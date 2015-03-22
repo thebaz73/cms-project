@@ -1,0 +1,11 @@
+.editable-board {
+    border: 1px dashed #cccccc; padding: 5px;
+}
+
+.hoverWrapper {
+    background-color: #428bca;
+}
+
+.activeWrapper {
+    border-color: #428bca;
+}
