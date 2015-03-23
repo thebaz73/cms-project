@@ -43,7 +43,7 @@ public class ReadOnlyUserManager implements UserDetailsManager {
     /**
      * Create a new user with the supplied details.
      *
-     * @param user
+     * @param user user name
      */
     @Override
     public void createUser(UserDetails user) {
@@ -53,7 +53,7 @@ public class ReadOnlyUserManager implements UserDetailsManager {
     /**
      * Update the specified user.
      *
-     * @param user
+     * @param user user name
      */
     @Override
     public void updateUser(UserDetails user) {
@@ -63,7 +63,7 @@ public class ReadOnlyUserManager implements UserDetailsManager {
     /**
      * Remove the user with the given login name from the system.
      *
-     * @param username
+     * @param username user name
      */
     @Override
     public void deleteUser(String username) {
