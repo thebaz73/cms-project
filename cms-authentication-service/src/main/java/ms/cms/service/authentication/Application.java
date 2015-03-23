@@ -1,8 +1,7 @@
 package ms.cms.service.authentication;
 
-import ms.cms.domain.CmsRole;
 import ms.cms.domain.CmsUser;
-import ms.cms.service.authentication.business.UserManager;
+import ms.cms.service.authentication.business.ReadOnlyUserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,9 +18,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-
-import javax.sql.DataSource;
-import java.util.Arrays;
 
 /**
  * Application
@@ -85,16 +81,16 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
 //        @Autowired
 //        private DataSource dataSource;
         @Autowired
-        private UserManager userManager;
+        private ReadOnlyUserManager userManager;
 
         @Override
         public void init(AuthenticationManagerBuilder auth) throws Exception {
             auth.userDetailsService(userManager).passwordEncoder(userManager.getEncoder());
             //auth.jdbcAuthentication().dataSource(dataSource);
 
-            for (CmsUser cmsUser : userManager.findAllUsers()) {
-                userManager.allocateUser(cmsUser);
-            }
+//            for (CmsUser cmsUser : userManager.findAllUsers()) {
+//                userManager.allocateUser(cmsUser);
+//            }
 
 //            CmsUser user = new CmsUser("user", "user", Arrays.asList(new CmsRole("ROLE_USER")));
 //            user.setName("Normal user");

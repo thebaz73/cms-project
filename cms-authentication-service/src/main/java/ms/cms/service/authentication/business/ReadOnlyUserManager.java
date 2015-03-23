@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UserManager
+ * ReadOnlyUserManager
  * Created by thebaz on 21/03/15.
  */
-public class UserManager implements UserDetailsManager {
+public class ReadOnlyUserManager implements UserDetailsManager {
     private final Log logger = LogFactory.getLog(getClass());
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -32,7 +32,7 @@ public class UserManager implements UserDetailsManager {
     private CmsUserRepository cmsUserRepository;
 
 //    @Autowired
-//    public UserManager(DataSource dataSource) {
+//    public ReadOnlyUserManager(DataSource dataSource) {
 //        super.setDataSource(dataSource);
 //    }
 
@@ -47,7 +47,7 @@ public class UserManager implements UserDetailsManager {
      */
     @Override
     public void createUser(UserDetails user) {
-
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -57,7 +57,7 @@ public class UserManager implements UserDetailsManager {
      */
     @Override
     public void updateUser(UserDetails user) {
-
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -67,7 +67,7 @@ public class UserManager implements UserDetailsManager {
      */
     @Override
     public void deleteUser(String username) {
-
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -79,17 +79,17 @@ public class UserManager implements UserDetailsManager {
      */
     @Override
     public void changePassword(String oldPassword, String newPassword) {
-
+        throw new UnsupportedOperationException();
     }
 
     /**
      * Check if a user with the supplied login name exists in the system.
      *
-     * @param username
+     * @param username user name
      */
     @Override
     public boolean userExists(String username) {
-        return false;
+        return !cmsUserRepository.findByUsername(username).isEmpty();
     }
 
     /**
@@ -104,34 +104,15 @@ public class UserManager implements UserDetailsManager {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        UserDetails user = null;
+        List<CmsUser> byUsername = cmsUserRepository.findByUsername(username);
+        for (CmsUser cmsUser : byUsername) {
+            user = allocateUser(cmsUser);
+        }
+        return user;
     }
 
-    /**
-     * Find all users
-     *
-     * @return user list
-     */
-    public List<CmsUser> findAllUsers() {
-        return cmsUserRepository.findAll();
-    }
-
-    public boolean userCreated(String username) {
-        return !cmsUserRepository.findByUsername(username).isEmpty();
-    }
-
-    /**
-     * Creates a new user
-     *
-     * @param cmsUser to be created
-     */
-    public void createUser(CmsUser cmsUser) {
-        allocateUser(cmsUser);
-
-        cmsUserRepository.save(cmsUser);
-    }
-
-    public void allocateUser(CmsUser cmsUser) {
+    private User allocateUser(CmsUser cmsUser) {
         List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
         for (CmsRole cmsRole : cmsUser.getRoles()) {
             authorities.add(new SimpleGrantedAuthority(cmsRole.getRole().getName()));
@@ -139,31 +120,7 @@ public class UserManager implements UserDetailsManager {
         User user = new User(cmsUser.getUsername(), encoder.encode(cmsUser.getPassword()),
                 authorities);
 
-        createUser(user);
-    }
-
-    /**
-     * Deletes a user
-     *
-     * @param cmsUser to be deleted
-     */
-    public void deleteUser(CmsUser cmsUser) {
-        for (CmsUser user : cmsUserRepository.findByUsername(cmsUser.getUsername())) {
-            cmsUserRepository.delete(user);
-        }
-        deleteUser(cmsUser.getUsername());
-    }
-
-    /**
-     * Delete a user given its username
-     *
-     * @param username username
-     */
-    public void deleteUserByUsername(String username) {
-        for (CmsUser user : cmsUserRepository.findByUsername(username)) {
-            cmsUserRepository.delete(user);
-        }
-        deleteUser(username);
+        return user;
     }
 }
 
