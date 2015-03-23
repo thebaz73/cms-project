@@ -115,6 +115,21 @@ public class ReadOnlyUserManager implements UserDetailsManager {
         return user;
     }
 
+    /**
+     * Load a user given username
+     * @param username user name
+     * @return user or null if not found
+     */
+    public CmsUser findUser(String username) {
+        CmsUser cmsUser = null;
+        List<CmsUser> byUsername = cmsUserRepository.findByUsername(username);
+        for (CmsUser user : byUsername) {
+            cmsUser = user;
+        }
+
+        return cmsUser;
+    }
+
     private User allocateUser(CmsUser cmsUser) {
         List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
         if(authorities.isEmpty()) {
