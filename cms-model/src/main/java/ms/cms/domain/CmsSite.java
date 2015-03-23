@@ -1,5 +1,6 @@
 package ms.cms.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Created by thebaz on 21/03/15.
  */
 @Document
+@JsonIgnoreProperties({"timestamp", "status"})
 public class CmsSite {
     @Id
     private String id;

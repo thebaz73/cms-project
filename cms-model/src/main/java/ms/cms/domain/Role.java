@@ -1,12 +1,14 @@
 package ms.cms.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Role
  * Created by thebaz on 21/03/15.
  */
+@JsonIgnoreProperties({"timestamp", "status"})
 public enum Role {
     ROLE_USER("ROLE_USER"),
     ROLE_ADMIN("ROLE_ADMIN"),

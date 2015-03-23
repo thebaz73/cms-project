@@ -1,10 +1,10 @@
-package ms.cms.service.authentication.web;
+package ms.cms.service.authentication.config;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,21 +13,23 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import java.net.UnknownHostException;
 
 /**
-* TestConfiguration
-* Created by thebaz on 21/03/15.
-*/
+ * MongoConfig
+ * Created by thebaz on 23/03/15.
+ */
 @Configuration
-@EnableMongoRepositories
-@ComponentScan(basePackages = "ms.cms")
+@EnableMongoRepositories(basePackages = {"ms.cms"})
 public class MongoConfig extends AbstractMongoConfiguration {
+    @Value("${spring.data.mongodb.name}")
+    private String databaseName;
+
     @Override
     protected String getDatabaseName() {
-        return "cms-test";
+        return databaseName;
     }
 
     @Bean
     public Mongo mongo() throws UnknownHostException {
-        MongoClient client = new MongoClient("localhost");
+        MongoClient client = new MongoClient();
         client.setWriteConcern(WriteConcern.SAFE);
         return client;
     }

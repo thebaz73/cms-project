@@ -1,5 +1,8 @@
 package ms.cms.data;
 
+import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import com.mongodb.WriteConcern;
 import ms.cms.domain.CmsRole;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsUser;
@@ -7,25 +10,48 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 
 
-@ContextConfiguration(classes={MongoConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
-public class RepositoryTest {
-
+@EnableMongoRepositories(basePackages = "ms.cms")
+@ComponentScan
+@ContextConfiguration(classes = {RepositoryTest.class})
+public class RepositoryTest extends AbstractMongoConfiguration {
     @Autowired
     private CmsUserRepository userRepository;
     @Autowired
     private CmsRoleRepository roleRepository;
     @Autowired
     private CmsSiteRepository siteRepository;
+
+    public String getDatabaseName() {
+        return "cms-test";
+    }
+
+    @Bean
+    public Mongo mongo() throws UnknownHostException {
+        MongoClient client = new MongoClient();
+        client.setWriteConcern(WriteConcern.SAFE);
+        return client;
+    }
+
+    @Bean
+    public MongoTemplate mongoTemplate() throws UnknownHostException {
+        return new MongoTemplate(mongo(), getDatabaseName());
+    }
 
     @Before
     public void clean() {

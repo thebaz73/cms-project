@@ -12,11 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +22,7 @@ import java.util.List;
  * ReadOnlyUserManager
  * Created by thebaz on 21/03/15.
  */
+@Component
 public class ReadOnlyUserManager implements UserDetailsManager {
     private final Log logger = LogFactory.getLog(getClass());
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();

@@ -14,12 +14,13 @@ import javax.servlet.http.HttpServletRequest;
  * Created by bazzoni on 23/03/2015.
  */
 @RestController
+@RequestMapping(value = "/auth")
 public class AuthenticationService {
     @Autowired
     private ReadOnlyUserManager userManager;
 
     @Secured("ROLE_USER")
-    @RequestMapping(value = "auth/whoami")
+    @RequestMapping(value = "/whoami")
     public CmsUser whoAmI(HttpServletRequest request) {
         CmsUser cmsUser = userManager.findUser(request.getRemoteUser());
         //password hiding
