@@ -109,18 +109,23 @@ public class ReadOnlyUserManager implements UserDetailsManager {
         for (CmsUser cmsUser : byUsername) {
             user = allocateUser(cmsUser);
         }
+        if(user == null) {
+            throw new UsernameNotFoundException("No user found.");
+        }
         return user;
     }
 
     private User allocateUser(CmsUser cmsUser) {
         List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+        if(authorities.isEmpty()) {
+            throw new UsernameNotFoundException("No authorities found.");
+        }
         for (CmsRole cmsRole : cmsUser.getRoles()) {
             authorities.add(new SimpleGrantedAuthority(cmsRole.getRole().getName()));
         }
-        User user = new User(cmsUser.getUsername(), encoder.encode(cmsUser.getPassword()),
-                authorities);
 
-        return user;
+        return new User(cmsUser.getUsername(), encoder.encode(cmsUser.getPassword()),
+                authorities);
     }
 }
 
