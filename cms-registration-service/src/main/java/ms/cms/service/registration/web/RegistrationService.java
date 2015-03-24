@@ -40,8 +40,8 @@ public class RegistrationService {
         }
     }
 
-    @RequestMapping(value = "{username}", method = RequestMethod.GET)
-    public CmsUser findByUsername(HttpServletResponse response, @PathVariable(value = "username") String username) throws IOException {
+    @RequestMapping(value = "/by-username", method = RequestMethod.GET)
+    public CmsUser findByUsername(HttpServletResponse response, @RequestParam(value = "username") String username) throws IOException {
         try {
             return registrationManager.findByUsername(username);
         } catch (RegistrationException e) {
@@ -53,8 +53,8 @@ public class RegistrationService {
         return null;
     }
 
-    @RequestMapping(value = "{email}", method = RequestMethod.GET)
-    public CmsUser findByEmail(HttpServletResponse response, @PathVariable(value = "email") String email) throws IOException {
+    @RequestMapping(value = "/by-email", method = RequestMethod.GET)
+    public CmsUser findByEmail(HttpServletResponse response, @RequestParam(value = "email") String email) throws IOException {
         try {
             return registrationManager.findByEmail(email);
         } catch (RegistrationException e) {
@@ -64,5 +64,20 @@ public class RegistrationService {
         }
 
         return null;
+    }
+
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
+    public void editUser(HttpServletResponse response,
+                         @PathVariable(value = "id") String id,
+                         @RequestParam(value = "password", defaultValue = "") String password,
+                         @RequestParam(value = "firstName", defaultValue = "") String firstName,
+                         @RequestParam(value = "lastName", defaultValue = "") String lastName) throws IOException {
+        try {
+            registrationManager.editUser(id, password, firstName, lastName);
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot edit user. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
     }
 }

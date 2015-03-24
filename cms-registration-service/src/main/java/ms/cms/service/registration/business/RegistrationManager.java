@@ -92,6 +92,27 @@ public class RegistrationManager {
         return roles;
     }
 
+    public void editUser(String id, String password, String firstName, String lastName) throws RegistrationException {
+        CmsUser cmsUser = cmsUserRepository.findOne(id);
+        if (cmsUser == null) {
+            throw new RegistrationException("User id not found");
+        }
+        boolean modified = false;
+        if (!firstName.isEmpty() && !lastName.isEmpty()) {
+            String fullName = firstName + " " + lastName;
+            cmsUser.setName(fullName);
+            modified = true;
+        }
+        if (!password.isEmpty()) {
+            cmsUser.setPassword(password);
+            modified = true;
+        }
+
+        if (modified) {
+            cmsUserRepository.save(cmsUser);
+        }
+    }
+
     public static enum UserType {
         MANAGER, AUTHOR, VIEWER
     }
