@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * RegistrationService
+ * UserService
  * Created by bazzoni on 24/03/2015.
  */
 @RestController
-@RequestMapping(value = "/registration")
-public class RegistrationService {
+@RequestMapping(value = "/user")
+public class UserService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -40,23 +40,10 @@ public class RegistrationService {
         }
     }
 
-    @RequestMapping(value = "/by-username", method = RequestMethod.GET)
-    public CmsUser findByUsername(HttpServletResponse response, @RequestParam(value = "username") String username) throws IOException {
+    @RequestMapping(value = "/find", method = RequestMethod.GET)
+    public CmsUser findUser(HttpServletResponse response, @RequestParam(value = "param") String param) throws IOException {
         try {
-            return registrationManager.findByUsername(username);
-        } catch (RegistrationException e) {
-            String msg = String.format("Cannot find user. Reason: %s", e.toString());
-            logger.info(msg);
-            response.sendError(400, msg);
-        }
-
-        return null;
-    }
-
-    @RequestMapping(value = "/by-email", method = RequestMethod.GET)
-    public CmsUser findByEmail(HttpServletResponse response, @RequestParam(value = "email") String email) throws IOException {
-        try {
-            return registrationManager.findByEmail(email);
+            return registrationManager.findUser(param);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot find user. Reason: %s", e.toString());
             logger.info(msg);
@@ -74,6 +61,18 @@ public class RegistrationService {
                          @RequestParam(value = "lastName", defaultValue = "") String lastName) throws IOException {
         try {
             registrationManager.editUser(id, password, firstName, lastName);
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot edit user. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    public void deleteUser(HttpServletResponse response,
+                           @PathVariable(value = "id") String id) throws IOException {
+        try {
+            registrationManager.deleteUser(id);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot edit user. Reason: %s", e.toString());
             logger.info(msg);

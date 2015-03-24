@@ -4,6 +4,7 @@ import ms.cms.data.CmsRoleRepository;
 import ms.cms.data.CmsSiteRepository;
 import ms.cms.data.CmsUserRepository;
 import ms.cms.domain.CmsRole;
+import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -52,44 +53,26 @@ public class RegistrationManager {
         if (!cmsUserRepository.findByEmail(email).isEmpty()) {
             throw new RegistrationException("Email already registered");
         }
+
         List<CmsRole> roles = doGuessRoles(userType);
         String fullName = firstName + " " + lastName;
-        CmsUser user = new CmsUser(fullName, email, username, password, roles);
-        cmsUserRepository.save(user);
+        CmsUser cmsUser = new CmsUser(fullName, email, username, password, roles);
+
+        cmsUserRepository.save(cmsUser);
     }
 
-    public CmsUser findByUsername(String username) throws RegistrationException {
-        List<CmsUser> byUsername = cmsUserRepository.findByUsername(username);
-        if (byUsername.isEmpty()) {
-            throw new RegistrationException("Username not found");
-        }
-        return byUsername.get(0);
-    }
-
-    public CmsUser findByEmail(String email) throws RegistrationException {
-        List<CmsUser> byEmail = cmsUserRepository.findByEmail(email);
-        if (byEmail.isEmpty()) {
-            throw new RegistrationException("Email not found");
-        }
-        return byEmail.get(0);
-    }
-
-    private List<CmsRole> doGuessRoles(UserType userType) {
-        List<CmsRole> roles = new ArrayList<>();
-        roles.add(roleUser);
-        switch (userType) {
-            case MANAGER:
-                roles.add(roleManager);
-                break;
-            case AUTHOR:
-                roles.add(roleAuthor);
-                break;
-            case VIEWER:
-                roles.add(roleViewer);
-                break;
+    public CmsUser findUser(String param) throws RegistrationException {
+        List<CmsUser> byUsername = cmsUserRepository.findByUsername(param);
+        if (!byUsername.isEmpty()) {
+            return byUsername.get(0);
         }
 
-        return roles;
+        List<CmsUser> byEmail = cmsUserRepository.findByEmail(param);
+        if (!byEmail.isEmpty()) {
+            return byEmail.get(0);
+        }
+
+        throw new RegistrationException("Wrong search parameter");
     }
 
     public void editUser(String id, String password, String firstName, String lastName) throws RegistrationException {
@@ -111,6 +94,98 @@ public class RegistrationManager {
         if (modified) {
             cmsUserRepository.save(cmsUser);
         }
+    }
+
+    public void deleteUser(String id) throws RegistrationException {
+        CmsUser cmsUser = cmsUserRepository.findOne(id);
+        if (cmsUser == null) {
+            throw new RegistrationException("User id not found");
+        }
+
+        List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(cmsUser);
+        for (CmsSite cmsSite : byWebMaster) {
+            cmsSiteRepository.delete(cmsSite);
+        }
+
+        cmsUserRepository.delete(cmsUser);
+    }
+
+    public void createSite(String userId, String name, String address) throws RegistrationException {
+        CmsUser cmsUser = cmsUserRepository.findOne(userId);
+        if (cmsUser == null) {
+            throw new RegistrationException("User id not found");
+        }
+        if (!cmsSiteRepository.findByAddress(address).isEmpty()) {
+            throw new RegistrationException("Site already registered");
+        }
+
+        CmsSite cmsSite = new CmsSite();
+        cmsSite.setName(name);
+        cmsSite.setAddress(address);
+        cmsSite.setWebMaster(cmsUser);
+
+        cmsSiteRepository.save(cmsSite);
+    }
+
+    public CmsSite findSite(String param) throws RegistrationException {
+        List<CmsUser> byUsername = cmsUserRepository.findByUsername(param);
+        if (!byUsername.isEmpty()) {
+            List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(byUsername.get(0));
+            if (!byWebMaster.isEmpty()) {
+                return byWebMaster.get(0);
+            }
+        }
+
+        List<CmsSite> byAddress = cmsSiteRepository.findByAddress(param);
+        if (!byAddress.isEmpty()) {
+            return byAddress.get(0);
+        }
+
+        throw new RegistrationException("Wrong search parameter");
+    }
+
+    public void editSite(String id, String name) throws RegistrationException {
+        CmsSite cmsSite = cmsSiteRepository.findOne(id);
+        if (cmsSite == null) {
+            throw new RegistrationException("Site id not found");
+        }
+
+        boolean modified = false;
+        if (!name.isEmpty()) {
+            cmsSite.setName(name);
+            modified = true;
+        }
+
+        if (modified) {
+            cmsSiteRepository.save(cmsSite);
+        }
+    }
+
+    public void deleteSite(String id) throws RegistrationException {
+        CmsSite cmsSite = cmsSiteRepository.findOne(id);
+        if (cmsSite == null) {
+            throw new RegistrationException("Site id not found");
+        }
+
+        cmsSiteRepository.delete(cmsSite);
+    }
+
+    private List<CmsRole> doGuessRoles(UserType userType) {
+        List<CmsRole> roles = new ArrayList<>();
+        roles.add(roleUser);
+        switch (userType) {
+            case MANAGER:
+                roles.add(roleManager);
+                break;
+            case AUTHOR:
+                roles.add(roleAuthor);
+                break;
+            case VIEWER:
+                roles.add(roleViewer);
+                break;
+        }
+
+        return roles;
     }
 
     public static enum UserType {
