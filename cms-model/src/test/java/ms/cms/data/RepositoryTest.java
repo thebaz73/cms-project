@@ -37,6 +37,14 @@ public class RepositoryTest extends AbstractMongoConfiguration {
     private CmsRoleRepository roleRepository;
     @Autowired
     private CmsSiteRepository siteRepository;
+    @Autowired
+    private CmsPageRepository pageRepository;
+    @Autowired
+    private CmsPostRepository postRepository;
+    @Autowired
+    private CmsAssetRepository assetRepository;
+    @Autowired
+    private CmsCommentRepository commentRepository;
 
     public String getDatabaseName() {
         return "cms-test";
@@ -59,6 +67,10 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         roleRepository.deleteAll();
         userRepository.deleteAll();
         siteRepository.deleteAll();
+        pageRepository.deleteAll();
+        postRepository.deleteAll();
+        assetRepository.deleteAll();
+        commentRepository.deleteAll();
     }
 
     @Test
