@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * CmsUser
@@ -30,16 +31,14 @@ public class CmsUser {
     private List<CmsRole> roles;
 
     public CmsUser() {
-        this.roles = new ArrayList<CmsRole>();
+        this.roles = new ArrayList<>();
     }
 
     public CmsUser(String username, String password, Collection<CmsRole> roles) {
         this.username = username;
         this.password = password;
-        this.roles = new ArrayList<CmsRole>();
-        for (CmsRole role : roles) {
-            this.roles.add(role);
-        }
+        this.roles = new ArrayList<>();
+        this.roles.addAll(roles.stream().collect(Collectors.toList()));
     }
 
     @PersistenceConstructor
@@ -48,10 +47,8 @@ public class CmsUser {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.roles = new ArrayList<CmsRole>();
-        for (CmsRole role : roles) {
-            this.roles.add(role);
-        }
+        this.roles = new ArrayList<>();
+        this.roles.addAll(roles.stream().collect(Collectors.toList()));
     }
 
     public String getId() {

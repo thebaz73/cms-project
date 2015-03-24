@@ -6,6 +6,7 @@ import com.mongodb.WriteConcern;
 import ms.cms.domain.CmsRole;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsUser;
+import ms.cms.domain.Role;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,12 +63,19 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
     @Test
     public void testCmsRoleRepository() {
-        List<CmsRole> cmsRoles = new ArrayList<>();
-        cmsRoles.add(createCmsRole("ROLE_USER"));
-        cmsRoles.add(createCmsRole("ROLE_ADMIN"));
+        for (Role role : Role.ALL) {
+            createCmsRole(role.getName());
+        }
 
         List<CmsRole> all = roleRepository.findAll();
-        assertEquals(cmsRoles.size(), all.size());
+        assertEquals(Role.ALL.length, all.size());
+
+        for (Role role : Role.ALL) {
+            List<CmsRole> byRole = roleRepository.findByRole(role.getName());
+            if (!byRole.isEmpty()) {
+                assertEquals(role.getName(), byRole.get(0).getRole().getName());
+            }
+        }
     }
 
     @Test

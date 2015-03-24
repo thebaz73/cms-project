@@ -1,17 +1,17 @@
 package ms.cms.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 /**
  * CmsSite
  * Created by thebaz on 21/03/15.
  */
 @Document
-@JsonIgnoreProperties({"timestamp", "status"})
 public class CmsSite {
     @Id
     private String id;
@@ -21,6 +21,10 @@ public class CmsSite {
     @DBRef
     @Indexed(unique = true)
     private CmsUser webMaster;
+    @DBRef
+    private List<CmsPage> pages;
+    @DBRef
+    private List<CmsPost> posts;
 
     public String getId() {
         return id;
@@ -52,5 +56,21 @@ public class CmsSite {
 
     public void setWebMaster(CmsUser webMaster) {
         this.webMaster = webMaster;
+    }
+
+    public List<CmsPage> getPages() {
+        return pages;
+    }
+
+    public void setPages(List<CmsPage> pages) {
+        this.pages = pages;
+    }
+
+    public List<CmsPost> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<CmsPost> posts) {
+        this.posts = posts;
     }
 }
