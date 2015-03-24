@@ -17,4 +17,12 @@ public interface CmsUserRepository extends MongoRepository<CmsUser, String> {
      * @return list of @EmsUser
      */
     List<CmsUser> findByUsername(String username);
+
+    /**
+     * Finds @EmsUser given its email
+     *
+     * @param email user email
+     * @return list of @EmsUser
+     */
+    List<CmsUser> findByEmail(String email);
 }

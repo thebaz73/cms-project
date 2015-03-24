@@ -16,6 +16,7 @@
     <properties>
         <start-class>ms.cms.service.authentication.Application</start-class>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>ms.cms</groupId>
