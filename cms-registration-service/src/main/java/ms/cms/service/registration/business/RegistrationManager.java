@@ -9,7 +9,6 @@ import ms.cms.domain.CmsUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,6 @@ public class RegistrationManager {
         throw new RegistrationException("Wrong user type");
     }
 
-    @PostConstruct
     public void initialize() {
         roleUser = cmsRoleRepository.findByRole("ROLE_USER").get(0);
         roleManager = cmsRoleRepository.findByRole("ROLE_MANAGER").get(0);

@@ -22,7 +22,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -62,7 +62,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
     @Test
     public void testCmsRoleRepository() {
-        List<CmsRole> cmsRoles = new ArrayList<CmsRole>();
+        List<CmsRole> cmsRoles = new ArrayList<>();
         cmsRoles.add(createCmsRole("ROLE_USER"));
         cmsRoles.add(createCmsRole("ROLE_ADMIN"));
 
@@ -72,7 +72,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
     @Test
     public void testCmsUserRepository() {
-        ArrayList<CmsRole> cmsRoles = new ArrayList<CmsRole>();
+        List<CmsRole> cmsRoles = new ArrayList<>();
         cmsRoles.add(createCmsRole("ROLE_USER"));
         cmsRoles.add(createCmsRole("ROLE_ADMIN"));
         CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", cmsRoles);
@@ -87,7 +87,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
     @Test
     public void testCmsSiteRepository() {
-        ArrayList<CmsRole> cmsRoles = new ArrayList<CmsRole>();
+        List<CmsRole> cmsRoles = new ArrayList<>();
         cmsRoles.add(createCmsRole("ROLE_USER"));
         cmsRoles.add(createCmsRole("ROLE_MANAGER"));
         CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", cmsRoles);
