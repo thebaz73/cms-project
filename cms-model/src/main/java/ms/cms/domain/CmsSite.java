@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public class CmsSite {
     @Indexed(unique = true)
     private String address;
     @DBRef
-    @Indexed(unique = true)
+    @Indexed
     private CmsUser webMaster;
     @DBRef
     private List<CmsPage> pages;
@@ -59,6 +60,9 @@ public class CmsSite {
     }
 
     public List<CmsPage> getPages() {
+        if (pages == null) {
+            pages = new ArrayList<>();
+        }
         return pages;
     }
 
@@ -67,6 +71,9 @@ public class CmsSite {
     }
 
     public List<CmsPost> getPosts() {
+        if (posts == null) {
+            posts = new ArrayList<>();
+        }
         return posts;
     }
 

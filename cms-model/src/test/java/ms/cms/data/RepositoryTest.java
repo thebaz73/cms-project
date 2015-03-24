@@ -3,10 +3,7 @@ package ms.cms.data;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
-import ms.cms.domain.CmsRole;
-import ms.cms.domain.CmsSite;
-import ms.cms.domain.CmsUser;
-import ms.cms.domain.Role;
+import ms.cms.domain.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -129,9 +127,85 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(1, siteRepository.findByWebMaster(userRepository.findByUsername("jdoe").get(0)).size());
     }
 
+    @Test
+    public void testAuthoring() {
+        List<CmsRole> cmsRoles = new ArrayList<>();
+        cmsRoles.add(createCmsRole("ROLE_USER"));
+        cmsRoles.add(createCmsRole("ROLE_MANAGER"));
+        CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", cmsRoles);
+        userRepository.save(user);
+
+        CmsSite site = new CmsSite();
+        site.setName("John Doe's Blog");
+        site.setAddress("www.jdoe.com");
+        site.setWebMaster(user);
+        siteRepository.save(site);
+
+        CmsPage page01 = createCmsPage("page01", "Curriculum Vitae", "/curriculum_vitae", "summary", "content");
+
+        site.getPages().add(page01);
+        siteRepository.save(site);
+
+        assertEquals(1, pageRepository.findAll().size());
+        assertNotNull(pageRepository.findAll().get(0));
+        assertNotNull(pageRepository.findAll().get(0).getId());
+        assertEquals(page01.getName(), pageRepository.findAll().get(0).getName());
+        assertEquals(page01.getTitle(), pageRepository.findAll().get(0).getTitle());
+        assertEquals(page01.getUri(), pageRepository.findAll().get(0).getUri());
+        assertEquals(page01.getSummary(), pageRepository.findAll().get(0).getSummary());
+        assertEquals(page01.getContent(), pageRepository.findAll().get(0).getContent());
+
+        assertEquals(0, pageRepository.findAll().get(0).getAssets().size());
+
+        CmsAsset asset01 = createCmsAsset("asset01", "photo01", "/assets/photo01.png");
+
+        page01.getAssets().add(asset01);
+        pageRepository.save(page01);
+
+        assertEquals(1, pageRepository.findAll().get(0).getAssets().size());
+        assertNotNull(pageRepository.findAll().get(0).getAssets().get(0).getId());
+        assertEquals(asset01.getName(), pageRepository.findAll().get(0).getAssets().get(0).getName());
+        assertEquals(asset01.getTitle(), pageRepository.findAll().get(0).getAssets().get(0).getTitle());
+        assertEquals(asset01.getUri(), pageRepository.findAll().get(0).getAssets().get(0).getUri());
+
+        CmsAsset asset02 = createCmsAsset("asset02", "photo02", "/assets/photo02.png");
+
+        page01.getAssets().add(asset02);
+        pageRepository.save(page01);
+
+        assertEquals(2, pageRepository.findAll().get(0).getAssets().size());
+        assertNotNull(pageRepository.findAll().get(0).getAssets().get(1).getId());
+        assertEquals(asset02.getName(), pageRepository.findAll().get(0).getAssets().get(1).getName());
+        assertEquals(asset02.getTitle(), pageRepository.findAll().get(0).getAssets().get(1).getTitle());
+        assertEquals(asset02.getUri(), pageRepository.findAll().get(0).getAssets().get(1).getUri());
+    }
+
+    private CmsPage createCmsPage(String name, String title, String uri, String summary, String content) {
+        CmsPage cmsPage = new CmsPage();
+        cmsPage.setName(name);
+        cmsPage.setTitle(title);
+        cmsPage.setUri(uri);
+        cmsPage.setSummary(summary);
+        cmsPage.setContent(content);
+        pageRepository.save(cmsPage);
+
+        return cmsPage;
+    }
+
+    private CmsAsset createCmsAsset(String name, String title, String uri) {
+        CmsAsset cmsAsset = new CmsAsset();
+        cmsAsset.setName(name);
+        cmsAsset.setTitle(title);
+        cmsAsset.setUri(uri);
+        assetRepository.save(cmsAsset);
+
+        return cmsAsset;
+    }
+
     private CmsRole createCmsRole(String roleName) {
         CmsRole cmsRole = new CmsRole(roleName);
         roleRepository.save(cmsRole);
+
         return cmsRole;
     }
 }
