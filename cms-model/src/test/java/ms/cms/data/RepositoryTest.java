@@ -248,34 +248,40 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(asset03.getTitle(), postRepository.findAll().get(0).getAssets().get(0).getTitle());
         assertEquals(asset03.getUri(), postRepository.findAll().get(0).getAssets().get(0).getUri());
 
-        assertEquals(0, postRepository.findAll().get(0).getComments().size());
+        assertEquals(0, commentRepository.findAll().size());
 
         CmsUser viewer01 = new CmsUser("Harry Potter", "harry.potter@hogwarts.com", "hpotter", "hpotter", new Date(), Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_VIEWER")));
         userRepository.save(viewer01);
-        CmsComment comment01 = createCmsComment(randomAlphanumeric(20), randomAlphabetic(200), viewer01);
+        CmsComment comment01 = createCmsComment(post01.getId(), randomAlphanumeric(20), randomAlphabetic(200), viewer01);
 
-        post01.getComments().add(comment01);
-        postRepository.save(post01);
+        assertEquals(1, commentRepository.findAll().size());
+        assertNotNull(commentRepository.findAll().get(0).getId());
+        assertEquals(comment01.getTimestamp().getTime(), commentRepository.findAll().get(0).getTimestamp().getTime());
+        assertEquals(comment01.getTitle(), commentRepository.findAll().get(0).getTitle());
+        assertEquals(comment01.getContent(), commentRepository.findAll().get(0).getContent());
 
-        assertEquals(1, postRepository.findAll().get(0).getComments().size());
-        assertNotNull(postRepository.findAll().get(0).getComments().get(0).getId());
-        assertEquals(comment01.getTimestamp().getTime(), postRepository.findAll().get(0).getComments().get(0).getTimestamp().getTime());
-        assertEquals(comment01.getTitle(), postRepository.findAll().get(0).getComments().get(0).getTitle());
-        assertEquals(comment01.getContent(), postRepository.findAll().get(0).getComments().get(0).getContent());
+        assertEquals(1, commentRepository.findByContentId(post01.getId()).size());
+        assertNotNull(commentRepository.findByContentId(post01.getId()).get(0).getId());
+        assertEquals(comment01.getTimestamp().getTime(), commentRepository.findByContentId(post01.getId()).get(0).getTimestamp().getTime());
+        assertEquals(comment01.getTitle(), commentRepository.findByContentId(post01.getId()).get(0).getTitle());
+        assertEquals(comment01.getContent(), commentRepository.findByContentId(post01.getId()).get(0).getContent());
 
 
         CmsUser viewer02 = new CmsUser("Lord Voldemort", "voldemort@evil.com", "lvoldemort", "avada!kedavra", new Date(), Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_VIEWER")));
         userRepository.save(viewer02);
-        CmsComment comment02 = createCmsComment(randomAlphanumeric(20), randomAlphabetic(200), viewer02);
+        CmsComment comment02 = createCmsComment(post01.getId(), randomAlphanumeric(20), randomAlphabetic(200), viewer02);
 
-        post01.getComments().add(comment02);
-        postRepository.save(post01);
+        assertEquals(2, commentRepository.findAll().size());
+        assertNotNull(commentRepository.findAll().get(1).getId());
+        assertEquals(comment02.getTimestamp().getTime(), commentRepository.findAll().get(1).getTimestamp().getTime());
+        assertEquals(comment02.getTitle(), commentRepository.findAll().get(1).getTitle());
+        assertEquals(comment02.getContent(), commentRepository.findAll().get(1).getContent());
 
-        assertEquals(2, postRepository.findAll().get(0).getComments().size());
-        assertNotNull(postRepository.findAll().get(0).getComments().get(1).getId());
-        assertEquals(comment02.getTimestamp().getTime(), postRepository.findAll().get(0).getComments().get(0).getTimestamp().getTime());
-        assertEquals(comment02.getTitle(), postRepository.findAll().get(0).getComments().get(1).getTitle());
-        assertEquals(comment02.getContent(), postRepository.findAll().get(0).getComments().get(1).getContent());
+        assertEquals(2, commentRepository.findByContentId(post01.getId()).size());
+        assertNotNull(commentRepository.findByContentId(post01.getId()).get(1).getId());
+        assertEquals(comment02.getTimestamp().getTime(), commentRepository.findByContentId(post01.getId()).get(1).getTimestamp().getTime());
+        assertEquals(comment02.getTitle(), commentRepository.findByContentId(post01.getId()).get(1).getTitle());
+        assertEquals(comment02.getContent(), commentRepository.findByContentId(post01.getId()).get(1).getContent());
     }
 
     private CmsPage createCmsPage(String name, String title, String uri, String summary, String content) {
@@ -315,8 +321,9 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         return cmsAsset;
     }
 
-    private CmsComment createCmsComment(String title, String content, CmsUser viewer) {
+    private CmsComment createCmsComment(String contentId, String title, String content, CmsUser viewer) {
         CmsComment cmsComment = new CmsComment();
+        cmsComment.setContentId(contentId);
         cmsComment.setTimestamp(new Date());
         cmsComment.setTitle(title);
         cmsComment.setContent(content);

@@ -15,6 +15,8 @@ public class CmsComment {
     @Id
     private String id;
     @Indexed
+    private String contentId;
+    @Indexed
     private Date timestamp;
     private String title;
     private String content;
@@ -25,7 +27,8 @@ public class CmsComment {
     }
 
     @PersistenceConstructor
-    public CmsComment(Date timestamp, String title, String content, CmsUser viewer) {
+    public CmsComment(String contentId, Date timestamp, String title, String content, CmsUser viewer) {
+        this.contentId = contentId;
         this.timestamp = timestamp;
         this.title = title;
         this.content = content;
@@ -38,6 +41,14 @@ public class CmsComment {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getContentId() {
+        return contentId;
+    }
+
+    public void setContentId(String contentId) {
+        this.contentId = contentId;
     }
 
     public Date getTimestamp() {
