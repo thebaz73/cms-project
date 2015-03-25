@@ -120,14 +120,35 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         site.setWebMaster(user);
         siteRepository.save(site);
 
-        List<CmsSite> all = siteRepository.findAll();
-        assertEquals(1, all.size());
+        assertEquals(1, siteRepository.findAll().size());
 
         assertEquals(0, siteRepository.findByAddress("").size());
         assertEquals(1, siteRepository.findByAddress("www.jdoe.com").size());
 
         assertEquals(0, siteRepository.findByWebMaster(null).size());
         assertEquals(1, siteRepository.findByWebMaster(userRepository.findByUsername("jdoe").get(0)).size());
+
+        assertEquals(0, siteRepository.findAll().get(0).getAuthors().size());
+
+        CmsUser author01 = new CmsUser("Harry Potter", "harry.potter@hogwarts.com", "hpotter", "hpotter", Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_AUTHOR")));
+        userRepository.save(author01);
+
+        site.getAuthors().add(author01);
+        siteRepository.save(site);
+
+        assertEquals(1, siteRepository.findAll().get(0).getAuthors().size());
+        assertNotNull(siteRepository.findAll().get(0).getAuthors().get(0).getId());
+        assertEquals(author01.getName(), siteRepository.findAll().get(0).getAuthors().get(0).getName());
+
+        CmsUser author02 = new CmsUser("Lord Voldemort", "voldemort@evil.com", "lvoldemort", "avada!kedavra", Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_AUTHOR")));
+        userRepository.save(author02);
+
+        site.getAuthors().add(author02);
+        siteRepository.save(site);
+
+        assertEquals(1, siteRepository.findAll().get(0).getAuthors().size());
+        assertNotNull(siteRepository.findAll().get(0).getAuthors().get(1).getId());
+        assertEquals(author02.getName(), siteRepository.findAll().get(0).getAuthors().get(1).getName());
     }
 
     @Test

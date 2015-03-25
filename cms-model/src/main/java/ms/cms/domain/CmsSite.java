@@ -23,6 +23,8 @@ public class CmsSite {
     @Indexed
     private CmsUser webMaster;
     @DBRef
+    private List<CmsUser> authors;
+    @DBRef
     private List<CmsPage> pages;
     @DBRef
     private List<CmsPost> posts;
@@ -57,6 +59,17 @@ public class CmsSite {
 
     public void setWebMaster(CmsUser webMaster) {
         this.webMaster = webMaster;
+    }
+
+    public List<CmsUser> getAuthors() {
+        if (authors == null) {
+            authors = new ArrayList<>();
+        }
+        return authors;
+    }
+
+    public void setAuthors(List<CmsUser> authors) {
+        this.authors = authors;
     }
 
     public List<CmsPage> getPages() {
