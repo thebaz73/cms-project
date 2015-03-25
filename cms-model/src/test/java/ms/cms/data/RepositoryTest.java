@@ -18,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
@@ -143,10 +144,13 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         site.setWebMaster(user);
         siteRepository.save(site);
 
-        CmsPage page01 = createCmsPage("page01", "Curriculum Vitae", "/curriculum_vitae", randomAlphanumeric(20), randomAlphabetic(200));
+        //PAGEs
+        CmsPage page01 = createCmsPage("page01", "Page 01", "/page_01", randomAlphanumeric(20), randomAlphabetic(200));
 
         site.getPages().add(page01);
         siteRepository.save(site);
+
+        assertEquals(1, siteRepository.findAll().get(0).getPages().size());
 
         assertEquals(1, pageRepository.findAll().size());
         assertNotNull(pageRepository.findAll().get(0));
@@ -159,7 +163,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         assertEquals(0, pageRepository.findAll().get(0).getAssets().size());
 
-        CmsAsset asset01 = createCmsAsset("asset01", "photo01", "/assets/photo01.png");
+        CmsAsset asset01 = createCmsAsset("asset01", "asset01", "/assets/asset01.png");
 
         page01.getAssets().add(asset01);
         pageRepository.save(page01);
@@ -170,7 +174,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(asset01.getTitle(), pageRepository.findAll().get(0).getAssets().get(0).getTitle());
         assertEquals(asset01.getUri(), pageRepository.findAll().get(0).getAssets().get(0).getUri());
 
-        CmsAsset asset02 = createCmsAsset("asset02", "photo02", "/assets/photo02.png");
+        CmsAsset asset02 = createCmsAsset("asset02", "asset02", "/assets/asset02.png");
 
         page01.getAssets().add(asset02);
         pageRepository.save(page01);
@@ -180,6 +184,63 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(asset02.getName(), pageRepository.findAll().get(0).getAssets().get(1).getName());
         assertEquals(asset02.getTitle(), pageRepository.findAll().get(0).getAssets().get(1).getTitle());
         assertEquals(asset02.getUri(), pageRepository.findAll().get(0).getAssets().get(1).getUri());
+
+        //POSTs
+        CmsPost post01 = createCmsPost("post01", "Post 01", "/post_01", randomAlphanumeric(20), randomAlphabetic(200));
+
+        site.getPosts().add(post01);
+        siteRepository.save(site);
+
+        assertEquals(1, siteRepository.findAll().get(0).getPosts().size());
+
+        assertEquals(1, postRepository.findAll().size());
+        assertNotNull(postRepository.findAll().get(0));
+        assertNotNull(postRepository.findAll().get(0).getId());
+        assertEquals(post01.getName(), postRepository.findAll().get(0).getName());
+        assertEquals(post01.getTitle(), postRepository.findAll().get(0).getTitle());
+        assertEquals(post01.getUri(), postRepository.findAll().get(0).getUri());
+        assertEquals(post01.getSummary(), postRepository.findAll().get(0).getSummary());
+        assertEquals(post01.getContent(), postRepository.findAll().get(0).getContent());
+
+        assertEquals(0, postRepository.findAll().get(0).getAssets().size());
+
+        CmsAsset asset03 = createCmsAsset("asset03", "asset03", "/assets/asset03.png");
+
+        post01.getAssets().add(asset03);
+        postRepository.save(post01);
+
+        assertEquals(1, postRepository.findAll().get(0).getAssets().size());
+        assertNotNull(postRepository.findAll().get(0).getAssets().get(0).getId());
+        assertEquals(asset03.getName(), postRepository.findAll().get(0).getAssets().get(0).getName());
+        assertEquals(asset03.getTitle(), postRepository.findAll().get(0).getAssets().get(0).getTitle());
+        assertEquals(asset03.getUri(), postRepository.findAll().get(0).getAssets().get(0).getUri());
+
+        assertEquals(0, postRepository.findAll().get(0).getComments().size());
+
+        CmsUser viewer01 = new CmsUser("Harry Potter", "harry.potter@hogwarts.com", "hpotter", "hpotter", Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_VIEWER")));
+        userRepository.save(viewer01);
+        CmsComment comment01 = createCmsComment(randomAlphanumeric(20), randomAlphabetic(200), viewer01);
+
+        post01.getComments().add(comment01);
+        postRepository.save(post01);
+
+        assertEquals(1, postRepository.findAll().get(0).getComments().size());
+        assertNotNull(postRepository.findAll().get(0).getComments().get(0).getId());
+        assertEquals(comment01.getTitle(), postRepository.findAll().get(0).getComments().get(0).getTitle());
+        assertEquals(comment01.getContent(), postRepository.findAll().get(0).getComments().get(0).getContent());
+
+
+        CmsUser viewer02 = new CmsUser("Lord Voldemort", "voldemort@evil.com", "lvoldemort", "avada!kedavra", Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_VIEWER")));
+        userRepository.save(viewer02);
+        CmsComment comment02 = createCmsComment(randomAlphanumeric(20), randomAlphabetic(200), viewer02);
+
+        post01.getComments().add(comment02);
+        postRepository.save(post01);
+
+        assertEquals(2, postRepository.findAll().get(0).getComments().size());
+        assertNotNull(postRepository.findAll().get(0).getComments().get(1).getId());
+        assertEquals(comment02.getTitle(), postRepository.findAll().get(0).getComments().get(1).getTitle());
+        assertEquals(comment02.getContent(), postRepository.findAll().get(0).getComments().get(1).getContent());
     }
 
     private CmsPage createCmsPage(String name, String title, String uri, String summary, String content) {
@@ -194,6 +255,18 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         return cmsPage;
     }
 
+    private CmsPost createCmsPost(String name, String title, String uri, String summary, String content) {
+        CmsPost cmsPost = new CmsPost();
+        cmsPost.setName(name);
+        cmsPost.setTitle(title);
+        cmsPost.setUri(uri);
+        cmsPost.setSummary(summary);
+        cmsPost.setContent(content);
+        postRepository.save(cmsPost);
+
+        return cmsPost;
+    }
+
     private CmsAsset createCmsAsset(String name, String title, String uri) {
         CmsAsset cmsAsset = new CmsAsset();
         cmsAsset.setName(name);
@@ -202,6 +275,16 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assetRepository.save(cmsAsset);
 
         return cmsAsset;
+    }
+
+    private CmsComment createCmsComment(String title, String content, CmsUser viewer) {
+        CmsComment cmsComment = new CmsComment();
+        cmsComment.setTitle(title);
+        cmsComment.setContent(content);
+        cmsComment.setViewer(viewer);
+        commentRepository.save(cmsComment);
+
+        return cmsComment;
     }
 
     private CmsRole createCmsRole(String roleName) {
