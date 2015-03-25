@@ -152,7 +152,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         site.getAuthors().add(author02);
         siteRepository.save(site);
 
-        assertEquals(1, siteRepository.findAll().get(0).getAuthors().size());
+        assertEquals(2, siteRepository.findAll().get(0).getAuthors().size());
         assertNotNull(siteRepository.findAll().get(0).getAuthors().get(1).getId());
         assertEquals(author02.getName(), siteRepository.findAll().get(0).getAuthors().get(1).getName());
     }
@@ -212,7 +212,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(2, pageRepository.findAll().get(0).getAssets().size());
         assertNotNull(pageRepository.findAll().get(0).getAssets().get(1).getId());
         assertEquals(asset02.getName(), pageRepository.findAll().get(0).getAssets().get(1).getName());
-        assertEquals(asset02.getModificationDate().getTime(), pageRepository.findAll().get(0).getAssets().get(0).getModificationDate().getTime());
+        assertEquals(asset02.getModificationDate().getTime(), pageRepository.findAll().get(0).getAssets().get(1).getModificationDate().getTime());
         assertEquals(asset02.getTitle(), pageRepository.findAll().get(0).getAssets().get(1).getTitle());
         assertEquals(asset02.getUri(), pageRepository.findAll().get(0).getAssets().get(1).getUri());
 
@@ -244,7 +244,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(1, postRepository.findAll().get(0).getAssets().size());
         assertNotNull(postRepository.findAll().get(0).getAssets().get(0).getId());
         assertEquals(asset03.getName(), postRepository.findAll().get(0).getAssets().get(0).getName());
-        assertEquals(asset03.getModificationDate().getTime(), pageRepository.findAll().get(0).getAssets().get(0).getModificationDate().getTime());
+        assertEquals(asset03.getModificationDate().getTime(), postRepository.findAll().get(0).getAssets().get(0).getModificationDate().getTime());
         assertEquals(asset03.getTitle(), postRepository.findAll().get(0).getAssets().get(0).getTitle());
         assertEquals(asset03.getUri(), postRepository.findAll().get(0).getAssets().get(0).getUri());
 
