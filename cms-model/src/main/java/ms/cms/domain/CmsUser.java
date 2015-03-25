@@ -1,6 +1,5 @@
 package ms.cms.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -9,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  * Created by thebaz on 21/03/15.
  */
 @Document
-@JsonIgnoreProperties({"timestamp", "status"})
 public class CmsUser {
     @Id
     private String id;
@@ -27,6 +26,8 @@ public class CmsUser {
     @Indexed(unique = true)
     private String username;
     private String password;
+    @Indexed
+    private Date creationDate;
     @DBRef
     private List<CmsRole> roles;
 
@@ -42,11 +43,12 @@ public class CmsUser {
     }
 
     @PersistenceConstructor
-    public CmsUser(String name, String email, String username, String password, Collection<CmsRole> roles) {
+    public CmsUser(String name, String email, String username, String password, Date creationDate, Collection<CmsRole> roles) {
         this.name = name;
         this.email = email;
         this.username = username;
         this.password = password;
+        this.creationDate = creationDate;
         this.roles = new ArrayList<>();
         this.roles.addAll(roles.stream().collect(Collectors.toList()));
     }
@@ -89,6 +91,14 @@ public class CmsUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public List<CmsRole> getRoles() {

@@ -1,6 +1,8 @@
 package ms.cms.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,12 +20,27 @@ public class CmsPage {
     private String id;
     private String name;
     private String title;
+    @Indexed
     private String uri;
+    @Indexed
     private Date modificationDate;
     private String summary;
     private String content;
     @DBRef
     private List<CmsAsset> assets;
+
+    public CmsPage() {
+    }
+
+    @PersistenceConstructor
+    public CmsPage(String name, String title, String uri, Date modificationDate, String summary, String content) {
+        this.name = name;
+        this.title = title;
+        this.uri = uri;
+        this.modificationDate = modificationDate;
+        this.summary = summary;
+        this.content = content;
+    }
 
     public String getId() {
         return id;

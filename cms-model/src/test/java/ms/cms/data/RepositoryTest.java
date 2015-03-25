@@ -97,7 +97,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         List<CmsRole> cmsRoles = new ArrayList<>();
         cmsRoles.add(createCmsRole("ROLE_USER"));
         cmsRoles.add(createCmsRole("ROLE_ADMIN"));
-        CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", cmsRoles);
+        CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", new Date(), cmsRoles);
         userRepository.save(user);
 
         List<CmsUser> all = userRepository.findAll();
@@ -112,7 +112,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         List<CmsRole> cmsRoles = new ArrayList<>();
         cmsRoles.add(createCmsRole("ROLE_USER"));
         cmsRoles.add(createCmsRole("ROLE_MANAGER"));
-        CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", cmsRoles);
+        CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", new Date(), cmsRoles);
         userRepository.save(user);
 
         CmsSite site = new CmsSite();
@@ -136,7 +136,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         assertEquals(0, siteRepository.findAll().get(0).getAuthors().size());
 
-        CmsUser author01 = new CmsUser("Harry Potter", "harry.potter@hogwarts.com", "hpotter", "hpotter", Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_AUTHOR")));
+        CmsUser author01 = new CmsUser("Harry Potter", "harry.potter@hogwarts.com", "hpotter", "hpotter", new Date(), Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_AUTHOR")));
         userRepository.save(author01);
 
         site.getAuthors().add(author01);
@@ -146,7 +146,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertNotNull(siteRepository.findAll().get(0).getAuthors().get(0).getId());
         assertEquals(author01.getName(), siteRepository.findAll().get(0).getAuthors().get(0).getName());
 
-        CmsUser author02 = new CmsUser("Lord Voldemort", "voldemort@evil.com", "lvoldemort", "avada!kedavra", Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_AUTHOR")));
+        CmsUser author02 = new CmsUser("Lord Voldemort", "voldemort@evil.com", "lvoldemort", "avada!kedavra", new Date(), Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_AUTHOR")));
         userRepository.save(author02);
 
         site.getAuthors().add(author02);
@@ -162,7 +162,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         List<CmsRole> cmsRoles = new ArrayList<>();
         cmsRoles.add(createCmsRole("ROLE_USER"));
         cmsRoles.add(createCmsRole("ROLE_MANAGER"));
-        CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", cmsRoles);
+        CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", new Date(), cmsRoles);
         userRepository.save(user);
 
         CmsSite site = new CmsSite();
@@ -250,7 +250,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         assertEquals(0, postRepository.findAll().get(0).getComments().size());
 
-        CmsUser viewer01 = new CmsUser("Harry Potter", "harry.potter@hogwarts.com", "hpotter", "hpotter", Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_VIEWER")));
+        CmsUser viewer01 = new CmsUser("Harry Potter", "harry.potter@hogwarts.com", "hpotter", "hpotter", new Date(), Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_VIEWER")));
         userRepository.save(viewer01);
         CmsComment comment01 = createCmsComment(randomAlphanumeric(20), randomAlphabetic(200), viewer01);
 
@@ -264,7 +264,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(comment01.getContent(), postRepository.findAll().get(0).getComments().get(0).getContent());
 
 
-        CmsUser viewer02 = new CmsUser("Lord Voldemort", "voldemort@evil.com", "lvoldemort", "avada!kedavra", Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_VIEWER")));
+        CmsUser viewer02 = new CmsUser("Lord Voldemort", "voldemort@evil.com", "lvoldemort", "avada!kedavra", new Date(), Arrays.asList(createCmsRole("ROLE_USER"), createCmsRole("ROLE_VIEWER")));
         userRepository.save(viewer02);
         CmsComment comment02 = createCmsComment(randomAlphanumeric(20), randomAlphabetic(200), viewer02);
 

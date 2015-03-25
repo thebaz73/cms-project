@@ -1,6 +1,7 @@
 package ms.cms.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,6 +19,7 @@ public class CmsSite {
     @Id
     private String id;
     private String name;
+    @Indexed
     private Date creationDate;
     @Indexed(unique = true)
     private String address;
@@ -30,6 +32,17 @@ public class CmsSite {
     private List<CmsPage> pages;
     @DBRef
     private List<CmsPost> posts;
+
+    public CmsSite() {
+    }
+
+    @PersistenceConstructor
+    public CmsSite(String name, Date creationDate, String address, CmsUser webMaster) {
+        this.name = name;
+        this.creationDate = creationDate;
+        this.address = address;
+        this.webMaster = webMaster;
+    }
 
     public String getId() {
         return id;

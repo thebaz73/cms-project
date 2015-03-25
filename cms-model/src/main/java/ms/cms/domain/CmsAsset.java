@@ -1,6 +1,8 @@
 package ms.cms.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -16,7 +18,19 @@ public class CmsAsset {
     private String name;
     private Date modificationDate;
     private String title;
+    @Indexed(unique = true)
     private String uri;
+
+    public CmsAsset() {
+    }
+
+    @PersistenceConstructor
+    public CmsAsset(String name, Date modificationDate, String title, String uri) {
+        this.name = name;
+        this.modificationDate = modificationDate;
+        this.title = title;
+        this.uri = uri;
+    }
 
     public String getId() {
         return id;

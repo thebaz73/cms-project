@@ -1,6 +1,7 @@
 package ms.cms.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
@@ -13,12 +14,23 @@ import java.util.Date;
 public class CmsComment {
     @Id
     private String id;
+    @Indexed
     private Date timestamp;
     private String title;
     private String content;
     @DBRef
-    @Indexed
     private CmsUser viewer;
+
+    public CmsComment() {
+    }
+
+    @PersistenceConstructor
+    public CmsComment(Date timestamp, String title, String content, CmsUser viewer) {
+        this.timestamp = timestamp;
+        this.title = title;
+        this.content = content;
+        this.viewer = viewer;
+    }
 
     public String getId() {
         return id;
