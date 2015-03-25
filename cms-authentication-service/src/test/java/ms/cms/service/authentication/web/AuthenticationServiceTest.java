@@ -18,7 +18,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Date;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,6 +33,7 @@ public class AuthenticationServiceTest {
     private CmsUserRepository userRepository;
     @Autowired
     private CmsRoleRepository roleRepository;
+    private CmsUser cmsUser;
 
     @Before
     public void setUp() {
@@ -39,17 +42,18 @@ public class AuthenticationServiceTest {
         ArrayList<CmsRole> cmsRoles = new ArrayList<CmsRole>();
         cmsRoles.add(createCmsRole("ROLE_USER"));
         cmsRoles.add(createCmsRole("ROLE_ADMIN"));
-        CmsUser user = new CmsUser("John Doe", "jdoe@email.com", "jdoe", "jdoe", cmsRoles);
-        userRepository.save(user);
+        cmsUser = new CmsUser("John Doe", "jdoe@email.com", randomAlphanumeric(8), randomAlphanumeric(8), new Date(), cmsRoles);
+        userRepository.save(cmsUser);
     }
 
     @Test
     public void testWhoAmI() throws Exception {
-        ResponseEntity<CmsUser> responseEntity = template.getForEntity("http://jdoe:jdoe@localhost:9000/auth/whoami", CmsUser.class);
+        String url = String.format("http://%s:%s@localhost:9000/auth/whoami", cmsUser.getUsername(), cmsUser.getPassword());
+        ResponseEntity<CmsUser> responseEntity = template.getForEntity(url, CmsUser.class);
         CmsUser user = responseEntity.getBody();
-        assertEquals("jdoe", user.getUsername());
-        assertEquals("jdoe@email.com", user.getEmail());
-        assertEquals("John Doe", user.getName());
+        assertEquals(cmsUser.getUsername(), user.getUsername());
+        assertEquals(cmsUser.getEmail(), user.getEmail());
+        assertEquals(cmsUser.getName(), user.getName());
         assertEquals("", user.getPassword());
     }
 

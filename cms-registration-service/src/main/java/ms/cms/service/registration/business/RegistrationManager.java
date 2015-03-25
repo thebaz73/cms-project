@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public class RegistrationManager {
 
         List<CmsRole> roles = doGuessRoles(userType);
         String fullName = firstName + " " + lastName;
-        CmsUser cmsUser = new CmsUser(fullName, email, username, password, roles);
+        CmsUser cmsUser = new CmsUser(fullName, email, username, password, new Date(), roles);
 
         cmsUserRepository.save(cmsUser);
     }
