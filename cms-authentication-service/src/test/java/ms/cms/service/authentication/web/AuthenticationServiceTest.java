@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
@@ -37,7 +38,7 @@ public class AuthenticationServiceTest {
     public void setUp() {
         roleRepository.deleteAll();
         userRepository.deleteAll();
-        ArrayList<CmsRole> cmsRoles = new ArrayList<>();
+        List<CmsRole> cmsRoles = new ArrayList<>();
         cmsRoles.add(createCmsRole("ROLE_USER"));
         cmsRoles.add(createCmsRole("ROLE_ADMIN"));
         cmsUser = new CmsUser("John Doe", "jdoe@email.com", randomAlphanumeric(8), randomAlphanumeric(8), new Date(), cmsRoles);
