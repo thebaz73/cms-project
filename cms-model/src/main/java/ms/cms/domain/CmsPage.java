@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ public class CmsPage {
     private String name;
     private String title;
     private String uri;
+    private Date modificationDate;
     private String summary;
     private String content;
     @DBRef
@@ -53,6 +55,14 @@ public class CmsPage {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public Date getModificationDate() {
+        return modificationDate;
+    }
+
+    public void setModificationDate(Date modificationDate) {
+        this.modificationDate = modificationDate;
     }
 
     public String getSummary() {

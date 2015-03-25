@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
+import java.util.Date;
+
 /**
  * CmsComment
  * Created by thebaz on 24/03/15.
@@ -11,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 public class CmsComment {
     @Id
     private String id;
+    private Date timestamp;
     private String title;
     private String content;
     @DBRef
@@ -23,6 +26,14 @@ public class CmsComment {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getTitle() {

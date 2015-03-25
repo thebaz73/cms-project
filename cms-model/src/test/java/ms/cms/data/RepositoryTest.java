@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
@@ -116,11 +117,16 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         CmsSite site = new CmsSite();
         site.setName("John Doe's Blog");
+        site.setCreationDate(new Date());
         site.setAddress("www.jdoe.com");
         site.setWebMaster(user);
         siteRepository.save(site);
 
         assertEquals(1, siteRepository.findAll().size());
+        assertEquals(site.getName(), siteRepository.findAll().get(0).getName());
+        assertEquals(site.getCreationDate(), siteRepository.findAll().get(0).getCreationDate());
+        assertEquals(site.getAddress(), siteRepository.findAll().get(0).getAddress());
+        assertNotNull(siteRepository.findAll().get(0).getWebMaster());
 
         assertEquals(0, siteRepository.findByAddress("").size());
         assertEquals(1, siteRepository.findByAddress("www.jdoe.com").size());
@@ -161,6 +167,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         CmsSite site = new CmsSite();
         site.setName("John Doe's Blog");
+        site.setCreationDate(new Date());
         site.setAddress("www.jdoe.com");
         site.setWebMaster(user);
         siteRepository.save(site);
@@ -179,6 +186,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(page01.getName(), pageRepository.findAll().get(0).getName());
         assertEquals(page01.getTitle(), pageRepository.findAll().get(0).getTitle());
         assertEquals(page01.getUri(), pageRepository.findAll().get(0).getUri());
+        assertEquals(page01.getModificationDate().getTime(), pageRepository.findAll().get(0).getModificationDate().getTime());
         assertEquals(page01.getSummary(), pageRepository.findAll().get(0).getSummary());
         assertEquals(page01.getContent(), pageRepository.findAll().get(0).getContent());
 
@@ -192,6 +200,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(1, pageRepository.findAll().get(0).getAssets().size());
         assertNotNull(pageRepository.findAll().get(0).getAssets().get(0).getId());
         assertEquals(asset01.getName(), pageRepository.findAll().get(0).getAssets().get(0).getName());
+        assertEquals(asset01.getModificationDate().getTime(), pageRepository.findAll().get(0).getAssets().get(0).getModificationDate().getTime());
         assertEquals(asset01.getTitle(), pageRepository.findAll().get(0).getAssets().get(0).getTitle());
         assertEquals(asset01.getUri(), pageRepository.findAll().get(0).getAssets().get(0).getUri());
 
@@ -203,6 +212,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(2, pageRepository.findAll().get(0).getAssets().size());
         assertNotNull(pageRepository.findAll().get(0).getAssets().get(1).getId());
         assertEquals(asset02.getName(), pageRepository.findAll().get(0).getAssets().get(1).getName());
+        assertEquals(asset02.getModificationDate().getTime(), pageRepository.findAll().get(0).getAssets().get(0).getModificationDate().getTime());
         assertEquals(asset02.getTitle(), pageRepository.findAll().get(0).getAssets().get(1).getTitle());
         assertEquals(asset02.getUri(), pageRepository.findAll().get(0).getAssets().get(1).getUri());
 
@@ -221,6 +231,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(post01.getTitle(), postRepository.findAll().get(0).getTitle());
         assertEquals(post01.getUri(), postRepository.findAll().get(0).getUri());
         assertEquals(post01.getSummary(), postRepository.findAll().get(0).getSummary());
+        assertEquals(post01.getModificationDate().getTime(), postRepository.findAll().get(0).getModificationDate().getTime());
         assertEquals(post01.getContent(), postRepository.findAll().get(0).getContent());
 
         assertEquals(0, postRepository.findAll().get(0).getAssets().size());
@@ -233,6 +244,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(1, postRepository.findAll().get(0).getAssets().size());
         assertNotNull(postRepository.findAll().get(0).getAssets().get(0).getId());
         assertEquals(asset03.getName(), postRepository.findAll().get(0).getAssets().get(0).getName());
+        assertEquals(asset03.getModificationDate().getTime(), pageRepository.findAll().get(0).getAssets().get(0).getModificationDate().getTime());
         assertEquals(asset03.getTitle(), postRepository.findAll().get(0).getAssets().get(0).getTitle());
         assertEquals(asset03.getUri(), postRepository.findAll().get(0).getAssets().get(0).getUri());
 
@@ -247,6 +259,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         assertEquals(1, postRepository.findAll().get(0).getComments().size());
         assertNotNull(postRepository.findAll().get(0).getComments().get(0).getId());
+        assertEquals(comment01.getTimestamp().getTime(), postRepository.findAll().get(0).getComments().get(0).getTimestamp().getTime());
         assertEquals(comment01.getTitle(), postRepository.findAll().get(0).getComments().get(0).getTitle());
         assertEquals(comment01.getContent(), postRepository.findAll().get(0).getComments().get(0).getContent());
 
@@ -260,6 +273,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         assertEquals(2, postRepository.findAll().get(0).getComments().size());
         assertNotNull(postRepository.findAll().get(0).getComments().get(1).getId());
+        assertEquals(comment02.getTimestamp().getTime(), postRepository.findAll().get(0).getComments().get(0).getTimestamp().getTime());
         assertEquals(comment02.getTitle(), postRepository.findAll().get(0).getComments().get(1).getTitle());
         assertEquals(comment02.getContent(), postRepository.findAll().get(0).getComments().get(1).getContent());
     }
@@ -267,6 +281,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
     private CmsPage createCmsPage(String name, String title, String uri, String summary, String content) {
         CmsPage cmsPage = new CmsPage();
         cmsPage.setName(name);
+        cmsPage.setModificationDate(new Date());
         cmsPage.setTitle(title);
         cmsPage.setUri(uri);
         cmsPage.setSummary(summary);
@@ -279,6 +294,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
     private CmsPost createCmsPost(String name, String title, String uri, String summary, String content) {
         CmsPost cmsPost = new CmsPost();
         cmsPost.setName(name);
+        cmsPost.setModificationDate(new Date());
         cmsPost.setTitle(title);
         cmsPost.setUri(uri);
         cmsPost.setSummary(summary);
@@ -291,6 +307,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
     private CmsAsset createCmsAsset(String name, String title, String uri) {
         CmsAsset cmsAsset = new CmsAsset();
         cmsAsset.setName(name);
+        cmsAsset.setModificationDate(new Date());
         cmsAsset.setTitle(title);
         cmsAsset.setUri(uri);
         assetRepository.save(cmsAsset);
@@ -300,6 +317,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
     private CmsComment createCmsComment(String title, String content, CmsUser viewer) {
         CmsComment cmsComment = new CmsComment();
+        cmsComment.setTimestamp(new Date());
         cmsComment.setTitle(title);
         cmsComment.setContent(content);
         cmsComment.setViewer(viewer);
