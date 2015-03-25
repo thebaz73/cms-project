@@ -20,6 +20,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -141,7 +143,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         site.setWebMaster(user);
         siteRepository.save(site);
 
-        CmsPage page01 = createCmsPage("page01", "Curriculum Vitae", "/curriculum_vitae", "summary", "content");
+        CmsPage page01 = createCmsPage("page01", "Curriculum Vitae", "/curriculum_vitae", randomAlphanumeric(20), randomAlphabetic(200));
 
         site.getPages().add(page01);
         siteRepository.save(site);

@@ -19,6 +19,9 @@
         <!-- use UTF-8 for everything -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- util -->
+        <guava.version>17.0</guava.version>
+        <commons-lang3.version>3.3.2</commons-lang3.version>
     </properties>
 
     <repositories>
@@ -58,7 +61,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <executions>
@@ -76,11 +79,23 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 
     <dependencies>
+        <!-- util -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
+        </dependency>
+        <!-- logging -->
 
         <!-- logging dependencies -->
         <dependency>
