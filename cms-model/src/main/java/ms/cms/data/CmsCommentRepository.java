@@ -9,7 +9,7 @@ import java.util.List;
  * CmsPageRepository
  * Created by thebaz on 24/03/15.
  */
-public interface CmsCommentRepository extends MongoRepository<CmsComment, String>/*, QueryDslPredicateExecutor<CmsComment>*/ {
+public interface CmsCommentRepository extends MongoRepository<CmsComment, String>/*, PagingAndSortingRepository<CmsComment, String>*//*, QueryDslPredicateExecutor<CmsComment>*/ {
     /**
      * Finds list of @CmsComment given its contentId
      *
