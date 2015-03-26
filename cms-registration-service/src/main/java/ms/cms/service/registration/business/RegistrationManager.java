@@ -6,6 +6,7 @@ import ms.cms.data.CmsUserRepository;
 import ms.cms.domain.CmsRole;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsUser;
+import ms.cms.domain.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -167,6 +168,41 @@ public class RegistrationManager {
         }
 
         cmsSiteRepository.delete(cmsSite);
+    }
+
+    public void addSiteAuthor(String id, String userId) throws RegistrationException {
+        CmsUser cmsUser = cmsUserRepository.findOne(userId);
+        if (cmsUser == null) {
+            throw new RegistrationException("User id not found");
+        }
+        if (cmsUser.getRoles().stream().noneMatch(r -> r.getRole().equals(Role.ROLE_AUTHOR))) {
+            throw new RegistrationException("Author not found");
+        }
+
+        CmsSite cmsSite = cmsSiteRepository.findOne(id);
+        if (cmsSite == null) {
+            throw new RegistrationException("Site id not found");
+        }
+
+        cmsSite.getAuthors().add(cmsUser);
+        cmsSiteRepository.save(cmsSite);
+    }
+
+    public void removeSiteAuthor(String id, String userId) throws RegistrationException {
+        CmsUser cmsUser = cmsUserRepository.findOne(userId);
+        if (cmsUser == null) {
+            throw new RegistrationException("User id not found");
+        }
+
+        CmsSite cmsSite = cmsSiteRepository.findOne(id);
+        if (cmsSite == null) {
+            throw new RegistrationException("Site id not found");
+        }
+
+        cmsSite.getAuthors().stream().filter(user -> user.getId().equals(cmsUser.getId())).forEach(user -> {
+            cmsSite.getAuthors().remove(user);
+        });
+        cmsSiteRepository.save(cmsSite);
     }
 
     private List<CmsRole> doGuessRoles(UserType userType) {

@@ -16,14 +16,13 @@ import java.io.IOException;
  * Created by bazzoni on 24/03/2015.
  */
 @RestController
-@RequestMapping(value = "/user")
 public class UserService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private RegistrationManager registrationManager;
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     public void createUser(HttpServletResponse response,
                            @RequestParam(value = "type") String type,
                            @RequestParam(value = "username") String username,
@@ -40,8 +39,8 @@ public class UserService {
         }
     }
 
-    @RequestMapping(value = "/find", method = RequestMethod.GET)
-    public CmsUser findUser(HttpServletResponse response, @RequestParam(value = "param") String param) throws IOException {
+    @RequestMapping(value = "/user/{param}", method = RequestMethod.GET)
+    public CmsUser findUser(HttpServletResponse response, @PathVariable(value = "param") String param) throws IOException {
         try {
             return registrationManager.findUser(param);
         } catch (RegistrationException e) {
@@ -53,7 +52,7 @@ public class UserService {
         return null;
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     public void editUser(HttpServletResponse response,
                          @PathVariable(value = "id") String id,
                          @RequestParam(value = "password", defaultValue = "") String password,
@@ -68,7 +67,7 @@ public class UserService {
         }
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public void deleteUser(HttpServletResponse response,
                            @PathVariable(value = "id") String id) throws IOException {
         try {

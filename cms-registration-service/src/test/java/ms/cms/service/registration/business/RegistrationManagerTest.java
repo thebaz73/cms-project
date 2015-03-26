@@ -159,7 +159,26 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
 
     @Test
     public void testCreateSite() throws Exception {
-
+        String id = cmsUserRepository.findAll().get(0).getId();
+        registrationManager.createSite(id, "Half Blood Blog", "www.half-blood.com");
+        assertEquals(1, cmsSiteRepository.findAll().size());
+        assertNotNull(cmsSiteRepository.findAll().get(0).getId());
+        assertNotNull(cmsSiteRepository.findAll().get(0).getCreationDate());
+        assertEquals("Half Blood Blog", cmsSiteRepository.findAll().get(0).getName());
+        assertEquals("www.half-blood.com", cmsSiteRepository.findAll().get(0).getAddress());
+        assertEquals(1, cmsSiteRepository.findAll().get(0).getAuthors().size());
+        assertEquals(1, cmsSiteRepository.findAll().get(0).getPages().size());
+        assertEquals(1, cmsSiteRepository.findAll().get(0).getPosts().size());
+        try {
+            registrationManager.createSite("test", "Half Blood Blog", "www.half-blood.com");
+        } catch (RegistrationException e) {
+            assertEquals(RegistrationException.class, e.getClass());
+        }
+        try {
+            registrationManager.createSite(id, "Half Blood Blog", "www.half-blood.com");
+        } catch (RegistrationException e) {
+            assertEquals(RegistrationException.class, e.getClass());
+        }
     }
 
     @Test
@@ -174,6 +193,16 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
 
     @Test
     public void testDeleteSite() throws Exception {
+
+    }
+
+    @Test
+    public void testAddSiteAuthor() throws Exception {
+
+    }
+
+    @Test
+    public void testRemoveSiteAuthor() throws Exception {
 
     }
 }

@@ -16,14 +16,13 @@ import java.io.IOException;
  * Created by thebaz on 24/03/15.
  */
 @RestController
-@RequestMapping(value = "/site")
 public class SiteService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private RegistrationManager registrationManager;
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/site", method = RequestMethod.POST)
     public void createUser(HttpServletResponse response,
                            @RequestParam(value = "userId") String userId,
                            @RequestParam(value = "name") String name,
@@ -37,8 +36,8 @@ public class SiteService {
         }
     }
 
-    @RequestMapping(value = "/find", method = RequestMethod.GET)
-    public CmsSite findSite(HttpServletResponse response, @RequestParam(value = "param") String param) throws IOException {
+    @RequestMapping(value = "/site/{param}", method = RequestMethod.GET)
+    public CmsSite findSite(HttpServletResponse response, @PathVariable(value = "param") String param) throws IOException {
         try {
             return registrationManager.findSite(param);
         } catch (RegistrationException e) {
@@ -50,7 +49,7 @@ public class SiteService {
         return null;
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/site/{id}", method = RequestMethod.PUT)
     public void editSite(HttpServletResponse response,
                          @PathVariable(value = "id") String id,
                          @RequestParam(value = "name", defaultValue = "") String name) throws IOException {
@@ -63,13 +62,39 @@ public class SiteService {
         }
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/site/{id}", method = RequestMethod.DELETE)
     public void deleteSite(HttpServletResponse response,
                            @PathVariable(value = "id") String id) throws IOException {
         try {
             registrationManager.deleteSite(id);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot edit site. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
+    }
+
+    @RequestMapping(value = "/site/author/{id}", method = RequestMethod.POST)
+    public void addSiteAuthor(HttpServletResponse response,
+                              @PathVariable("id") String id,
+                              @RequestParam(value = "userId") String userId) throws IOException {
+        try {
+            registrationManager.addSiteAuthor(id, userId);
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot add author site. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
+    }
+
+    @RequestMapping(value = "/site/author/{id}", method = RequestMethod.DELETE)
+    public void removeSiteAuthor(HttpServletResponse response,
+                                 @PathVariable("id") String id,
+                                 @RequestParam(value = "userId") String userId) throws IOException {
+        try {
+            registrationManager.removeSiteAuthor(id, userId);
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot remove author site. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
