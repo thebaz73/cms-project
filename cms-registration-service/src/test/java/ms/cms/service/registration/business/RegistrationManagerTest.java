@@ -183,12 +183,31 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
 
     @Test
     public void testFindSite() throws Exception {
-
+        String id = cmsUserRepository.findAll().get(0).getId();
+        registrationManager.createSite(id, "Half Blood Blog", "www.half-blood.com");
+        assertEquals(registrationManager.findSite(id).getId(), cmsSiteRepository.findAll().get(0).getId());
+        assertEquals(registrationManager.findSite("www.half-blood.com").getId(), cmsSiteRepository.findAll().get(0).getId());
+        try {
+            registrationManager.findSite("test");
+        } catch (RegistrationException e) {
+            assertEquals(RegistrationException.class, e.getClass());
+        }
     }
 
     @Test
     public void testEditSite() throws Exception {
-
+        String id = cmsUserRepository.findAll().get(0).getId();
+        registrationManager.createSite(id, "Half Blood Blog", "www.half-blood.com");
+        String siteId = cmsSiteRepository.findAll().get(0).getId();
+        registrationManager.editSite(siteId, "Half Blood site");
+        assertEquals("Half Blood site", cmsSiteRepository.findAll().get(0).getName());
+        registrationManager.editSite(siteId, "");
+        assertEquals("Half Blood site", cmsSiteRepository.findAll().get(0).getName());
+        try {
+            registrationManager.editSite("test", "Half Blood site");
+        } catch (RegistrationException e) {
+            assertEquals(RegistrationException.class, e.getClass());
+        }
     }
 
     @Test
