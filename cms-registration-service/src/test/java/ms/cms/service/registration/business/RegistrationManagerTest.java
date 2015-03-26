@@ -71,7 +71,7 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
             }
         }
         registrationManager.initialize();
-        registrationManager.createUser(RegistrationManager.UserType.AUTHOR,
+        registrationManager.createUser(RegistrationManager.UserType.MANAGER,
                 "lvoldemort",
                 "avada!kedavra",
                 "voldemort@evil.com",
@@ -89,10 +89,10 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
         assertEquals("voldemort@evil.com", cmsUserRepository.findAll().get(0).getEmail());
         assertEquals("Tom Riddle", cmsUserRepository.findAll().get(0).getName());
         assertEquals(Role.ROLE_USER, cmsUserRepository.findAll().get(0).getRoles().get(0).getRole());
-        assertEquals(Role.ROLE_AUTHOR, cmsUserRepository.findAll().get(0).getRoles().get(1).getRole());
+        assertEquals(Role.ROLE_MANAGER, cmsUserRepository.findAll().get(0).getRoles().get(1).getRole());
 
         try {
-            registrationManager.createUser(RegistrationManager.UserType.AUTHOR,
+            registrationManager.createUser(RegistrationManager.UserType.MANAGER,
                     "lvoldemort",
                     "avada!kedavra",
                     "voldemort@evil.com",
@@ -103,7 +103,7 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
         }
 
         try {
-            registrationManager.createUser(RegistrationManager.UserType.AUTHOR,
+            registrationManager.createUser(RegistrationManager.UserType.MANAGER,
                     "tomriddle",
                     "avada!kedavra",
                     "voldemort@evil.com",
@@ -159,23 +159,22 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
 
     @Test
     public void testCreateSite() throws Exception {
-        String id = cmsUserRepository.findAll().get(0).getId();
-        registrationManager.createSite(id, "Half Blood Blog", "www.half-blood.com");
+        String userId = createSite();
         assertEquals(1, cmsSiteRepository.findAll().size());
         assertNotNull(cmsSiteRepository.findAll().get(0).getId());
         assertNotNull(cmsSiteRepository.findAll().get(0).getCreationDate());
         assertEquals("Half Blood Blog", cmsSiteRepository.findAll().get(0).getName());
         assertEquals("www.half-blood.com", cmsSiteRepository.findAll().get(0).getAddress());
-        assertEquals(1, cmsSiteRepository.findAll().get(0).getAuthors().size());
-        assertEquals(1, cmsSiteRepository.findAll().get(0).getPages().size());
-        assertEquals(1, cmsSiteRepository.findAll().get(0).getPosts().size());
+        assertEquals(0, cmsSiteRepository.findAll().get(0).getAuthors().size());
+        assertEquals(0, cmsSiteRepository.findAll().get(0).getPages().size());
+        assertEquals(0, cmsSiteRepository.findAll().get(0).getPosts().size());
         try {
-            registrationManager.createSite("test", "Half Blood Blog", "www.half-blood.com");
+            registrationManager.createSite("error", "Half Blood Blog", "www.half-blood.com");
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
         try {
-            registrationManager.createSite(id, "Half Blood Blog", "www.half-blood.com");
+            registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com");
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
@@ -183,12 +182,12 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
 
     @Test
     public void testFindSite() throws Exception {
-        String id = cmsUserRepository.findAll().get(0).getId();
-        registrationManager.createSite(id, "Half Blood Blog", "www.half-blood.com");
-        assertEquals(registrationManager.findSite(id).getId(), cmsSiteRepository.findAll().get(0).getId());
+        String userId = createSite();
+        assertEquals(registrationManager.findSite(userId).getId(), cmsSiteRepository.findAll().get(0).getId());
+        assertEquals(registrationManager.findSite("lvoldemort").getId(), cmsSiteRepository.findAll().get(0).getId());
         assertEquals(registrationManager.findSite("www.half-blood.com").getId(), cmsSiteRepository.findAll().get(0).getId());
         try {
-            registrationManager.findSite("test");
+            registrationManager.findSite("error");
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
@@ -196,15 +195,14 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
 
     @Test
     public void testEditSite() throws Exception {
-        String id = cmsUserRepository.findAll().get(0).getId();
-        registrationManager.createSite(id, "Half Blood Blog", "www.half-blood.com");
+        createSite();
         String siteId = cmsSiteRepository.findAll().get(0).getId();
         registrationManager.editSite(siteId, "Half Blood site");
         assertEquals("Half Blood site", cmsSiteRepository.findAll().get(0).getName());
         registrationManager.editSite(siteId, "");
         assertEquals("Half Blood site", cmsSiteRepository.findAll().get(0).getName());
         try {
-            registrationManager.editSite("test", "Half Blood site");
+            registrationManager.editSite("error", "Half Blood site");
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
@@ -212,16 +210,92 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
 
     @Test
     public void testDeleteSite() throws Exception {
+        createSite();
+        String siteId = cmsSiteRepository.findAll().get(0).getId();
+        try {
+            registrationManager.deleteSite("error");
+        } catch (RegistrationException e) {
+            assertEquals(RegistrationException.class, e.getClass());
+        }
+        assertEquals(1, cmsSiteRepository.findAll().size());
 
+        registrationManager.deleteSite(siteId);
+        assertEquals(0, cmsSiteRepository.findAll().size());
     }
 
     @Test
     public void testAddSiteAuthor() throws Exception {
+        String userId = createSiteAndAuthor();
+        String siteId = cmsSiteRepository.findAll().get(0).getId();
+        String princeId = cmsUserRepository.findByUsername("prince").get(0).getId();
+        registrationManager.addSiteAuthor(siteId, princeId);
 
+        assertEquals(1, cmsSiteRepository.findAll().get(0).getAuthors().size());
+        assertNotNull(cmsSiteRepository.findAll().get(0).getAuthors().get(0).getId());
+        assertNotNull(cmsSiteRepository.findAll().get(0).getAuthors().get(0).getCreationDate());
+        assertEquals("prince", cmsSiteRepository.findAll().get(0).getAuthors().get(0).getUsername());
+        assertEquals("legilimens", cmsSiteRepository.findAll().get(0).getAuthors().get(0).getPassword());
+        assertEquals("ssnape@evil.com", cmsSiteRepository.findAll().get(0).getAuthors().get(0).getEmail());
+        assertEquals("Severus Snape", cmsSiteRepository.findAll().get(0).getAuthors().get(0).getName());
+        assertEquals(Role.ROLE_USER, cmsSiteRepository.findAll().get(0).getAuthors().get(0).getRoles().get(0).getRole());
+        assertEquals(Role.ROLE_AUTHOR, cmsSiteRepository.findAll().get(0).getAuthors().get(0).getRoles().get(1).getRole());
+
+        try {
+            registrationManager.addSiteAuthor("error", princeId);
+        } catch (RegistrationException e) {
+            assertEquals(RegistrationException.class, e.getClass());
+        }
+
+        try {
+            registrationManager.addSiteAuthor(siteId, "error");
+        } catch (RegistrationException e) {
+            assertEquals(RegistrationException.class, e.getClass());
+        }
+
+        try {
+            registrationManager.addSiteAuthor(siteId, userId);
+        } catch (RegistrationException e) {
+            assertEquals(RegistrationException.class, e.getClass());
+        }
     }
 
     @Test
     public void testRemoveSiteAuthor() throws Exception {
+        createSiteAndAuthor();
+        String siteId = cmsSiteRepository.findAll().get(0).getId();
+        String princeId = cmsUserRepository.findByUsername("prince").get(0).getId();
+        registrationManager.addSiteAuthor(siteId, princeId);
 
+        try {
+            registrationManager.removeSiteAuthor("error", princeId);
+        } catch (RegistrationException e) {
+            assertEquals(RegistrationException.class, e.getClass());
+        }
+
+        try {
+            registrationManager.removeSiteAuthor(siteId, "error");
+        } catch (RegistrationException e) {
+            assertEquals(RegistrationException.class, e.getClass());
+        }
+
+        registrationManager.removeSiteAuthor(siteId, princeId);
+        assertEquals(0, cmsSiteRepository.findAll().get(0).getAuthors().size());
+    }
+
+    private String createSite() throws RegistrationException {
+        String userId = cmsUserRepository.findAll().get(0).getId();
+        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com");
+        return userId;
+    }
+
+    private String createSiteAndAuthor() throws RegistrationException {
+        String userId = createSite();
+        registrationManager.createUser(RegistrationManager.UserType.AUTHOR,
+                "prince",
+                "legilimens",
+                "ssnape@evil.com",
+                "Severus",
+                "Snape");
+        return userId;
     }
 }

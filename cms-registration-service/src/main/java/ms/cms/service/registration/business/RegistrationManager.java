@@ -119,15 +119,20 @@ public class RegistrationManager {
             throw new RegistrationException("Site already registered");
         }
 
-        CmsSite cmsSite = new CmsSite();
-        cmsSite.setName(name);
-        cmsSite.setAddress(address);
-        cmsSite.setWebMaster(cmsUser);
+        CmsSite cmsSite = new CmsSite(name, new Date(), address, cmsUser);
 
         cmsSiteRepository.save(cmsSite);
     }
 
     public CmsSite findSite(String param) throws RegistrationException {
+        CmsUser cmsUser = cmsUserRepository.findOne(param);
+        if (cmsUser != null) {
+            List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(cmsUser);
+            if (!byWebMaster.isEmpty()) {
+                return byWebMaster.get(0);
+            }
+        }
+
         List<CmsUser> byUsername = cmsUserRepository.findByUsername(param);
         if (!byUsername.isEmpty()) {
             List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(byUsername.get(0));
@@ -184,8 +189,10 @@ public class RegistrationManager {
             throw new RegistrationException("Site id not found");
         }
 
-        cmsSite.getAuthors().add(cmsUser);
-        cmsSiteRepository.save(cmsSite);
+        if (cmsSite.getAuthors().stream().noneMatch(a -> a.getId().equals(cmsUser.getId()))) {
+            cmsSite.getAuthors().add(cmsUser);
+            cmsSiteRepository.save(cmsSite);
+        }
     }
 
     public void removeSiteAuthor(String id, String userId) throws RegistrationException {
@@ -199,7 +206,8 @@ public class RegistrationManager {
             throw new RegistrationException("Site id not found");
         }
 
-        cmsSite.getAuthors().stream().filter(user -> user.getId().equals(cmsUser.getId())).forEach(user -> {
+        List<CmsUser> authors = new ArrayList<>(cmsSite.getAuthors());
+        authors.stream().filter(user -> user.getId().equals(cmsUser.getId())).forEach(user -> {
             cmsSite.getAuthors().remove(user);
         });
         cmsSiteRepository.save(cmsSite);
