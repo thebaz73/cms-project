@@ -3,10 +3,7 @@ package ms.cms.service.registration.business;
 import ms.cms.data.CmsRoleRepository;
 import ms.cms.data.CmsSiteRepository;
 import ms.cms.data.CmsUserRepository;
-import ms.cms.domain.CmsRole;
-import ms.cms.domain.CmsSite;
-import ms.cms.domain.CmsUser;
-import ms.cms.domain.Role;
+import ms.cms.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -110,7 +107,7 @@ public class RegistrationManager {
         cmsUserRepository.delete(cmsUser);
     }
 
-    public void createSite(String userId, String name, String address) throws RegistrationException {
+    public void createSite(String userId, String name, String address, WorkflowType workflowType) throws RegistrationException {
         CmsUser cmsUser = cmsUserRepository.findOne(userId);
         if (cmsUser == null) {
             throw new RegistrationException("User id not found");
@@ -119,7 +116,7 @@ public class RegistrationManager {
             throw new RegistrationException("Site already registered");
         }
 
-        CmsSite cmsSite = new CmsSite(name, new Date(), address, cmsUser);
+        CmsSite cmsSite = new CmsSite(name, new Date(), address, workflowType, cmsUser);
 
         cmsSiteRepository.save(cmsSite);
     }

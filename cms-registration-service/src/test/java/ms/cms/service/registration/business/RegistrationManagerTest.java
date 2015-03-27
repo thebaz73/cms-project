@@ -8,6 +8,7 @@ import ms.cms.data.CmsSiteRepository;
 import ms.cms.data.CmsUserRepository;
 import ms.cms.domain.CmsRole;
 import ms.cms.domain.Role;
+import ms.cms.domain.WorkflowType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -165,16 +166,17 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
         assertNotNull(cmsSiteRepository.findAll().get(0).getCreationDate());
         assertEquals("Half Blood Blog", cmsSiteRepository.findAll().get(0).getName());
         assertEquals("www.half-blood.com", cmsSiteRepository.findAll().get(0).getAddress());
+        assertEquals(WorkflowType.SELF_APPROVAL_WF, cmsSiteRepository.findAll().get(0).getWorkflowType());
         assertEquals(0, cmsSiteRepository.findAll().get(0).getAuthors().size());
         assertEquals(0, cmsSiteRepository.findAll().get(0).getPages().size());
         assertEquals(0, cmsSiteRepository.findAll().get(0).getPosts().size());
         try {
-            registrationManager.createSite("error", "Half Blood Blog", "www.half-blood.com");
+            registrationManager.createSite("error", "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
         try {
-            registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com");
+            registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
@@ -284,7 +286,7 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
 
     private String createSite() throws RegistrationException {
         String userId = cmsUserRepository.findAll().get(0).getId();
-        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com");
+        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
         return userId;
     }
 

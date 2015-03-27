@@ -1,6 +1,7 @@
 package ms.cms.service.registration.web;
 
 import ms.cms.domain.CmsSite;
+import ms.cms.domain.WorkflowType;
 import ms.cms.service.registration.business.RegistrationException;
 import ms.cms.service.registration.business.RegistrationManager;
 import org.slf4j.Logger;
@@ -26,9 +27,10 @@ public class SiteService {
     public void createUser(HttpServletResponse response,
                            @RequestParam(value = "userId") String userId,
                            @RequestParam(value = "name") String name,
-                           @RequestParam(value = "address") String address) throws IOException {
+                           @RequestParam(value = "address") String address,
+                           @RequestParam(value = "address") String workflowType) throws IOException {
         try {
-            registrationManager.createSite(userId, name, address);
+            registrationManager.createSite(userId, name, address, WorkflowType.forName(workflowType));
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create site. Reason: %s", e.toString());
             logger.info(msg);
