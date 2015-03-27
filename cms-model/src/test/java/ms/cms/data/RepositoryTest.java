@@ -115,11 +115,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", new Date(), cmsRoles);
         userRepository.save(user);
 
-        CmsSite site = new CmsSite();
-        site.setName("John Doe's Blog");
-        site.setCreationDate(new Date());
-        site.setAddress("www.jdoe.com");
-        site.setWebMaster(user);
+        CmsSite site = new CmsSite("John Doe's Blog", new Date(), "www.jdoe.com", WorkflowType.SELF_APPROVAL_WF, user);
         siteRepository.save(site);
 
         assertEquals(1, siteRepository.findAll().size());
@@ -165,11 +161,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", new Date(), cmsRoles);
         userRepository.save(user);
 
-        CmsSite site = new CmsSite();
-        site.setName("John Doe's Blog");
-        site.setCreationDate(new Date());
-        site.setAddress("www.jdoe.com");
-        site.setWebMaster(user);
+        CmsSite site = new CmsSite("John Doe's Blog", new Date(), "www.jdoe.com", WorkflowType.SELF_APPROVAL_WF, user);
         siteRepository.save(site);
 
         //PAGEs

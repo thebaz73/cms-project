@@ -23,6 +23,7 @@ public class CmsSite {
     private Date creationDate;
     @Indexed(unique = true)
     private String address;
+    private WorkflowType workflowType;
     @DBRef
     @Indexed
     private CmsUser webMaster;
@@ -37,10 +38,11 @@ public class CmsSite {
     }
 
     @PersistenceConstructor
-    public CmsSite(String name, Date creationDate, String address, CmsUser webMaster) {
+    public CmsSite(String name, Date creationDate, String address, WorkflowType workflowType, CmsUser webMaster) {
         this.name = name;
         this.creationDate = creationDate;
         this.address = address;
+        this.workflowType = workflowType;
         this.webMaster = webMaster;
     }
 
@@ -74,6 +76,14 @@ public class CmsSite {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public WorkflowType getWorkflowType() {
+        return workflowType;
+    }
+
+    public void setWorkflowType(WorkflowType workflowType) {
+        this.workflowType = workflowType;
     }
 
     public CmsUser getWebMaster() {
