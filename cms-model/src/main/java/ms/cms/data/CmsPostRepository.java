@@ -3,9 +3,18 @@ package ms.cms.data;
 import ms.cms.domain.CmsPost;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.List;
+
 /**
- * CmsPageRepository
+ * CmsPostRepository
  * Created by thebaz on 24/03/15.
  */
 public interface CmsPostRepository extends MongoRepository<CmsPost, String> {
+    /**
+     * Finds @CmsPost given its address
+     *
+     * @param uri post uri
+     * @return list of @CmsPost
+     */
+    List<CmsPost> findByUri(String uri);
 }

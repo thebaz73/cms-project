@@ -1,6 +1,6 @@
 package ms.cms.service.authoring.web;
 
-import ms.cms.domain.CmsPage;
+import ms.cms.domain.CmsPost;
 import ms.cms.service.authoring.business.AuthoringException;
 import ms.cms.service.authoring.business.AuthoringManager;
 import org.slf4j.Logger;
@@ -12,18 +12,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * PageService
+ * PostService
  * Created by thebaz on 27/03/15.
  */
 @RestController
-public class PageService {
+public class PostService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private AuthoringManager authoringManager;
 
-    @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public void createPage(HttpServletResponse response,
+    @RequestMapping(value = "/post", method = RequestMethod.POST)
+    public void createPost(HttpServletResponse response,
                            @RequestParam(value = "siteId") String siteId,
                            @RequestParam(value = "name", defaultValue = "") String name,
                            @RequestParam(value = "title") String title,
@@ -31,20 +31,20 @@ public class PageService {
                            @RequestParam(value = "summary", defaultValue = "") String summary,
                            @RequestParam(value = "content") String content) throws IOException {
         try {
-            authoringManager.createPage(siteId, name, title, uri, summary, content);
+            authoringManager.createPost(siteId, name, title, uri, summary, content);
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot create page. Reason: %s", e.toString());
+            String msg = String.format("Cannot create post. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
     }
 
-    @RequestMapping(value = "/page/{id}", method = RequestMethod.GET)
-    public CmsPage findPage(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
+    @RequestMapping(value = "/post/{id}", method = RequestMethod.GET)
+    public CmsPost findPost(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
         try {
-            return authoringManager.findPage(id);
+            return authoringManager.findPost(id);
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot find page. Reason: %s", e.toString());
+            String msg = String.format("Cannot find post. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
@@ -52,8 +52,8 @@ public class PageService {
         return null;
     }
 
-    @RequestMapping(value = "/page/{id}", method = RequestMethod.PUT)
-    public void editPage(HttpServletResponse response,
+    @RequestMapping(value = "/post/{id}", method = RequestMethod.PUT)
+    public void editPost(HttpServletResponse response,
                          @PathVariable(value = "id") String id,
                          @RequestParam(value = "name", defaultValue = "") String name,
                          @RequestParam(value = "title") String title,
@@ -61,21 +61,21 @@ public class PageService {
                          @RequestParam(value = "summary", defaultValue = "") String summary,
                          @RequestParam(value = "content") String content) throws IOException {
         try {
-            authoringManager.editPage(id, name, title, uri, summary, content);
+            authoringManager.editPost(id, name, title, uri, summary, content);
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot edit page. Reason: %s", e.toString());
+            String msg = String.format("Cannot edit post. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
     }
 
-    @RequestMapping(value = "/page/{id}", method = RequestMethod.DELETE)
-    public void deletePage(HttpServletResponse response,
+    @RequestMapping(value = "/post/{id}", method = RequestMethod.DELETE)
+    public void deletePost(HttpServletResponse response,
                            @PathVariable(value = "id") String id) throws IOException {
         try {
-            authoringManager.deletePage(id);
+            authoringManager.deletePost(id);
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot delete page. Reason: %s", e.toString());
+            String msg = String.format("Cannot delete post. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
