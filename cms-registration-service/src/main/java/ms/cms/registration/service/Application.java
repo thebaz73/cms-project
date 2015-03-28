@@ -51,6 +51,7 @@ public class Application implements CommandLineRunner {
                 cmsRoleRepository.save(cmsRole);
             }
         }
+        //TODO initialize values using Cloud ConfigService
         registrationManager.initialize();
     }
 }

@@ -30,7 +30,6 @@ public class AuthoringManager {
     private int maxWidth;
 
     public void initialize(int maxWidth) {
-        //initialize values using Cloud ConfigService
         this.maxWidth = maxWidth;
     }
 

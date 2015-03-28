@@ -36,7 +36,8 @@ public class Application implements CommandLineRunner {
      */
     @Override
     public void run(String... args) throws Exception {
-        authoringManager.initialize();
+        //TODO initialize values using Cloud ConfigService
+        authoringManager.initialize(100);
     }
 
 }
