@@ -10,13 +10,17 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>cms-authoring-ui</artifactId>
+    <artifactId>cms-registration-ui</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <start-class>ms.cms.registration.ui.Application</start-class>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>ms.cms</groupId>
-            <artifactId>cms-authoring-common</artifactId>
+            <artifactId>cms-registration-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -75,4 +79,13 @@
             <artifactId>commons-beanutils</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
