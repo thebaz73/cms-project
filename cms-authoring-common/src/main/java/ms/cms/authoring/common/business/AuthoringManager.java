@@ -7,10 +7,10 @@ import ms.cms.domain.CmsPage;
 import ms.cms.domain.CmsPost;
 import ms.cms.domain.CmsSite;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 import static ms.cms.authoring.common.utils.AuthoringUtils.abbreviateHtml;
 import static ms.cms.authoring.common.utils.AuthoringUtils.toPrettyURL;
@@ -27,11 +27,11 @@ public class AuthoringManager {
     private CmsPageRepository cmsPageRepository;
     @Autowired
     private CmsPostRepository cmsPostRepository;
-    @Value("${summary.max.width}")
     private int maxWidth;
 
-    public void initialize() {
+    public void initialize(int maxWidth) {
         //initialize values using Cloud ConfigService
+        this.maxWidth = maxWidth;
     }
 
     public void createPage(String siteId, String name, String title, String uri, String summary, String content) throws AuthoringException {
@@ -62,6 +62,15 @@ public class AuthoringManager {
         throw new AuthoringException("Wrong search parameter");
     }
 
+    public CmsPage findPageByUri(String siteId, String uri) throws AuthoringException {
+        List<CmsPage> bySiteIdAndUri = cmsPageRepository.findBySiteIdAndUri(siteId, uri);
+        if (!bySiteIdAndUri.isEmpty()) {
+            return bySiteIdAndUri.get(0);
+        }
+
+        throw new AuthoringException("Wrong search parameter");
+    }
+
     public void editPage(String id, String name, String title, String uri, String summary, String content) throws AuthoringException {
         CmsPage cmsPage = cmsPageRepository.findOne(id);
         if (cmsPage == null) {
@@ -80,6 +89,7 @@ public class AuthoringManager {
         cmsPage.setName(name);
         cmsPage.setTitle(title);
         cmsPage.setUri(uri);
+        cmsPage.setModificationDate(new Date());
         cmsPage.setSummary(summary);
         cmsPage.setContent(content);
 
@@ -123,6 +133,15 @@ public class AuthoringManager {
         throw new AuthoringException("Wrong search parameter");
     }
 
+    public CmsPost findPostByUri(String siteId, String uri) throws AuthoringException {
+        List<CmsPost> bySiteIdAndUri = cmsPostRepository.findBySiteIdAndUri(siteId, uri);
+        if (!bySiteIdAndUri.isEmpty()) {
+            return bySiteIdAndUri.get(0);
+        }
+
+        throw new AuthoringException("Wrong search parameter");
+    }
+
     public void editPost(String id, String name, String title, String uri, String summary, String content) throws AuthoringException {
         CmsPost cmsPost = cmsPostRepository.findOne(id);
         if (cmsPost == null) {
@@ -141,6 +160,7 @@ public class AuthoringManager {
         cmsPost.setName(name);
         cmsPost.setTitle(title);
         cmsPost.setUri(uri);
+        cmsPost.setModificationDate(new Date());
         cmsPost.setSummary(summary);
         cmsPost.setContent(content);
 

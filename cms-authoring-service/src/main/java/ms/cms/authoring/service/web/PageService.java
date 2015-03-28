@@ -52,6 +52,21 @@ public class PageService {
         return null;
     }
 
+    @RequestMapping(value = "/page/byUri", method = RequestMethod.GET)
+    public CmsPage findPageByUri(HttpServletResponse response,
+                                 @RequestParam(value = "siteId") String siteId,
+                                 @RequestParam(value = "uri") String uri) throws IOException {
+        try {
+            return authoringManager.findPageByUri(siteId, uri);
+        } catch (AuthoringException e) {
+            String msg = String.format("Cannot find page. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
+
+        return null;
+    }
+
     @RequestMapping(value = "/page/{id}", method = RequestMethod.PUT)
     public void editPage(HttpServletResponse response,
                          @PathVariable(value = "id") String id,

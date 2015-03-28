@@ -52,6 +52,21 @@ public class PostService {
         return null;
     }
 
+    @RequestMapping(value = "/post/byUri", method = RequestMethod.GET)
+    public CmsPost findPostByUri(HttpServletResponse response,
+                                 @RequestParam(value = "siteId") String siteId,
+                                 @RequestParam(value = "uri") String uri) throws IOException {
+        try {
+            return authoringManager.findPostByUri(siteId, uri);
+        } catch (AuthoringException e) {
+            String msg = String.format("Cannot find post. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
+
+        return null;
+    }
+
     @RequestMapping(value = "/post/{id}", method = RequestMethod.PUT)
     public void editPost(HttpServletResponse response,
                          @PathVariable(value = "id") String id,

@@ -13,8 +13,9 @@ public interface CmsPostRepository extends MongoRepository<CmsPost, String> {
     /**
      * Finds @CmsPost given its address
      *
+     * @param siteId site id
      * @param uri post uri
      * @return list of @CmsPost
      */
-    List<CmsPost> findByUri(String uri);
+    List<CmsPost> findBySiteIdAndUri(String siteId, String uri);
 }

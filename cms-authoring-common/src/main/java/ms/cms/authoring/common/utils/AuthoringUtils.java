@@ -19,7 +19,7 @@ public class AuthoringUtils {
     public static String toPrettyURL(String string) {
         return Normalizer.normalize(string.toLowerCase(), Normalizer.Form.NFD)
                 .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
-                .replaceAll("[^\\p{Alnum}]+", "-");
+                .replaceAll("[^\\p{Alnum}]+", "_");
     }
 
     /**

@@ -13,8 +13,9 @@ public interface CmsPageRepository extends MongoRepository<CmsPage, String> {
     /**
      * Finds @CmsPage given its address
      *
+     * @param siteId site id
      * @param uri page uri
      * @return list of @CmsPage
      */
-    List<CmsPage> findByUri(String uri);
+    List<CmsPage> findBySiteIdAndUri(String siteId, String uri);
 }
