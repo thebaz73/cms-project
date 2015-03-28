@@ -2,6 +2,8 @@ package ms.cms.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -15,13 +17,16 @@ import java.util.List;
  * Created by thebaz on 24/03/15.
  */
 @Document
+@CompoundIndexes({
+        @CompoundIndex(name = "site_uri_idx", def = "{'siteId' : 1, 'uri' : 1}")
+})
 public abstract class CmsContent {
     private final String type;
     @Id
     private String id;
+    private String siteId;
     private String name;
     private String title;
-    @Indexed
     private String uri;
     @Indexed
     private Date modificationDate;
@@ -39,8 +44,9 @@ public abstract class CmsContent {
     }
 
     @PersistenceConstructor
-    public CmsContent(String type, String name, String title, String uri, Date modificationDate, String summary, String content) {
+    public CmsContent(String type, String siteId, String name, String title, String uri, Date modificationDate, String summary, String content) {
         this(type);
+        this.siteId = siteId;
         this.name = name;
         this.title = title;
         this.uri = uri;
@@ -50,6 +56,10 @@ public abstract class CmsContent {
     }
 
 
+    public String getType() {
+        return type;
+    }
+
     public String getId() {
         return id;
     }
@@ -58,8 +68,12 @@ public abstract class CmsContent {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
     }
 
     public String getName() {

@@ -18,7 +18,7 @@ public class CmsPage extends CmsContent {
     }
 
     @PersistenceConstructor
-    public CmsPage(String name, String title, String uri, Date modificationDate, String summary, String content) {
-        super("PAGE", name, title, uri, modificationDate, summary, content);
+    public CmsPage(String siteId, String name, String title, String uri, Date modificationDate, String summary, String content) {
+        super("PAGE", siteId, name, title, uri, modificationDate, summary, content);
     }
 }

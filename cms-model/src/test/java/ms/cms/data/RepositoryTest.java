@@ -165,7 +165,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         siteRepository.save(site);
 
         //PAGEs
-        CmsPage page01 = createCmsPage("page01", "Page 01", "/page_01", randomAlphanumeric(20), randomAlphabetic(200));
+        CmsPage page01 = createCmsPage(site.getId(), "page01", "Page 01", "/page_01", randomAlphanumeric(20), randomAlphabetic(200));
 
         site.getPages().add(page01);
         siteRepository.save(site);
@@ -209,7 +209,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(asset02.getUri(), pageRepository.findAll().get(0).getAssets().get(1).getUri());
 
         //POSTs
-        CmsPost post01 = createCmsPost("post01", "Post 01", "/post_01", randomAlphanumeric(20), randomAlphabetic(200));
+        CmsPost post01 = createCmsPost(site.getId(), "post01", "Post 01", "/post_01", randomAlphanumeric(20), randomAlphabetic(200));
 
         site.getPosts().add(post01);
         siteRepository.save(site);
@@ -276,27 +276,15 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(comment02.getContent(), commentRepository.findByContentId(post01.getId()).get(1).getContent());
     }
 
-    private CmsPage createCmsPage(String name, String title, String uri, String summary, String content) {
-        CmsPage cmsPage = new CmsPage();
-        cmsPage.setName(name);
-        cmsPage.setModificationDate(new Date());
-        cmsPage.setTitle(title);
-        cmsPage.setUri(uri);
-        cmsPage.setSummary(summary);
-        cmsPage.setContent(content);
+    private CmsPage createCmsPage(String siteId, String name, String title, String uri, String summary, String content) {
+        CmsPage cmsPage = new CmsPage(siteId, name, title, uri, new Date(), summary, content);
         pageRepository.save(cmsPage);
 
         return cmsPage;
     }
 
-    private CmsPost createCmsPost(String name, String title, String uri, String summary, String content) {
-        CmsPost cmsPost = new CmsPost();
-        cmsPost.setName(name);
-        cmsPost.setModificationDate(new Date());
-        cmsPost.setTitle(title);
-        cmsPost.setUri(uri);
-        cmsPost.setSummary(summary);
-        cmsPost.setContent(content);
+    private CmsPost createCmsPost(String siteId, String name, String title, String uri, String summary, String content) {
+        CmsPost cmsPost = new CmsPost(siteId, name, title, uri, new Date(), summary, content);
         postRepository.save(cmsPost);
 
         return cmsPost;

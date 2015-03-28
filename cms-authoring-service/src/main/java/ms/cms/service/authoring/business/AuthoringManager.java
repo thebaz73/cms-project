@@ -49,7 +49,7 @@ public class AuthoringManager {
             summary = abbreviateHtml(content, maxWidth, false);
         }
 
-        CmsPage cmsPage = new CmsPage(name, title, uri, new Date(), summary, content);
+        CmsPage cmsPage = new CmsPage(cmsSite.getId(), name, title, uri, new Date(), summary, content);
         cmsPageRepository.save(cmsPage);
     }
 
@@ -110,7 +110,7 @@ public class AuthoringManager {
             summary = abbreviateHtml(content, maxWidth, false);
         }
 
-        CmsPost cmsPost = new CmsPost(name, title, uri, new Date(), summary, content);
+        CmsPost cmsPost = new CmsPost(cmsSite.getId(), name, title, uri, new Date(), summary, content);
         cmsPostRepository.save(cmsPost);
     }
 

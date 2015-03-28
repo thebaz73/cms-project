@@ -18,7 +18,7 @@ public class CmsPost extends CmsContent {
     }
 
     @PersistenceConstructor
-    public CmsPost(String name, String title, String uri, Date modificationDate, String summary, String content) {
-        super("POST", name, title, uri, modificationDate, summary, content);
+    public CmsPost(String siteId, String name, String title, String uri, Date modificationDate, String summary, String content) {
+        super("POST", siteId, name, title, uri, modificationDate, summary, content);
     }
 }
