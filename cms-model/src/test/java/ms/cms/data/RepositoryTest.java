@@ -47,6 +47,8 @@ public class RepositoryTest extends AbstractMongoConfiguration {
     private CmsAssetRepository assetRepository;
     @Autowired
     private CmsCommentRepository commentRepository;
+    @Autowired
+    private CmsTagRepository tagRepository;
 
     public String getDatabaseName() {
         return "cms-test";
@@ -274,6 +276,31 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(comment02.getTimestamp().getTime(), commentRepository.findByContentId(post01.getId()).get(1).getTimestamp().getTime());
         assertEquals(comment02.getTitle(), commentRepository.findByContentId(post01.getId()).get(1).getTitle());
         assertEquals(comment02.getContent(), commentRepository.findByContentId(post01.getId()).get(1).getContent());
+
+        CmsTag tag01 = new CmsTag(site.getId(), "potions");
+        tag01.getCommentIds().add(post01.getId());
+        tagRepository.save(tag01);
+
+        assertEquals(1, tagRepository.findAll().size());
+        assertNotNull(tagRepository.findAll().get(0).getId());
+        assertEquals(1, tagRepository.findBySiteIdAndTag(site.getId(), "potions").size());
+        assertNotNull(tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getId());
+        assertEquals(tagRepository.findAll().get(0).getId(), tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getId());
+        assertEquals(tagRepository.findAll().get(0).getTag(), tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getTag());
+        assertEquals("potions", tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getTag());
+
+        CmsTag tag02 = new CmsTag(site.getId(), "magic");
+        tag02.getCommentIds().add(post01.getId());
+        tagRepository.save(tag02);
+
+        assertEquals(2, tagRepository.findAll().size());
+        assertNotNull(tagRepository.findAll().get(1).getId());
+
+        post01.getTags().add(tag01);
+        post01.getTags().add(tag02);
+        postRepository.save(post01);
+
+        assertEquals(2, postRepository.findAll().get(0).getTags().size());
     }
 
     private CmsPage createCmsPage(String siteId, String name, String title, String uri, String summary, String content) {
