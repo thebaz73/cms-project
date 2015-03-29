@@ -44,6 +44,8 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
     private CmsPageRepository cmsPageRepository;
     @Autowired
     private CmsPostRepository cmsPostRepository;
+    @Autowired
+    private CmsTagRepository cmsTagRepository;
 
     private String siteId;
 
@@ -70,6 +72,7 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
         cmsSiteRepository.deleteAll();
         cmsPageRepository.deleteAll();
         cmsPostRepository.deleteAll();
+        cmsTagRepository.deleteAll();
         for (Role role : Role.ALL) {
             List<CmsRole> byRole = cmsRoleRepository.findByRole(role.getName());
             if (byRole.isEmpty()) {
@@ -288,6 +291,56 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
 
         try {
             authoringManager.deletePost("error");
+        } catch (AuthoringException e) {
+            assertEquals(AuthoringException.class, e.getClass());
+        }
+    }
+
+    @Test
+    public void testAddPostTag() throws Exception {
+        authoringManager.createPost(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
+
+        String postId = cmsPostRepository.findAll().get(0).getId();
+
+        authoringManager.addPostTags(postId, "potions, magic");
+        assertEquals(2, cmsTagRepository.findAll().size());
+        assertNotNull(cmsTagRepository.findAll().get(0).getId());
+        assertEquals(siteId, cmsTagRepository.findAll().get(0).getSiteId());
+        assertEquals(1, cmsTagRepository.findAll().get(0).getPopularity().intValue());
+        assertEquals(1, cmsTagRepository.findAll().get(0).getCommentIds().size());
+        assertEquals(postId, cmsTagRepository.findAll().get(0).getCommentIds().iterator().next());
+
+        try {
+            authoringManager.addPostTags("error", "potions");
+        } catch (AuthoringException e) {
+            assertEquals(AuthoringException.class, e.getClass());
+        }
+    }
+
+    @Test
+    public void testRemovePostTag() throws Exception {
+        authoringManager.createPost(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
+
+        String postId = cmsPostRepository.findAll().get(0).getId();
+        authoringManager.addPostTags(postId, "potions, magic");
+        assertEquals(2, cmsTagRepository.findAll().size());
+        assertEquals(1, cmsTagRepository.findAll().get(0).getCommentIds().size());
+        assertEquals(2, cmsPostRepository.findAll().get(0).getTags().size());
+
+        authoringManager.removePostTags(postId, "Magic");
+        assertEquals(2, cmsTagRepository.findAll().size());
+        assertEquals(1, cmsTagRepository.findAll().get(0).getCommentIds().size());
+        assertEquals(0, cmsTagRepository.findAll().get(1).getPopularity().intValue());
+        assertEquals(1, cmsPostRepository.findAll().get(0).getTags().size());
+
+        try {
+            authoringManager.removePostTags("error", "potions");
+        } catch (AuthoringException e) {
+            assertEquals(AuthoringException.class, e.getClass());
+        }
+
+        try {
+            authoringManager.removePostTags(postId, "error");
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }

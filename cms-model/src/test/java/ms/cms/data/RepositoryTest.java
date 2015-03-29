@@ -75,6 +75,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         postRepository.deleteAll();
         assetRepository.deleteAll();
         commentRepository.deleteAll();
+        tagRepository.deleteAll();
     }
 
     @Test
@@ -279,18 +280,23 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         CmsTag tag01 = new CmsTag(site.getId(), "potions");
         tag01.getCommentIds().add(post01.getId());
+        tag01.setPopularity(tag01.getPopularity() + 1);
+        tag01.setPopularity(tag01.getPopularity() + 1);
         tagRepository.save(tag01);
 
         assertEquals(1, tagRepository.findAll().size());
         assertNotNull(tagRepository.findAll().get(0).getId());
         assertEquals(1, tagRepository.findBySiteIdAndTag(site.getId(), "potions").size());
         assertNotNull(tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getId());
+        assertEquals(1, tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getCommentIds().size());
         assertEquals(tagRepository.findAll().get(0).getId(), tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getId());
         assertEquals(tagRepository.findAll().get(0).getTag(), tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getTag());
         assertEquals("potions", tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getTag());
+        assertEquals(2, tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getPopularity().intValue());
 
         CmsTag tag02 = new CmsTag(site.getId(), "magic");
         tag02.getCommentIds().add(post01.getId());
+        tag02.setPopularity(tag02.getPopularity() + 1);
         tagRepository.save(tag02);
 
         assertEquals(2, tagRepository.findAll().size());

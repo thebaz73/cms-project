@@ -204,9 +204,7 @@ public class RegistrationManager {
         }
 
         List<CmsUser> authors = new ArrayList<>(cmsSite.getAuthors());
-        authors.stream().filter(user -> user.getId().equals(cmsUser.getId())).forEach(user -> {
-            cmsSite.getAuthors().remove(user);
-        });
+        authors.stream().filter(user -> user.getId().equals(cmsUser.getId())).forEach(user -> cmsSite.getAuthors().remove(user));
         cmsSiteRepository.save(cmsSite);
     }
 

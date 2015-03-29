@@ -3,12 +3,15 @@ package ms.cms.authoring.common.business;
 import ms.cms.data.CmsPageRepository;
 import ms.cms.data.CmsPostRepository;
 import ms.cms.data.CmsSiteRepository;
+import ms.cms.data.CmsTagRepository;
 import ms.cms.domain.CmsPage;
 import ms.cms.domain.CmsPost;
 import ms.cms.domain.CmsSite;
+import ms.cms.domain.CmsTag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +30,8 @@ public class AuthoringManager {
     private CmsPageRepository cmsPageRepository;
     @Autowired
     private CmsPostRepository cmsPostRepository;
+    @Autowired
+    private CmsTagRepository cmsTagRepository;
     private int maxWidth;
 
     public void initialize(int maxWidth) {
@@ -171,7 +176,53 @@ public class AuthoringManager {
         if (cmsPost == null) {
             throw new AuthoringException("Post not found");
         }
-
+        for (CmsTag cmsTag : cmsPost.getTags()) {
+            cmsTag.getCommentIds().remove(cmsPost.getId());
+            cmsTag.setPopularity(cmsTag.getPopularity() - 1);
+            cmsTagRepository.save(cmsTag);
+        }
         cmsPostRepository.delete(cmsPost);
+    }
+
+    public void addPostTags(String id, String tags) throws AuthoringException {
+        CmsPost cmsPost = cmsPostRepository.findOne(id);
+        if (cmsPost == null) {
+            throw new AuthoringException("Post not found");
+        }
+        for (String tag : tags.split(",|:|;|\\|")) {
+            List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsPost.getSiteId(), tag.toUpperCase().trim());
+            CmsTag cmsTag;
+            if (!bySiteIdAndTag.isEmpty()) {
+                cmsTag = bySiteIdAndTag.get(0);
+            } else {
+                cmsTag = new CmsTag(cmsPost.getSiteId(), tag.toUpperCase().trim());
+            }
+            cmsTag.getCommentIds().add(cmsPost.getId());
+            cmsTag.setPopularity(cmsTag.getPopularity() + 1);
+            cmsTagRepository.save(cmsTag);
+
+            cmsPost.getTags().add(cmsTag);
+        }
+        cmsPostRepository.save(cmsPost);
+    }
+
+    public void removePostTags(String id, String tag) throws AuthoringException {
+        CmsPost cmsPost = cmsPostRepository.findOne(id);
+        if (cmsPost == null) {
+            throw new AuthoringException("Post not found");
+        }
+        List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsPost.getSiteId(), tag.toUpperCase());
+        if (bySiteIdAndTag.isEmpty()) {
+            throw new AuthoringException("Tag not found");
+        }
+        List<CmsTag> allTags = new ArrayList<>(cmsPost.getTags());
+        allTags.stream().filter(cmsTag -> cmsTag.getTag().equalsIgnoreCase(tag.trim())).forEach(cmsTag -> cmsPost.getTags().remove(cmsTag));
+        cmsPostRepository.save(cmsPost);
+
+        CmsTag cmsTag = bySiteIdAndTag.get(0);
+        List<String> allIds = new ArrayList<>(cmsTag.getCommentIds());
+        allIds.stream().filter(commentId -> commentId.equals(id)).forEach(commentId -> cmsTag.getCommentIds().remove(commentId));
+        cmsTag.setPopularity(cmsTag.getPopularity() - 1);
+        cmsTagRepository.save(cmsTag);
     }
 }

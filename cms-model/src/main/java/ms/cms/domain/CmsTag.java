@@ -6,8 +6,8 @@ import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * CmsTag
@@ -15,20 +15,23 @@ import java.util.List;
  */
 @Document
 @CompoundIndexes({
-        @CompoundIndex(name = "site_uri_idx", def = "{'siteId' : 1, 'uri' : 1}")
+        @CompoundIndex(name = "site_tag_idx", def = "{'siteId' : 1, 'tag' : 1}")
 })
 public class CmsTag {
     @Id
     private String id;
     private String siteId;
     private String tag;
-    private List<String> commentIds;
+    private Integer popularity;
+    private Set<String> commentIds;
 
     public CmsTag() {
+        this.popularity = 0;
     }
 
     @PersistenceConstructor
     public CmsTag(String siteId, String tag) {
+        this();
         this.siteId = siteId;
         this.tag = tag;
     }
@@ -57,14 +60,39 @@ public class CmsTag {
         this.tag = tag;
     }
 
-    public List<String> getCommentIds() {
+    public Integer getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Integer popularity) {
+        this.popularity = popularity;
+    }
+
+    public Set<String> getCommentIds() {
         if (commentIds == null) {
-            commentIds = new ArrayList<>();
+            commentIds = new HashSet<>();
         }
         return commentIds;
     }
 
-    public void setCommentIds(List<String> commentIds) {
+    public void setCommentIds(Set<String> commentIds) {
         this.commentIds = commentIds;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CmsTag cmsTag = (CmsTag) o;
+
+        if (id != null ? !id.equals(cmsTag.id) : cmsTag.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

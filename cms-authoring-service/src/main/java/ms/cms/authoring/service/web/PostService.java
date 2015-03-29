@@ -95,4 +95,30 @@ public class PostService {
             response.sendError(400, msg);
         }
     }
+
+    @RequestMapping(value = "/post/{id}/tags", method = RequestMethod.POST)
+    public void addPostTags(HttpServletResponse response,
+                            @PathVariable(value = "id") String id,
+                            @RequestParam(value = "tags") String tags) throws IOException {
+        try {
+            authoringManager.addPostTags(id, tags);
+        } catch (AuthoringException e) {
+            String msg = String.format("Cannot add tags to post. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
+    }
+
+    @RequestMapping(value = "/post/{id}/tag", method = RequestMethod.DELETE)
+    public void removePostTags(HttpServletResponse response,
+                               @PathVariable(value = "id") String id,
+                               @RequestParam(value = "tag") String tag) throws IOException {
+        try {
+            authoringManager.removePostTags(id, tag);
+        } catch (AuthoringException e) {
+            String msg = String.format("Cannot remove tags to post. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
+    }
 }
