@@ -5,13 +5,22 @@ import ms.cms.data.CmsUserRepository;
 import ms.cms.domain.CmsRole;
 import ms.cms.domain.CmsUser;
 import ms.cms.service.authentication.Application;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
@@ -21,13 +30,13 @@ import java.util.Date;
 import java.util.List;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {Application.class})
 @WebAppConfiguration
 @IntegrationTest
 public class AuthenticationServiceTest {
-    RestTemplate template = new TestRestTemplate();
     @Autowired
     private CmsUserRepository userRepository;
     @Autowired
@@ -47,13 +56,35 @@ public class AuthenticationServiceTest {
 
     @Test
     public void testWhoAmI() throws Exception {
-//        String url = String.format("http://%s:%s@localhost:9000/auth/whoami", cmsUser.getUsername(), cmsUser.getPassword());
-//        ResponseEntity<CmsUser> responseEntity = template.getForEntity(url, CmsUser.class);
-//        CmsUser user = responseEntity.getBody();
-//        assertEquals(cmsUser.getUsername(), user.getUsername());
-//        assertEquals(cmsUser.getEmail(), user.getEmail());
-//        assertEquals(cmsUser.getName(), user.getName());
-//        assertEquals("", user.getPassword());
+        int timeout = 5;
+
+        RequestConfig config = RequestConfig.custom()
+                .setConnectTimeout(timeout * 1000)
+                .setConnectionRequestTimeout(timeout * 1000)
+                .setSocketTimeout(timeout * 1000)
+                .build();
+
+        BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        AuthScope authScope = new AuthScope("localhost", 9000, AuthScope.ANY_REALM);
+        Credentials credentials = new UsernamePasswordCredentials(cmsUser.getUsername(), cmsUser.getPassword());
+        credentialsProvider.setCredentials(authScope, credentials);
+
+        HttpClient client = HttpClientBuilder.create()
+                .setDefaultRequestConfig(config)
+                .setDefaultCredentialsProvider(credentialsProvider)
+                .build();
+
+        RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
+
+        ResponseEntity<CmsUser> responseEntity;
+        responseEntity = template.exchange("http://localhost:9000/api/whoami", HttpMethod.GET, null, CmsUser.class);
+
+        CmsUser user = responseEntity.getBody();
+
+        assertEquals(cmsUser.getUsername(), user.getUsername());
+        assertEquals(cmsUser.getEmail(), user.getEmail());
+        assertEquals(cmsUser.getName(), user.getName());
+        assertEquals("", user.getPassword());
     }
 
     private CmsRole createCmsRole(String roleName) {

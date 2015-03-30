@@ -1,10 +1,7 @@
 package ms.cms.service.authentication.business;
 
 import ms.cms.data.CmsUserRepository;
-import ms.cms.domain.CmsRole;
 import ms.cms.domain.CmsUser;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -13,18 +10,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * ReadOnlyUserManager
  * Created by thebaz on 21/03/15.
  */
-@Component
 public class ReadOnlyUserManager implements UserDetailsManager {
-    private final Log logger = LogFactory.getLog(getClass());
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
@@ -130,15 +124,12 @@ public class ReadOnlyUserManager implements UserDetailsManager {
     }
 
     private User allocateUser(CmsUser cmsUser) {
-        List<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
+        List<SimpleGrantedAuthority> authorities = cmsUser.getRoles().stream().map(cmsRole -> new SimpleGrantedAuthority(cmsRole.getRole().getName())).collect(Collectors.toList());
         if(authorities.isEmpty()) {
             throw new UsernameNotFoundException("No authorities found.");
         }
-        for (CmsRole cmsRole : cmsUser.getRoles()) {
-            authorities.add(new SimpleGrantedAuthority(cmsRole.getRole().getName()));
-        }
 
-        return new User(cmsUser.getUsername(), encoder.encode(cmsUser.getPassword()),
+        return new User(cmsUser.getUsername(), /*encoder.encode*/(cmsUser.getPassword()),
                 authorities);
     }
 }

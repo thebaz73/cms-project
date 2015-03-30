@@ -15,6 +15,8 @@
 
     <properties>
         <start-class>ms.cms.service.authentication.Application</start-class>
+        <httpcore.version>4.3.2</httpcore.version>
+        <httpclient.version>4.3.5</httpclient.version>
     </properties>
 
     <dependencies>
@@ -34,6 +36,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${httpcore.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
         </dependency>
     </dependencies>
 
