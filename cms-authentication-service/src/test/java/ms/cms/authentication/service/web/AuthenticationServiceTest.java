@@ -1,10 +1,10 @@
-package ms.cms.service.authentication.web;
+package ms.cms.authentication.service.web;
 
+import ms.cms.authentication.service.Application;
 import ms.cms.data.CmsRoleRepository;
 import ms.cms.data.CmsUserRepository;
 import ms.cms.domain.CmsRole;
 import ms.cms.domain.CmsUser;
-import ms.cms.service.authentication.Application;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;

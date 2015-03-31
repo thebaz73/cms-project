@@ -1,4 +1,4 @@
-package ms.cms.service.authentication.config;
+package ms.cms.authentication.service.config;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;

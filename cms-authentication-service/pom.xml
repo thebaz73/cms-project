@@ -14,7 +14,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <start-class>ms.cms.service.authentication.Application</start-class>
+        <start-class>ms.cms.authentication.service.Application</start-class>
         <httpcore.version>4.3.2</httpcore.version>
         <httpclient.version>4.3.5</httpclient.version>
     </properties>

@@ -1,4 +1,4 @@
-package ms.cms.service.authentication.config;
+package ms.cms.authentication.service.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +10,6 @@ import org.springframework.context.annotation.ImportResource;
  */
 @Configuration
 @ImportResource({"classpath:webSecurityConfig.xml"})
-@ComponentScan({"ms.cms.service.authentication.security"})
+@ComponentScan({"ms.cms.security"})
 public class ApplicationSecurity {
 }

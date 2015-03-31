@@ -1,4 +1,4 @@
-package ms.cms.service.authentication;
+package ms.cms.authentication.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan({"ms.cms"})
 @EnableAutoConfiguration
-//@Import(value = {MongoConfig.class, WebConfig.class})
 public class Application {
 
     public static void main(String[] args) {

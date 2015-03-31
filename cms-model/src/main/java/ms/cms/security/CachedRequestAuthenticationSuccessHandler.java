@@ -1,4 +1,4 @@
-package ms.cms.service.authentication.security;
+package ms.cms.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;

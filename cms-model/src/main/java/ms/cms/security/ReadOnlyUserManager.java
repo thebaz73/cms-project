@@ -1,4 +1,4 @@
-package ms.cms.service.authentication.business;
+package ms.cms.security;
 
 import ms.cms.data.CmsUserRepository;
 import ms.cms.domain.CmsUser;

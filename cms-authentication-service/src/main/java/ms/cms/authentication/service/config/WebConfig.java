@@ -1,4 +1,4 @@
-package ms.cms.service.authentication.config;
+package ms.cms.authentication.service.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan({"ms.cms.service.authentication.web"})
+@ComponentScan({"ms.cms.authentication.service.web"})
 public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
