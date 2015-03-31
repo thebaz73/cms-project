@@ -6,6 +6,7 @@ import ms.cms.domain.CmsPost;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,12 +17,14 @@ import java.io.IOException;
  * Created by thebaz on 27/03/15.
  */
 @RestController
+@RequestMapping(value = "/api")
 public class PostService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private AuthoringManager authoringManager;
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/post", method = RequestMethod.POST)
     public void createPost(HttpServletResponse response,
                            @RequestParam(value = "siteId") String siteId,
@@ -39,6 +42,7 @@ public class PostService {
         }
     }
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/post/{id}", method = RequestMethod.GET)
     public CmsPost findPost(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
         try {
@@ -52,6 +56,7 @@ public class PostService {
         return null;
     }
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/post/byUri", method = RequestMethod.GET)
     public CmsPost findPostByUri(HttpServletResponse response,
                                  @RequestParam(value = "siteId") String siteId,
@@ -67,6 +72,7 @@ public class PostService {
         return null;
     }
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/post/{id}", method = RequestMethod.PUT)
     public void editPost(HttpServletResponse response,
                          @PathVariable(value = "id") String id,
@@ -84,6 +90,7 @@ public class PostService {
         }
     }
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/post/{id}", method = RequestMethod.DELETE)
     public void deletePost(HttpServletResponse response,
                            @PathVariable(value = "id") String id) throws IOException {
@@ -96,6 +103,7 @@ public class PostService {
         }
     }
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/post/{id}/tags", method = RequestMethod.POST)
     public void addPostTags(HttpServletResponse response,
                             @PathVariable(value = "id") String id,
@@ -109,6 +117,7 @@ public class PostService {
         }
     }
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/post/{id}/tag", method = RequestMethod.DELETE)
     public void removePostTags(HttpServletResponse response,
                                @PathVariable(value = "id") String id,

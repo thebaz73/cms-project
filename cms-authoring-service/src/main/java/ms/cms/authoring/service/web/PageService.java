@@ -6,6 +6,7 @@ import ms.cms.domain.CmsPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,12 +17,14 @@ import java.io.IOException;
  * Created by thebaz on 27/03/15.
  */
 @RestController
+@RequestMapping(value = "/api")
 public class PageService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private AuthoringManager authoringManager;
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/page", method = RequestMethod.POST)
     public void createPage(HttpServletResponse response,
                            @RequestParam(value = "siteId") String siteId,
@@ -39,6 +42,7 @@ public class PageService {
         }
     }
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/page/{id}", method = RequestMethod.GET)
     public CmsPage findPage(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
         try {
@@ -52,6 +56,7 @@ public class PageService {
         return null;
     }
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/page/byUri", method = RequestMethod.GET)
     public CmsPage findPageByUri(HttpServletResponse response,
                                  @RequestParam(value = "siteId") String siteId,
@@ -67,6 +72,7 @@ public class PageService {
         return null;
     }
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/page/{id}", method = RequestMethod.PUT)
     public void editPage(HttpServletResponse response,
                          @PathVariable(value = "id") String id,
@@ -84,6 +90,7 @@ public class PageService {
         }
     }
 
+    @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/page/{id}", method = RequestMethod.DELETE)
     public void deletePage(HttpServletResponse response,
                            @PathVariable(value = "id") String id) throws IOException {
