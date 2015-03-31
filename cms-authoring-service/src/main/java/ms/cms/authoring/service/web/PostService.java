@@ -72,6 +72,7 @@ public class PostService {
         return null;
     }
 
+    //TODO change method to and json object post
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/post/{id}", method = RequestMethod.PUT)
     public void editPost(HttpServletResponse response,

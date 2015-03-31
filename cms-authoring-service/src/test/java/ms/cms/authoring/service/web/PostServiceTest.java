@@ -101,37 +101,25 @@ public class PostServiceTest extends AbstractServiceTest {
 
     @Test
     public void testEditPost() throws Exception {
-//        String title = "Advanced Potions 2";
-//        String uri = "advanced_potions_2";
-//        authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
-//        CmsPost postByUri = authoringManager.findPostByUri(siteId, uri);
-//
-//        RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
-//
-//        MultiValueMap<String, String> mvm = new LinkedMultiValueMap<>();
-//        mvm.add("name", "a");
-//        mvm.add("title", "a");
-//        mvm.add("uri", "a");
-//        mvm.add("summary", "a");
-//        mvm.add("content", "a");
-//
-//        HttpHeaders requestHeaders = new HttpHeaders();
-//        requestHeaders.add("Accept", "*/*");
-//        requestHeaders.add("Content-Type", "application/json");
-//        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(mvm, requestHeaders);
-//
-//        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post/{id}", HttpMethod.PUT, requestEntity, Void.class, postByUri.getId());
-//
-//        assertEquals(HttpStatus.OK, entity.getStatusCode());
-//        CmsPost editedPost = authoringManager.findPostByUri(siteId, uri);
-//
-//        assertNotNull(editedPost);
-//        assertEquals("a", editedPost.getUri());
-//        assertEquals("a", editedPost.getName());
-//        assertEquals("a", editedPost.getTitle());
-//        assertEquals("a", editedPost.getSummary());
-//        assertEquals("a", editedPost.getContent());
-//        assertEquals("POST", editedPost.getType());
+        String title = "Advanced Potions 2";
+        String uri = "advanced_potions_2";
+        authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
+        CmsPost postByUri = authoringManager.findPostByUri(siteId, uri);
+
+        RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
+
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post/{id}?title={title}&content={content}", HttpMethod.PUT, null, Void.class, postByUri.getId(), "a", "a");
+
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
+        CmsPost editedPost = authoringManager.findPostByUri(siteId, "a");
+
+        assertNotNull(editedPost);
+        assertEquals("a", editedPost.getUri());
+        assertEquals("a", editedPost.getName());
+        assertEquals("a", editedPost.getTitle());
+        assertEquals("a", editedPost.getSummary());
+        assertEquals("a", editedPost.getContent());
+        assertEquals("POST", editedPost.getType());
     }
 
     @Test

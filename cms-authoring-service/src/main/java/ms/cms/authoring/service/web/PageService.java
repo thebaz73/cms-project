@@ -72,6 +72,7 @@ public class PageService {
         return null;
     }
 
+    //TODO change method to and json object post
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/page/{id}", method = RequestMethod.PUT)
     public void editPage(HttpServletResponse response,

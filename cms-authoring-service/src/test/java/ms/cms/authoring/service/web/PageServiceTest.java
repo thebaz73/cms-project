@@ -101,37 +101,25 @@ public class PageServiceTest extends AbstractServiceTest {
 
     @Test
     public void testEditPage() throws Exception {
-//        String title = "Advanced Potions 2";
-//        String uri = "advanced_potions_2";
-//        authoringManager.createPage(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
-//        CmsPage pageByUri = authoringManager.findPageByUri(siteId, uri);
-//
-//        RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
-//
-//        MultiValueMap<String, String> mvm = new LinkedMultiValueMap<>();
-//        mvm.add("name", "a");
-//        mvm.add("title", "a");
-//        mvm.add("uri", "a");
-//        mvm.add("summary", "a");
-//        mvm.add("content", "a");
-//
-//        HttpHeaders requestHeaders = new HttpHeaders();
-//        requestHeaders.add("Accept", "*/*");
-//        requestHeaders.add("Content-Type", "application/json");
-//        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(mvm, requestHeaders);
-//
-//        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/page/{id}", HttpMethod.PUT, requestEntity, Void.class, pageByUri.getId());
-//
-//        assertEquals(HttpStatus.OK, entity.getStatusCode());
-//        CmsPage editedPage = authoringManager.findPageByUri(siteId, uri);
-//
-//        assertNotNull(editedPage);
-//        assertEquals("a", editedPage.getUri());
-//        assertEquals("a", editedPage.getName());
-//        assertEquals("a", editedPage.getTitle());
-//        assertEquals("a", editedPage.getSummary());
-//        assertEquals("a", editedPage.getContent());
-//        assertEquals("PAGE", editedPage.getType());
+        String title = "Advanced Potions 2";
+        String uri = "advanced_potions_2";
+        authoringManager.createPage(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
+        CmsPage pageByUri = authoringManager.findPageByUri(siteId, uri);
+
+        RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
+
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/page/{id}?title={title}&content={content}", HttpMethod.PUT, null, Void.class, pageByUri.getId(), "a", "a");
+
+        assertEquals(HttpStatus.OK, entity.getStatusCode());
+        CmsPage editedPage = authoringManager.findPageByUri(siteId, "a");
+
+        assertNotNull(editedPage);
+        assertEquals("a", editedPage.getUri());
+        assertEquals("a", editedPage.getName());
+        assertEquals("a", editedPage.getTitle());
+        assertEquals("a", editedPage.getSummary());
+        assertEquals("a", editedPage.getContent());
+        assertEquals("PAGE", editedPage.getType());
     }
 
     @Test
