@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
  * Created by thebaz on 27/03/15.
  */
 @Configuration
-@EnableMongoRepositories(basePackages = {"ms.cms"})
+@EnableMongoRepositories({"ms.cms.data", "ms.cms.domain"})
 public class MongoConfig extends AbstractMongoConfiguration {
     @Value("${spring.data.mongodb.name}")
     private String databaseName;

@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
  * Created by thebaz on 27/03/15.
  */
 @Configuration
-@ComponentScan("ms.cms")
+@ComponentScan({"ms.cms"})
 @EnableAutoConfiguration
 @Import(value = {MongoConfig.class, WebConfig.class})
 public class Application implements CommandLineRunner {
