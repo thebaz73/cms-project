@@ -16,6 +16,7 @@ import java.io.IOException;
  * Created by bazzoni on 24/03/2015.
  */
 @RestController
+@RequestMapping(value = "/public")
 public class UserService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

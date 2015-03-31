@@ -7,6 +7,7 @@ import ms.cms.registration.common.business.RegistrationManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,12 +18,14 @@ import java.io.IOException;
  * Created by thebaz on 24/03/15.
  */
 @RestController
+@RequestMapping(value = "/api")
 public class SiteService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private RegistrationManager registrationManager;
 
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = "/site", method = RequestMethod.POST)
     public void createUser(HttpServletResponse response,
                            @RequestParam(value = "userId") String userId,
@@ -38,6 +41,7 @@ public class SiteService {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = "/site/{param}", method = RequestMethod.GET)
     public CmsSite findSite(HttpServletResponse response, @PathVariable(value = "param") String param) throws IOException {
         try {
@@ -51,6 +55,7 @@ public class SiteService {
         return null;
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = "/site/{id}", method = RequestMethod.PUT)
     public void editSite(HttpServletResponse response,
                          @PathVariable(value = "id") String id,
@@ -64,6 +69,7 @@ public class SiteService {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = "/site/{id}", method = RequestMethod.DELETE)
     public void deleteSite(HttpServletResponse response,
                            @PathVariable(value = "id") String id) throws IOException {
@@ -76,6 +82,7 @@ public class SiteService {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = "/site/author/{id}", method = RequestMethod.POST)
     public void addSiteAuthor(HttpServletResponse response,
                               @PathVariable("id") String id,
@@ -89,6 +96,7 @@ public class SiteService {
         }
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = "/site/author/{id}", method = RequestMethod.DELETE)
     public void removeSiteAuthor(HttpServletResponse response,
                                  @PathVariable("id") String id,
