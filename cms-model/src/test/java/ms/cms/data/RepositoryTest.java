@@ -28,6 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 
+@SuppressWarnings("deprecation")
 @RunWith(SpringJUnit4ClassRunner.class)
 @EnableMongoRepositories(basePackages = "ms.cms")
 @ComponentScan
@@ -170,11 +171,6 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         //PAGEs
         CmsPage page01 = createCmsPage(site.getId(), "page01", "Page 01", "/page_01", randomAlphanumeric(20), randomAlphabetic(200));
 
-        site.getPages().add(page01);
-        siteRepository.save(site);
-
-        assertEquals(1, siteRepository.findAll().get(0).getPages().size());
-
         assertEquals(1, pageRepository.findAll().size());
         assertNotNull(pageRepository.findAll().get(0));
         assertNotNull(pageRepository.findAll().get(0).getId());
@@ -213,11 +209,6 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         //POSTs
         CmsContent post01 = createCmsPost(site.getId(), "post01", "Post 01", "/post_01", randomAlphanumeric(20), randomAlphabetic(200));
-
-        site.getContents().add(post01);
-        siteRepository.save(site);
-
-        assertEquals(1, siteRepository.findAll().get(0).getContents().size());
 
         assertEquals(1, postRepository.findAll().size());
         assertNotNull(postRepository.findAll().get(0));

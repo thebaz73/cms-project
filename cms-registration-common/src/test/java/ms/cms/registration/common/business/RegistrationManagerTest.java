@@ -165,8 +165,7 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
         assertEquals("www.half-blood.com", cmsSiteRepository.findAll().get(0).getAddress());
         assertEquals(WorkflowType.SELF_APPROVAL_WF, cmsSiteRepository.findAll().get(0).getWorkflowType());
         assertEquals(0, cmsSiteRepository.findAll().get(0).getAuthors().size());
-        assertEquals(0, cmsSiteRepository.findAll().get(0).getPages().size());
-        assertEquals(0, cmsSiteRepository.findAll().get(0).getContents().size());
+
         try {
             registrationManager.createSite("error", "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
         } catch (RegistrationException e) {

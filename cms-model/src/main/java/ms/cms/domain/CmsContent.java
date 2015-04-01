@@ -19,7 +19,7 @@ public class CmsContent extends CmsAbstractContent {
     private List<CmsTag> tags;
 
     public CmsContent() {
-        super("POST");
+        super("CONTENT");
     }
 
     @PersistenceConstructor

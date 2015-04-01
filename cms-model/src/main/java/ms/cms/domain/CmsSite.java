@@ -29,10 +29,6 @@ public class CmsSite {
     private CmsUser webMaster;
     @DBRef
     private List<CmsUser> authors;
-    @DBRef
-    private List<CmsPage> pages;
-    @DBRef
-    private List<CmsContent> contents;
 
     public CmsSite() {
     }
@@ -103,27 +99,5 @@ public class CmsSite {
 
     public void setAuthors(List<CmsUser> authors) {
         this.authors = authors;
-    }
-
-    public List<CmsPage> getPages() {
-        if (pages == null) {
-            pages = new ArrayList<>();
-        }
-        return pages;
-    }
-
-    public void setPages(List<CmsPage> pages) {
-        this.pages = pages;
-    }
-
-    public List<CmsContent> getContents() {
-        if (contents == null) {
-            contents = new ArrayList<>();
-        }
-        return contents;
-    }
-
-    public void setContents(List<CmsContent> contents) {
-        this.contents = contents;
     }
 }
