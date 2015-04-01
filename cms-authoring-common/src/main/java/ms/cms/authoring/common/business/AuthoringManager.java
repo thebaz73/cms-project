@@ -1,11 +1,9 @@
 package ms.cms.authoring.common.business;
 
 import ms.cms.data.CmsContentRepository;
-import ms.cms.data.CmsPageRepository;
 import ms.cms.data.CmsSiteRepository;
 import ms.cms.data.CmsTagRepository;
 import ms.cms.domain.CmsContent;
-import ms.cms.domain.CmsPage;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsTag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +25,6 @@ public class AuthoringManager {
     @Autowired
     private CmsSiteRepository cmsSiteRepository;
     @Autowired
-    private CmsPageRepository cmsPageRepository;
-    @Autowired
     private CmsContentRepository cmsContentRepository;
     @Autowired
     private CmsTagRepository cmsTagRepository;
@@ -36,82 +32,6 @@ public class AuthoringManager {
 
     public void initialize(int maxWidth) {
         this.maxWidth = maxWidth;
-    }
-
-    @Deprecated
-    public void createPage(String siteId, String name, String title, String uri, String summary, String content) throws AuthoringException {
-        CmsSite cmsSite = cmsSiteRepository.findOne(siteId);
-        if (cmsSite == null) {
-            throw new AuthoringException("Site not found");
-        }
-        if (name == null || name.isEmpty()) {
-            name = title;
-        }
-        if (uri == null || uri.isEmpty()) {
-            uri = toPrettyURL(title);
-        }
-        if (summary == null || summary.isEmpty()) {
-            summary = abbreviateHtml(content, maxWidth, false);
-        }
-
-        CmsPage cmsPage = new CmsPage(cmsSite.getId(), name, title, uri, new Date(), summary, content);
-        cmsPageRepository.save(cmsPage);
-    }
-
-    @Deprecated
-    public CmsPage findPage(String id) throws AuthoringException {
-        CmsPage cmsPage = cmsPageRepository.findOne(id);
-        if (cmsPage != null) {
-            return cmsPage;
-        }
-
-        throw new AuthoringException("Wrong search parameter");
-    }
-
-    @Deprecated
-    public CmsPage findPageByUri(String siteId, String uri) throws AuthoringException {
-        List<CmsPage> bySiteIdAndUri = cmsPageRepository.findBySiteIdAndUri(siteId, uri);
-        if (!bySiteIdAndUri.isEmpty()) {
-            return bySiteIdAndUri.get(0);
-        }
-
-        throw new AuthoringException("Wrong search parameter");
-    }
-
-    @Deprecated
-    public void editPage(String id, String name, String title, String uri, String summary, String content) throws AuthoringException {
-        CmsPage cmsPage = cmsPageRepository.findOne(id);
-        if (cmsPage == null) {
-            throw new AuthoringException("Page not found");
-        }
-        if (name.isEmpty()) {
-            name = title;
-        }
-        if (uri.isEmpty()) {
-            uri = toPrettyURL(title);
-        }
-        if (summary.isEmpty()) {
-            summary = abbreviateHtml(content, maxWidth, false);
-        }
-
-        cmsPage.setName(name);
-        cmsPage.setTitle(title);
-        cmsPage.setUri(uri);
-        cmsPage.setModificationDate(new Date());
-        cmsPage.setSummary(summary);
-        cmsPage.setContent(content);
-
-        cmsPageRepository.save(cmsPage);
-    }
-
-    @Deprecated
-    public void deletePage(String id) throws AuthoringException {
-        CmsPage cmsPage = cmsPageRepository.findOne(id);
-        if (cmsPage == null) {
-            throw new AuthoringException("Page not found");
-        }
-
-        cmsPageRepository.delete(cmsPage);
     }
 
     public void createContent(String siteId, String name, String title, String uri, String summary, String content) throws AuthoringException {

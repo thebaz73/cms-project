@@ -41,7 +41,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
     @Autowired
     private CmsSiteRepository siteRepository;
     @Autowired
-    private CmsPageRepository pageRepository;
+    private CmsContentRepository contentRepository;
     @Autowired
     private CmsContentRepository postRepository;
     @Autowired
@@ -72,7 +72,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         roleRepository.deleteAll();
         userRepository.deleteAll();
         siteRepository.deleteAll();
-        pageRepository.deleteAll();
+        contentRepository.deleteAll();
         postRepository.deleteAll();
         assetRepository.deleteAll();
         commentRepository.deleteAll();
@@ -168,47 +168,47 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         CmsSite site = new CmsSite("John Doe's Blog", new Date(), "www.jdoe.com", WorkflowType.SELF_APPROVAL_WF, user);
         siteRepository.save(site);
 
-        //PAGEs
-        CmsPage page01 = createCmsPage(site.getId(), "page01", "Page 01", "/page_01", randomAlphanumeric(20), randomAlphabetic(200));
+        //CONTENTs
+        CmsContent content01 = createCmsContent(site.getId(), "content01", "Content 01", "/content_01", randomAlphanumeric(20), randomAlphabetic(200));
 
-        assertEquals(1, pageRepository.findAll().size());
-        assertNotNull(pageRepository.findAll().get(0));
-        assertNotNull(pageRepository.findAll().get(0).getId());
-        assertEquals(page01.getName(), pageRepository.findAll().get(0).getName());
-        assertEquals(page01.getTitle(), pageRepository.findAll().get(0).getTitle());
-        assertEquals(page01.getUri(), pageRepository.findAll().get(0).getUri());
-        assertEquals(page01.getModificationDate().getTime(), pageRepository.findAll().get(0).getModificationDate().getTime());
-        assertEquals(page01.getSummary(), pageRepository.findAll().get(0).getSummary());
-        assertEquals(page01.getContent(), pageRepository.findAll().get(0).getContent());
+        assertEquals(1, contentRepository.findAll().size());
+        assertNotNull(contentRepository.findAll().get(0));
+        assertNotNull(contentRepository.findAll().get(0).getId());
+        assertEquals(content01.getName(), contentRepository.findAll().get(0).getName());
+        assertEquals(content01.getTitle(), contentRepository.findAll().get(0).getTitle());
+        assertEquals(content01.getUri(), contentRepository.findAll().get(0).getUri());
+        assertEquals(content01.getModificationDate().getTime(), contentRepository.findAll().get(0).getModificationDate().getTime());
+        assertEquals(content01.getSummary(), contentRepository.findAll().get(0).getSummary());
+        assertEquals(content01.getContent(), contentRepository.findAll().get(0).getContent());
 
-        assertEquals(0, pageRepository.findAll().get(0).getAssets().size());
+        assertEquals(0, contentRepository.findAll().get(0).getAssets().size());
 
         CmsAsset asset01 = createCmsAsset("asset01", "asset01", "/assets/asset01.png");
 
-        page01.getAssets().add(asset01);
-        pageRepository.save(page01);
+        content01.getAssets().add(asset01);
+        contentRepository.save(content01);
 
-        assertEquals(1, pageRepository.findAll().get(0).getAssets().size());
-        assertNotNull(pageRepository.findAll().get(0).getAssets().get(0).getId());
-        assertEquals(asset01.getName(), pageRepository.findAll().get(0).getAssets().get(0).getName());
-        assertEquals(asset01.getModificationDate().getTime(), pageRepository.findAll().get(0).getAssets().get(0).getModificationDate().getTime());
-        assertEquals(asset01.getTitle(), pageRepository.findAll().get(0).getAssets().get(0).getTitle());
-        assertEquals(asset01.getUri(), pageRepository.findAll().get(0).getAssets().get(0).getUri());
+        assertEquals(1, contentRepository.findAll().get(0).getAssets().size());
+        assertNotNull(contentRepository.findAll().get(0).getAssets().get(0).getId());
+        assertEquals(asset01.getName(), contentRepository.findAll().get(0).getAssets().get(0).getName());
+        assertEquals(asset01.getModificationDate().getTime(), contentRepository.findAll().get(0).getAssets().get(0).getModificationDate().getTime());
+        assertEquals(asset01.getTitle(), contentRepository.findAll().get(0).getAssets().get(0).getTitle());
+        assertEquals(asset01.getUri(), contentRepository.findAll().get(0).getAssets().get(0).getUri());
 
         CmsAsset asset02 = createCmsAsset("asset02", "asset02", "/assets/asset02.png");
 
-        page01.getAssets().add(asset02);
-        pageRepository.save(page01);
+        content01.getAssets().add(asset02);
+        contentRepository.save(content01);
 
-        assertEquals(2, pageRepository.findAll().get(0).getAssets().size());
-        assertNotNull(pageRepository.findAll().get(0).getAssets().get(1).getId());
-        assertEquals(asset02.getName(), pageRepository.findAll().get(0).getAssets().get(1).getName());
-        assertEquals(asset02.getModificationDate().getTime(), pageRepository.findAll().get(0).getAssets().get(1).getModificationDate().getTime());
-        assertEquals(asset02.getTitle(), pageRepository.findAll().get(0).getAssets().get(1).getTitle());
-        assertEquals(asset02.getUri(), pageRepository.findAll().get(0).getAssets().get(1).getUri());
+        assertEquals(2, contentRepository.findAll().get(0).getAssets().size());
+        assertNotNull(contentRepository.findAll().get(0).getAssets().get(1).getId());
+        assertEquals(asset02.getName(), contentRepository.findAll().get(0).getAssets().get(1).getName());
+        assertEquals(asset02.getModificationDate().getTime(), contentRepository.findAll().get(0).getAssets().get(1).getModificationDate().getTime());
+        assertEquals(asset02.getTitle(), contentRepository.findAll().get(0).getAssets().get(1).getTitle());
+        assertEquals(asset02.getUri(), contentRepository.findAll().get(0).getAssets().get(1).getUri());
 
         //POSTs
-        CmsContent post01 = createCmsPost(site.getId(), "post01", "Post 01", "/post_01", randomAlphanumeric(20), randomAlphabetic(200));
+        CmsContent post01 = createCmsContent(site.getId(), "post01", "Post 01", "/post_01", randomAlphanumeric(20), randomAlphabetic(200));
 
         assertEquals(1, postRepository.findAll().size());
         assertNotNull(postRepository.findAll().get(0));
@@ -300,14 +300,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(2, postRepository.findAll().get(0).getTags().size());
     }
 
-    private CmsPage createCmsPage(String siteId, String name, String title, String uri, String summary, String content) {
-        CmsPage cmsPage = new CmsPage(siteId, name, title, uri, new Date(), summary, content);
-        pageRepository.save(cmsPage);
-
-        return cmsPage;
-    }
-
-    private CmsContent createCmsPost(String siteId, String name, String title, String uri, String summary, String content) {
+    private CmsContent createCmsContent(String siteId, String name, String title, String uri, String summary, String content) {
         CmsContent cmsContent = new CmsContent(siteId, name, title, uri, new Date(), summary, content);
         postRepository.save(cmsContent);
 

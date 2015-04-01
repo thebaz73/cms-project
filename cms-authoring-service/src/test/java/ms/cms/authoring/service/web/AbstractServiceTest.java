@@ -1,7 +1,6 @@
 package ms.cms.authoring.service.web;
 
 import ms.cms.authoring.common.business.AuthoringManager;
-import ms.cms.data.CmsPageRepository;
 import ms.cms.data.CmsRoleRepository;
 import ms.cms.data.CmsSiteRepository;
 import ms.cms.data.CmsUserRepository;
@@ -37,14 +36,11 @@ public abstract class AbstractServiceTest {
     private CmsRoleRepository cmsRoleRepository;
     @Autowired
     private CmsSiteRepository cmsSiteRepository;
-    @Autowired
-    private CmsPageRepository cmsPageRepository;
 
     protected void prepareEnvironment() {
         cmsRoleRepository.deleteAll();
         cmsUserRepository.deleteAll();
         cmsSiteRepository.deleteAll();
-        cmsPageRepository.deleteAll();
         for (Role role : Role.ALL) {
             List<CmsRole> byRole = cmsRoleRepository.findByRole(role.getName());
             if (byRole.isEmpty()) {

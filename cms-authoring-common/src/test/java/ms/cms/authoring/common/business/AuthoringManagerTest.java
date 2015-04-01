@@ -42,8 +42,6 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
     @Autowired
     private CmsSiteRepository cmsSiteRepository;
     @Autowired
-    private CmsPageRepository cmsPageRepository;
-    @Autowired
     private CmsContentRepository cmsContentRepository;
     @Autowired
     private CmsTagRepository cmsTagRepository;
@@ -71,7 +69,6 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
         cmsRoleRepository.deleteAll();
         cmsUserRepository.deleteAll();
         cmsSiteRepository.deleteAll();
-        cmsPageRepository.deleteAll();
         cmsContentRepository.deleteAll();
         cmsTagRepository.deleteAll();
         for (Role role : Role.ALL) {
@@ -97,105 +94,6 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
                 webMaster);
         cmsSiteRepository.save(cmsSite);
         siteId = cmsSite.getId();
-    }
-
-    @Test
-    public void testCreatePage() throws Exception {
-        authoringManager.createPage(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
-
-        assertEquals(1, cmsPageRepository.findAll().size());
-        assertNotNull(cmsPageRepository.findAll().get(0).getId());
-        assertNotNull(cmsPageRepository.findAll().get(0).getModificationDate());
-        assertEquals("PAGE", cmsPageRepository.findAll().get(0).getType());
-        assertEquals(siteId, cmsPageRepository.findAll().get(0).getSiteId());
-        assertEquals("Advanced Potions 2", cmsPageRepository.findAll().get(0).getName());
-        assertEquals("Advanced Potions 2", cmsPageRepository.findAll().get(0).getTitle());
-        assertEquals("advanced_potions_2", cmsPageRepository.findAll().get(0).getUri());
-        assertNotNull(cmsPageRepository.findAll().get(0).getSummary());
-        assertNotNull(cmsPageRepository.findAll().get(0).getContent());
-
-        try {
-            authoringManager.createPage(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
-        } catch (AuthoringException e) {
-            assertEquals(AuthoringException.class, e.getClass());
-        }
-    }
-
-    @Test
-    public void testFindPage() throws Exception {
-        authoringManager.createPage(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
-
-        String pageId = cmsPageRepository.findAll().get(0).getId();
-
-        assertNotNull(authoringManager.findPage(pageId));
-        assertEquals(pageId, authoringManager.findPage(pageId).getId());
-
-        try {
-            assertNotNull(authoringManager.findPage("error"));
-        } catch (AuthoringException e) {
-            assertEquals(AuthoringException.class, e.getClass());
-        }
-
-        assertNotNull(authoringManager.findPageByUri(siteId, "advanced_potions_2"));
-        assertEquals(pageId, authoringManager.findPageByUri(siteId, "advanced_potions_2").getId());
-
-        try {
-            assertNotNull(authoringManager.findPageByUri("error", "advanced_potions_2"));
-        } catch (AuthoringException e) {
-            assertEquals(AuthoringException.class, e.getClass());
-        }
-        try {
-            assertNotNull(authoringManager.findPageByUri(siteId, "error"));
-        } catch (AuthoringException e) {
-            assertEquals(AuthoringException.class, e.getClass());
-        }
-        try {
-            assertNotNull(authoringManager.findPageByUri("error", "error"));
-        } catch (AuthoringException e) {
-            assertEquals(AuthoringException.class, e.getClass());
-        }
-    }
-
-    @Test
-    public void testEditPage() throws Exception {
-        authoringManager.createPage(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
-
-        assertEquals(1, cmsPageRepository.findAll().size());
-        String pageId = cmsPageRepository.findAll().get(0).getId();
-        assertNotNull(pageId);
-        Date modificationDate = cmsPageRepository.findAll().get(0).getModificationDate();
-        assertNotNull(modificationDate);
-
-        authoringManager.editPage(pageId, "a", "a", "a", "a", "a");
-        assertEquals("a", cmsPageRepository.findAll().get(0).getName());
-        assertEquals("a", cmsPageRepository.findAll().get(0).getTitle());
-        assertEquals("a", cmsPageRepository.findAll().get(0).getUri());
-        assertEquals("a", cmsPageRepository.findAll().get(0).getSummary());
-        assertEquals("a", cmsPageRepository.findAll().get(0).getContent());
-        assertTrue(modificationDate.before(cmsPageRepository.findAll().get(0).getModificationDate()));
-
-        try {
-            authoringManager.createPage("error", "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
-        } catch (AuthoringException e) {
-            assertEquals(AuthoringException.class, e.getClass());
-        }
-    }
-
-    @Test
-    public void testDeletePage() throws Exception {
-        authoringManager.createPage(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
-
-        assertEquals(1, cmsPageRepository.findAll().size());
-        String pageId = cmsPageRepository.findAll().get(0).getId();
-
-        authoringManager.deletePage(pageId);
-        assertEquals(0, cmsPageRepository.findAll().size());
-
-        try {
-            authoringManager.deletePage("error");
-        } catch (AuthoringException e) {
-            assertEquals(AuthoringException.class, e.getClass());
-        }
     }
 
     @Test
