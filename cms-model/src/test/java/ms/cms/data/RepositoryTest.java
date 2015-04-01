@@ -43,8 +43,6 @@ public class RepositoryTest extends AbstractMongoConfiguration {
     @Autowired
     private CmsContentRepository contentRepository;
     @Autowired
-    private CmsContentRepository postRepository;
-    @Autowired
     private CmsAssetRepository assetRepository;
     @Autowired
     private CmsCommentRepository commentRepository;
@@ -73,7 +71,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         userRepository.deleteAll();
         siteRepository.deleteAll();
         contentRepository.deleteAll();
-        postRepository.deleteAll();
+        contentRepository.deleteAll();
         assetRepository.deleteAll();
         commentRepository.deleteAll();
         tagRepository.deleteAll();
@@ -210,29 +208,29 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         //POSTs
         CmsContent post01 = createCmsContent(site.getId(), "post01", "Post 01", "/post_01", randomAlphanumeric(20), randomAlphabetic(200));
 
-        assertEquals(1, postRepository.findAll().size());
-        assertNotNull(postRepository.findAll().get(0));
-        assertNotNull(postRepository.findAll().get(0).getId());
-        assertEquals(post01.getName(), postRepository.findAll().get(0).getName());
-        assertEquals(post01.getTitle(), postRepository.findAll().get(0).getTitle());
-        assertEquals(post01.getUri(), postRepository.findAll().get(0).getUri());
-        assertEquals(post01.getSummary(), postRepository.findAll().get(0).getSummary());
-        assertEquals(post01.getModificationDate().getTime(), postRepository.findAll().get(0).getModificationDate().getTime());
-        assertEquals(post01.getContent(), postRepository.findAll().get(0).getContent());
+        assertEquals(2, contentRepository.findAll().size());
+        assertNotNull(contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0));
+        assertNotNull(contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getId());
+        assertEquals(post01.getName(), contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getName());
+        assertEquals(post01.getTitle(), contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getTitle());
+        assertEquals(post01.getUri(), contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getUri());
+        assertEquals(post01.getSummary(), contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getSummary());
+        assertEquals(post01.getModificationDate().getTime(), contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getModificationDate().getTime());
+        assertEquals(post01.getContent(), contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getContent());
 
-        assertEquals(0, postRepository.findAll().get(0).getAssets().size());
+        assertEquals(0, contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getAssets().size());
 
         CmsAsset asset03 = createCmsAsset("asset03", "asset03", "/assets/asset03.png");
 
         post01.getAssets().add(asset03);
-        postRepository.save(post01);
+        contentRepository.save(post01);
 
-        assertEquals(1, postRepository.findAll().get(0).getAssets().size());
-        assertNotNull(postRepository.findAll().get(0).getAssets().get(0).getId());
-        assertEquals(asset03.getName(), postRepository.findAll().get(0).getAssets().get(0).getName());
-        assertEquals(asset03.getModificationDate().getTime(), postRepository.findAll().get(0).getAssets().get(0).getModificationDate().getTime());
-        assertEquals(asset03.getTitle(), postRepository.findAll().get(0).getAssets().get(0).getTitle());
-        assertEquals(asset03.getUri(), postRepository.findAll().get(0).getAssets().get(0).getUri());
+        assertEquals(1, contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getAssets().size());
+        assertNotNull(contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getAssets().get(0).getId());
+        assertEquals(asset03.getName(), contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getAssets().get(0).getName());
+        assertEquals(asset03.getModificationDate().getTime(), contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getAssets().get(0).getModificationDate().getTime());
+        assertEquals(asset03.getTitle(), contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getAssets().get(0).getTitle());
+        assertEquals(asset03.getUri(), contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getAssets().get(0).getUri());
 
         assertEquals(0, commentRepository.findAll().size());
 
@@ -295,14 +293,14 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         post01.getTags().add(tag01);
         post01.getTags().add(tag02);
-        postRepository.save(post01);
+        contentRepository.save(post01);
 
-        assertEquals(2, postRepository.findAll().get(0).getTags().size());
+        assertEquals(2, contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getTags().size());
     }
 
     private CmsContent createCmsContent(String siteId, String name, String title, String uri, String summary, String content) {
         CmsContent cmsContent = new CmsContent(siteId, name, title, uri, new Date(), summary, content);
-        postRepository.save(cmsContent);
+        contentRepository.save(cmsContent);
 
         return cmsContent;
     }

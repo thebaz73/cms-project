@@ -14,7 +14,7 @@ import java.util.List;
  * AuthenticationService
  * Created by bazzoni on 23/03/2015.
  */
-@RestController
+@RestController(value = "authenticationWebService")
 @RequestMapping(value = "/api")
 public class AuthenticationService {
     @Autowired

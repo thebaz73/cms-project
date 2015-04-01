@@ -17,7 +17,7 @@ import java.io.IOException;
  * SiteService
  * Created by thebaz on 24/03/15.
  */
-@RestController
+@RestController(value = "siteWebService")
 @RequestMapping(value = "/api")
 public class SiteService {
     private final Logger logger = LoggerFactory.getLogger(getClass());

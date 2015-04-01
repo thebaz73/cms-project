@@ -49,7 +49,7 @@ public class UserServiceTest extends AbstractServiceTest {
         // Pass the new person and header
         HttpEntity<CmsUser> requestEntity = new HttpEntity<>(cmsUser, headers);
 
-        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/user/{type}", HttpMethod.POST, requestEntity, Void.class, "manager");
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/public/user/{type}", HttpMethod.POST, requestEntity, Void.class, "manager");
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
@@ -71,7 +71,7 @@ public class UserServiceTest extends AbstractServiceTest {
         // Pass the new person and header
         HttpEntity<CmsUser> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<CmsUser> entity = template.exchange("http://localhost:9000/api/user/{param}", HttpMethod.GET, requestEntity, CmsUser.class, "tomriddle");
+        ResponseEntity<CmsUser> entity = template.exchange("http://localhost:9000/public/user/{param}", HttpMethod.GET, requestEntity, CmsUser.class, "tomriddle");
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
@@ -99,7 +99,7 @@ public class UserServiceTest extends AbstractServiceTest {
         // Pass the new person and header
         HttpEntity<CmsUser> requestEntity = new HttpEntity<>(cmsUser, headers);
 
-        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/user/{id}", HttpMethod.PUT, requestEntity, Void.class, registrationManager.findUser("tomriddle").getId());
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/public/user/{id}", HttpMethod.PUT, requestEntity, Void.class, registrationManager.findUser("tomriddle").getId());
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
@@ -121,7 +121,7 @@ public class UserServiceTest extends AbstractServiceTest {
         // Pass the new person and header
         HttpEntity<CmsUser> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/user/{id}", HttpMethod.DELETE, requestEntity, Void.class, registrationManager.findUser("tomriddle").getId());
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/public/user/{id}", HttpMethod.DELETE, requestEntity, Void.class, registrationManager.findUser("tomriddle").getId());
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }

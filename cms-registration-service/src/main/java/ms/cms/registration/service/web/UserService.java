@@ -15,7 +15,7 @@ import java.io.IOException;
  * UserService
  * Created by bazzoni on 24/03/2015.
  */
-@RestController
+@RestController(value = "userWebService")
 @RequestMapping(value = "/public")
 public class UserService {
     private final Logger logger = LoggerFactory.getLogger(getClass());

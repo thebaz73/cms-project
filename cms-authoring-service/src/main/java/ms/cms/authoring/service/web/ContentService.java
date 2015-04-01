@@ -16,7 +16,7 @@ import java.io.IOException;
  * ContentService
  * Created by thebaz on 27/03/15.
  */
-@RestController
+@RestController(value = "contentWebService")
 @RequestMapping(value = "/api")
 public class ContentService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
