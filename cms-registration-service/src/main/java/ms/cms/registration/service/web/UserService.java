@@ -23,16 +23,12 @@ public class UserService {
     @Autowired
     private RegistrationManager registrationManager;
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/{type}", method = RequestMethod.POST)
     public void createUser(HttpServletResponse response,
-                           @RequestParam(value = "type") String type,
-                           @RequestParam(value = "username") String username,
-                           @RequestParam(value = "password") String password,
-                           @RequestParam(value = "email") String email,
-                           @RequestParam(value = "firstName") String firstName,
-                           @RequestParam(value = "lastName") String lastName) throws IOException {
+                           @PathVariable(value = "type") String type,
+                           @RequestBody CmsUser cmsUser) throws IOException {
         try {
-            registrationManager.createUser(RegistrationManager.getUserType(type), username, password, email, firstName, lastName);
+            registrationManager.createUser(RegistrationManager.getUserType(type.toUpperCase()), cmsUser.getUsername(), cmsUser.getPassword(), cmsUser.getEmail(), cmsUser.getName());
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create user. Reason: %s", e.toString());
             logger.info(msg);
@@ -56,11 +52,9 @@ public class UserService {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     public void editUser(HttpServletResponse response,
                          @PathVariable(value = "id") String id,
-                         @RequestParam(value = "password", defaultValue = "") String password,
-                         @RequestParam(value = "firstName", defaultValue = "") String firstName,
-                         @RequestParam(value = "lastName", defaultValue = "") String lastName) throws IOException {
+                         @RequestBody CmsUser cmsUser) throws IOException {
         try {
-            registrationManager.editUser(id, password, firstName, lastName);
+            registrationManager.editUser(id, cmsUser.getPassword(), cmsUser.getName());
         } catch (RegistrationException e) {
             String msg = String.format("Cannot edit user. Reason: %s", e.toString());
             logger.info(msg);

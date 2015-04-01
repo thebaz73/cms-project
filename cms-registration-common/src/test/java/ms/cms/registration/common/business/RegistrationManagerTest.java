@@ -76,8 +76,7 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
                 "lvoldemort",
                 "avada!kedavra",
                 "voldemort@evil.com",
-                "Tom",
-                "Riddle");
+                "Tom Riddle");
     }
 
     @Test
@@ -97,8 +96,7 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
                     "lvoldemort",
                     "avada!kedavra",
                     "voldemort@evil.com",
-                    "Tom",
-                    "Riddle");
+                    "Tom Riddle");
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
@@ -108,8 +106,7 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
                     "tomriddle",
                     "avada!kedavra",
                     "voldemort@evil.com",
-                    "Tom",
-                    "Riddle");
+                    "Tom Riddle");
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
@@ -131,15 +128,15 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
     public void testEditUser() throws Exception {
         String id = cmsUserRepository.findAll().get(0).getId();
 
-        registrationManager.editUser(id, "", "", "");
+        registrationManager.editUser(id, "", "");
         assertEquals("avada!kedavra", cmsUserRepository.findAll().get(0).getPassword());
         assertEquals("Tom Riddle", cmsUserRepository.findAll().get(0).getName());
 
-        registrationManager.editUser(id, "password", "FirstName", "LastName");
+        registrationManager.editUser(id, "password", "FirstName LastName");
         assertEquals("password", cmsUserRepository.findAll().get(0).getPassword());
         assertEquals("FirstName LastName", cmsUserRepository.findAll().get(0).getName());
         try {
-            registrationManager.editUser("error", "", "", "");
+            registrationManager.editUser("error", "", "");
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
@@ -296,8 +293,7 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
                 "prince",
                 "legilimens",
                 "ssnape@evil.com",
-                "Severus",
-                "Snape");
+                "Severus Snape");
         return userId;
     }
 }

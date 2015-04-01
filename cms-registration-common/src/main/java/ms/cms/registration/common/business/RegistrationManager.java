@@ -43,7 +43,7 @@ public class RegistrationManager {
         roleViewer = cmsRoleRepository.findByRole("ROLE_VIEWER").get(0);
     }
 
-    public void createUser(UserType userType, String username, String password, String email, String firstName, String lastName) throws RegistrationException {
+    public void createUser(UserType userType, String username, String password, String email, String fullName) throws RegistrationException {
         if (!cmsUserRepository.findByUsername(username).isEmpty()) {
             throw new RegistrationException("Username already registered");
         }
@@ -52,7 +52,7 @@ public class RegistrationManager {
         }
 
         List<CmsRole> roles = doGuessRoles(userType);
-        String fullName = firstName + " " + lastName;
+
         CmsUser cmsUser = new CmsUser(fullName, email, username, password, new Date(), roles);
 
         cmsUserRepository.save(cmsUser);
@@ -72,14 +72,13 @@ public class RegistrationManager {
         throw new RegistrationException("Wrong search parameter");
     }
 
-    public void editUser(String id, String password, String firstName, String lastName) throws RegistrationException {
+    public void editUser(String id, String password, String fullName) throws RegistrationException {
         CmsUser cmsUser = cmsUserRepository.findOne(id);
         if (cmsUser == null) {
             throw new RegistrationException("User id not found");
         }
         boolean modified = false;
-        if (!firstName.isEmpty() && !lastName.isEmpty()) {
-            String fullName = firstName + " " + lastName;
+        if (!fullName.isEmpty()) {
             cmsUser.setName(fullName);
             modified = true;
         }
