@@ -18,6 +18,7 @@ import java.io.IOException;
  */
 @RestController
 @RequestMapping(value = "/api")
+@Deprecated
 public class PageService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

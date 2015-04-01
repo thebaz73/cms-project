@@ -19,6 +19,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("deprecation")
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {Application.class})
 @WebAppConfiguration
@@ -36,12 +37,12 @@ public class PageServiceTest extends AbstractServiceTest {
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
 
         String title = "Advanced Potions 2";
-        String uri = "advanced_potions_2";
+        //String uri = "advanced_potions_2";
 
         CmsPage cmsPage = new CmsPage(siteId, "", title, "", null, "", RandomStringUtils.randomAlphabetic(200));
 
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
@@ -64,7 +65,7 @@ public class PageServiceTest extends AbstractServiceTest {
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
@@ -84,7 +85,7 @@ public class PageServiceTest extends AbstractServiceTest {
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
@@ -104,7 +105,7 @@ public class PageServiceTest extends AbstractServiceTest {
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 
         CmsPage cmsPage = new CmsPage(siteId, "a", "a", "a", null, "a", "a");
@@ -127,7 +128,7 @@ public class PageServiceTest extends AbstractServiceTest {
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();

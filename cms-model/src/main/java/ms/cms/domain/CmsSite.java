@@ -32,7 +32,7 @@ public class CmsSite {
     @DBRef
     private List<CmsPage> pages;
     @DBRef
-    private List<CmsPost> posts;
+    private List<CmsContent> contents;
 
     public CmsSite() {
     }
@@ -116,14 +116,14 @@ public class CmsSite {
         this.pages = pages;
     }
 
-    public List<CmsPost> getPosts() {
-        if (posts == null) {
-            posts = new ArrayList<>();
+    public List<CmsContent> getContents() {
+        if (contents == null) {
+            contents = new ArrayList<>();
         }
-        return posts;
+        return contents;
     }
 
-    public void setPosts(List<CmsPost> posts) {
-        this.posts = posts;
+    public void setContents(List<CmsContent> contents) {
+        this.contents = contents;
     }
 }

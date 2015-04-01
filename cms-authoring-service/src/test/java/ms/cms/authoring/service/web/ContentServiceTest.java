@@ -1,7 +1,7 @@
 package ms.cms.authoring.service.web;
 
 import ms.cms.authoring.service.Application;
-import ms.cms.domain.CmsPost;
+import ms.cms.domain.CmsContent;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
 @SpringApplicationConfiguration(classes = {Application.class})
 @WebAppConfiguration
 @IntegrationTest
-public class PostServiceTest extends AbstractServiceTest {
+public class ContentServiceTest extends AbstractServiceTest {
 
     @Before
     public void setUp() throws Exception {
@@ -35,23 +35,23 @@ public class PostServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void testCreatePost() throws Exception {
+    public void testCreateContent() throws Exception {
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
 
         String title = "Advanced Potions 2";
-        String uri = "advanced_potions_2";
+        //String uri = "advanced_potions_2";
 
-        CmsPost cmsPost = new CmsPost(siteId, "", title, "", null, "", RandomStringUtils.randomAlphabetic(200));
+        CmsContent cmsContent = new CmsContent(siteId, "", title, "", null, "", RandomStringUtils.randomAlphabetic(200));
 
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(acceptableMediaTypes);
-        HttpEntity<CmsPost> requestEntity = new HttpEntity<>(cmsPost, headers);
+        HttpEntity<CmsContent> requestEntity = new HttpEntity<>(cmsContent, headers);
 
-        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post", HttpMethod.POST, requestEntity, Void.class);
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/content", HttpMethod.POST, requestEntity, Void.class);
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
 
@@ -59,96 +59,96 @@ public class PostServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void testFindPost() throws Exception {
+    public void testFindContent() throws Exception {
         String title = "Advanced Potions 2";
         String uri = "advanced_potions_2";
-        authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
-        CmsPost postByUri = authoringManager.findPostByUri(siteId, uri);
+        authoringManager.createContent(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
+        CmsContent contentByUri = authoringManager.findContentByUri(siteId, uri);
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(acceptableMediaTypes);
         // Pass the new person and header
-        HttpEntity<CmsPost> requestEntity = new HttpEntity<>(headers);
+        HttpEntity<CmsContent> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<CmsPost> entity = template.exchange("http://localhost:9000/api/post/{id}", HttpMethod.GET, requestEntity, CmsPost.class, postByUri.getId());
+        ResponseEntity<CmsContent> entity = template.exchange("http://localhost:9000/api/content/{id}", HttpMethod.GET, requestEntity, CmsContent.class, contentByUri.getId());
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
 
     @Test
-    public void testFindPostByUri() throws Exception {
+    public void testFindContentByUri() throws Exception {
         String title = "Advanced Potions 2";
         String uri = "advanced_potions_2";
-        authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
+        authoringManager.createContent(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(acceptableMediaTypes);
         // Pass the new person and header
-        HttpEntity<CmsPost> requestEntity = new HttpEntity<>(headers);
+        HttpEntity<CmsContent> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<CmsPost> entity = template.exchange("http://localhost:9000/api/post/byUri?siteId={siteId}&uri={uri}", HttpMethod.GET, requestEntity, CmsPost.class, siteId, uri);
+        ResponseEntity<CmsContent> entity = template.exchange("http://localhost:9000/api/content/byUri?siteId={siteId}&uri={uri}", HttpMethod.GET, requestEntity, CmsContent.class, siteId, uri);
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
 
     @Test
-    public void testEditPost() throws Exception {
+    public void testEditContent() throws Exception {
         String title = "Advanced Potions 2";
         String uri = "advanced_potions_2";
-        authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
+        authoringManager.createContent(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 
-        CmsPost cmsPost = new CmsPost(siteId, "a", "a", "a", null, "a", "a");
+        CmsContent cmsContent = new CmsContent(siteId, "a", "a", "a", null, "a", "a");
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(acceptableMediaTypes);
         // Pass the new person and header
-        HttpEntity<CmsPost> requestEntity = new HttpEntity<>(cmsPost, headers);
+        HttpEntity<CmsContent> requestEntity = new HttpEntity<>(cmsContent, headers);
 
-        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post/{id}", HttpMethod.PUT, requestEntity, Void.class, authoringManager.findPostByUri(siteId, uri).getId());
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/content/{id}", HttpMethod.PUT, requestEntity, Void.class, authoringManager.findContentByUri(siteId, uri).getId());
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
 
     @Test
-    public void testDeletePost() throws Exception {
+    public void testDeleteContent() throws Exception {
         String title = "Advanced Potions 2";
         String uri = "advanced_potions_2";
-        authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
+        authoringManager.createContent(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(acceptableMediaTypes);
         // Pass the new person and header
-        HttpEntity<CmsPost> requestEntity = new HttpEntity<>(headers);
+        HttpEntity<CmsContent> requestEntity = new HttpEntity<>(headers);
 
 
-        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post/{id}", HttpMethod.DELETE, requestEntity, Void.class, authoringManager.findPostByUri(siteId, uri).getId());
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/content/{id}", HttpMethod.DELETE, requestEntity, Void.class, authoringManager.findContentByUri(siteId, uri).getId());
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
 
     @Test
-    public void testAddPostTags() throws Exception {
+    public void testAddContentTags() throws Exception {
         String title = "Advanced Potions 2";
         String uri = "advanced_potions_2";
-        authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
-        CmsPost postByUri = authoringManager.findPostByUri(siteId, uri);
+        authoringManager.createContent(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
+        CmsContent contentByUri = authoringManager.findContentByUri(siteId, uri);
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
 
@@ -159,38 +159,38 @@ public class PostServiceTest extends AbstractServiceTest {
         requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(mvm, requestHeaders);
 
-        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post/{id}/tags", HttpMethod.POST, requestEntity, Void.class, postByUri.getId());
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/content/{id}/tags", HttpMethod.POST, requestEntity, Void.class, contentByUri.getId());
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        postByUri = authoringManager.findPostByUri(siteId, uri);
+        contentByUri = authoringManager.findContentByUri(siteId, uri);
 
-        assertNotNull(postByUri);
-        assertEquals(uri, postByUri.getUri());
-        assertEquals(title, postByUri.getTitle());
-        assertEquals("potions".toUpperCase(), postByUri.getTags().get(0).getTag());
-        assertEquals("magic".toUpperCase(), postByUri.getTags().get(1).getTag());
-        assertEquals("POST", postByUri.getType());
+        assertNotNull(contentByUri);
+        assertEquals(uri, contentByUri.getUri());
+        assertEquals(title, contentByUri.getTitle());
+        assertEquals("potions".toUpperCase(), contentByUri.getTags().get(0).getTag());
+        assertEquals("magic".toUpperCase(), contentByUri.getTags().get(1).getTag());
+        assertEquals("CONTENT", contentByUri.getType());
     }
 
     @Test
-    public void testRemovePostTags() throws Exception {
+    public void testRemoveContentTags() throws Exception {
         String title = "Advanced Potions 2";
         String uri = "advanced_potions_2";
-        authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
-        CmsPost postByUri = authoringManager.findPostByUri(siteId, uri);
-        authoringManager.addPostTags(postByUri.getId(), "potions, magic");
+        authoringManager.createContent(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
+        CmsContent contentByUri = authoringManager.findContentByUri(siteId, uri);
+        authoringManager.addContentTags(contentByUri.getId(), "potions, magic");
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
 
-        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post/{id}/tag?tag={tag}", HttpMethod.DELETE, null, Void.class, postByUri.getId(), "magic");
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/content/{id}/tag?tag={tag}", HttpMethod.DELETE, null, Void.class, contentByUri.getId(), "magic");
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        postByUri = authoringManager.findPostByUri(siteId, uri);
+        contentByUri = authoringManager.findContentByUri(siteId, uri);
 
-        assertNotNull(postByUri);
-        assertEquals(uri, postByUri.getUri());
-        assertEquals(title, postByUri.getTitle());
-        assertEquals("potions".toUpperCase(), postByUri.getTags().get(0).getTag());
-        assertEquals("POST", postByUri.getType());
+        assertNotNull(contentByUri);
+        assertEquals(uri, contentByUri.getUri());
+        assertEquals(title, contentByUri.getTitle());
+        assertEquals("potions".toUpperCase(), contentByUri.getTags().get(0).getTag());
+        assertEquals("CONTENT", contentByUri.getType());
     }
 }

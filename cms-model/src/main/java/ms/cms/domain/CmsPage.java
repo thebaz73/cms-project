@@ -6,11 +6,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 /**
- * CmsPost
+ * CmsContent
  * Created by thebaz on 24/03/15.
  */
 @Document
-public class CmsPage extends CmsContent {
+@Deprecated
+public class CmsPage extends CmsAbstractContent {
 
 
     public CmsPage() {

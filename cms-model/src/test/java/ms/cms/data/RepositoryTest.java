@@ -42,7 +42,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
     @Autowired
     private CmsPageRepository pageRepository;
     @Autowired
-    private CmsPostRepository postRepository;
+    private CmsContentRepository postRepository;
     @Autowired
     private CmsAssetRepository assetRepository;
     @Autowired
@@ -212,12 +212,12 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(asset02.getUri(), pageRepository.findAll().get(0).getAssets().get(1).getUri());
 
         //POSTs
-        CmsPost post01 = createCmsPost(site.getId(), "post01", "Post 01", "/post_01", randomAlphanumeric(20), randomAlphabetic(200));
+        CmsContent post01 = createCmsPost(site.getId(), "post01", "Post 01", "/post_01", randomAlphanumeric(20), randomAlphabetic(200));
 
-        site.getPosts().add(post01);
+        site.getContents().add(post01);
         siteRepository.save(site);
 
-        assertEquals(1, siteRepository.findAll().get(0).getPosts().size());
+        assertEquals(1, siteRepository.findAll().get(0).getContents().size());
 
         assertEquals(1, postRepository.findAll().size());
         assertNotNull(postRepository.findAll().get(0));
@@ -316,11 +316,11 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         return cmsPage;
     }
 
-    private CmsPost createCmsPost(String siteId, String name, String title, String uri, String summary, String content) {
-        CmsPost cmsPost = new CmsPost(siteId, name, title, uri, new Date(), summary, content);
-        postRepository.save(cmsPost);
+    private CmsContent createCmsPost(String siteId, String name, String title, String uri, String summary, String content) {
+        CmsContent cmsContent = new CmsContent(siteId, name, title, uri, new Date(), summary, content);
+        postRepository.save(cmsContent);
 
-        return cmsPost;
+        return cmsContent;
     }
 
     private CmsAsset createCmsAsset(String name, String title, String uri) {

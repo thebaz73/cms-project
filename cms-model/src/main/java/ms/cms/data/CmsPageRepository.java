@@ -9,6 +9,7 @@ import java.util.List;
  * CmsPageRepository
  * Created by thebaz on 24/03/15.
  */
+@Deprecated
 public interface CmsPageRepository extends MongoRepository<CmsPage, String> {
     /**
      * Finds @CmsPage given its address

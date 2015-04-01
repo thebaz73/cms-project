@@ -26,6 +26,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("deprecation")
 @Configuration
 @RunWith(SpringJUnit4ClassRunner.class)
 @EnableMongoRepositories(basePackages = "ms.cms")
@@ -43,7 +44,7 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
     @Autowired
     private CmsPageRepository cmsPageRepository;
     @Autowired
-    private CmsPostRepository cmsPostRepository;
+    private CmsContentRepository cmsContentRepository;
     @Autowired
     private CmsTagRepository cmsTagRepository;
 
@@ -71,7 +72,7 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
         cmsUserRepository.deleteAll();
         cmsSiteRepository.deleteAll();
         cmsPageRepository.deleteAll();
-        cmsPostRepository.deleteAll();
+        cmsContentRepository.deleteAll();
         cmsTagRepository.deleteAll();
         for (Role role : Role.ALL) {
             List<CmsRole> byRole = cmsRoleRepository.findByRole(role.getName());
@@ -198,149 +199,149 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
     }
 
     @Test
-    public void testCreatePost() throws Exception {
-        authoringManager.createPost(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
+    public void testCreateContent() throws Exception {
+        authoringManager.createContent(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
 
-        assertEquals(1, cmsPostRepository.findAll().size());
-        assertNotNull(cmsPostRepository.findAll().get(0).getId());
-        assertNotNull(cmsPostRepository.findAll().get(0).getModificationDate());
-        assertEquals("POST", cmsPostRepository.findAll().get(0).getType());
-        assertEquals(siteId, cmsPostRepository.findAll().get(0).getSiteId());
-        assertEquals("Advanced Potions 2", cmsPostRepository.findAll().get(0).getName());
-        assertEquals("Advanced Potions 2", cmsPostRepository.findAll().get(0).getTitle());
-        assertEquals("advanced_potions_2", cmsPostRepository.findAll().get(0).getUri());
-        assertNotNull(cmsPostRepository.findAll().get(0).getSummary());
-        assertNotNull(cmsPostRepository.findAll().get(0).getContent());
+        assertEquals(1, cmsContentRepository.findAll().size());
+        assertNotNull(cmsContentRepository.findAll().get(0).getId());
+        assertNotNull(cmsContentRepository.findAll().get(0).getModificationDate());
+        assertEquals("CONTENT", cmsContentRepository.findAll().get(0).getType());
+        assertEquals(siteId, cmsContentRepository.findAll().get(0).getSiteId());
+        assertEquals("Advanced Potions 2", cmsContentRepository.findAll().get(0).getName());
+        assertEquals("Advanced Potions 2", cmsContentRepository.findAll().get(0).getTitle());
+        assertEquals("advanced_potions_2", cmsContentRepository.findAll().get(0).getUri());
+        assertNotNull(cmsContentRepository.findAll().get(0).getSummary());
+        assertNotNull(cmsContentRepository.findAll().get(0).getContent());
 
         try {
-            authoringManager.createPost(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
+            authoringManager.createContent(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }
     }
 
     @Test
-    public void testFindPost() throws Exception {
-        authoringManager.createPost(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
+    public void testFindContent() throws Exception {
+        authoringManager.createContent(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
 
-        String postId = cmsPostRepository.findAll().get(0).getId();
+        String contentId = cmsContentRepository.findAll().get(0).getId();
 
-        assertNotNull(authoringManager.findPost(postId));
-        assertEquals(postId, authoringManager.findPost(postId).getId());
+        assertNotNull(authoringManager.findContent(contentId));
+        assertEquals(contentId, authoringManager.findContent(contentId).getId());
 
         try {
-            assertNotNull(authoringManager.findPost("error"));
+            assertNotNull(authoringManager.findContent("error"));
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }
 
-        assertNotNull(authoringManager.findPostByUri(siteId, "advanced_potions_2"));
-        assertEquals(postId, authoringManager.findPostByUri(siteId, "advanced_potions_2").getId());
+        assertNotNull(authoringManager.findContentByUri(siteId, "advanced_potions_2"));
+        assertEquals(contentId, authoringManager.findContentByUri(siteId, "advanced_potions_2").getId());
 
         try {
-            assertNotNull(authoringManager.findPostByUri("error", "advanced_potions_2"));
+            assertNotNull(authoringManager.findContentByUri("error", "advanced_potions_2"));
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }
         try {
-            assertNotNull(authoringManager.findPostByUri(siteId, "error"));
+            assertNotNull(authoringManager.findContentByUri(siteId, "error"));
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }
         try {
-            assertNotNull(authoringManager.findPostByUri("error", "error"));
+            assertNotNull(authoringManager.findContentByUri("error", "error"));
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }
     }
 
     @Test
-    public void testEditPost() throws Exception {
-        authoringManager.createPost(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
+    public void testEditContent() throws Exception {
+        authoringManager.createContent(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
 
-        assertEquals(1, cmsPostRepository.findAll().size());
-        String postId = cmsPostRepository.findAll().get(0).getId();
-        assertNotNull(postId);
-        Date modificationDate = cmsPostRepository.findAll().get(0).getModificationDate();
+        assertEquals(1, cmsContentRepository.findAll().size());
+        String contentId = cmsContentRepository.findAll().get(0).getId();
+        assertNotNull(contentId);
+        Date modificationDate = cmsContentRepository.findAll().get(0).getModificationDate();
         assertNotNull(modificationDate);
 
-        authoringManager.editPost(postId, "a", "a", "a", "a", "a");
-        assertEquals("a", cmsPostRepository.findAll().get(0).getName());
-        assertEquals("a", cmsPostRepository.findAll().get(0).getTitle());
-        assertEquals("a", cmsPostRepository.findAll().get(0).getUri());
-        assertEquals("a", cmsPostRepository.findAll().get(0).getSummary());
-        assertEquals("a", cmsPostRepository.findAll().get(0).getContent());
-        assertTrue(modificationDate.before(cmsPostRepository.findAll().get(0).getModificationDate()));
+        authoringManager.editContent(contentId, "a", "a", "a", "a", "a");
+        assertEquals("a", cmsContentRepository.findAll().get(0).getName());
+        assertEquals("a", cmsContentRepository.findAll().get(0).getTitle());
+        assertEquals("a", cmsContentRepository.findAll().get(0).getUri());
+        assertEquals("a", cmsContentRepository.findAll().get(0).getSummary());
+        assertEquals("a", cmsContentRepository.findAll().get(0).getContent());
+        assertTrue(modificationDate.before(cmsContentRepository.findAll().get(0).getModificationDate()));
 
         try {
-            authoringManager.createPost("error", "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
+            authoringManager.createContent("error", "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }
     }
 
     @Test
-    public void testDeletePost() throws Exception {
-        authoringManager.createPost(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
+    public void testDeleteContent() throws Exception {
+        authoringManager.createContent(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
 
-        assertEquals(1, cmsPostRepository.findAll().size());
-        String postId = cmsPostRepository.findAll().get(0).getId();
+        assertEquals(1, cmsContentRepository.findAll().size());
+        String contentId = cmsContentRepository.findAll().get(0).getId();
 
-        authoringManager.deletePost(postId);
-        assertEquals(0, cmsPostRepository.findAll().size());
+        authoringManager.deleteContent(contentId);
+        assertEquals(0, cmsContentRepository.findAll().size());
 
         try {
-            authoringManager.deletePost("error");
+            authoringManager.deleteContent("error");
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }
     }
 
     @Test
-    public void testAddPostTag() throws Exception {
-        authoringManager.createPost(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
+    public void testAddContentTag() throws Exception {
+        authoringManager.createContent(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
 
-        String postId = cmsPostRepository.findAll().get(0).getId();
+        String contentId = cmsContentRepository.findAll().get(0).getId();
 
-        authoringManager.addPostTags(postId, "potions, magic");
+        authoringManager.addContentTags(contentId, "potions, magic");
         assertEquals(2, cmsTagRepository.findAll().size());
         assertNotNull(cmsTagRepository.findAll().get(0).getId());
         assertEquals(siteId, cmsTagRepository.findAll().get(0).getSiteId());
         assertEquals(1, cmsTagRepository.findAll().get(0).getPopularity().intValue());
         assertEquals(1, cmsTagRepository.findAll().get(0).getCommentIds().size());
-        assertEquals(postId, cmsTagRepository.findAll().get(0).getCommentIds().iterator().next());
+        assertEquals(contentId, cmsTagRepository.findAll().get(0).getCommentIds().iterator().next());
 
         try {
-            authoringManager.addPostTags("error", "potions");
+            authoringManager.addContentTags("error", "potions");
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }
     }
 
     @Test
-    public void testRemovePostTag() throws Exception {
-        authoringManager.createPost(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
+    public void testRemoveContentTag() throws Exception {
+        authoringManager.createContent(siteId, "", "Advanced Potions 2", "", "", RandomStringUtils.randomAlphabetic(200));
 
-        String postId = cmsPostRepository.findAll().get(0).getId();
-        authoringManager.addPostTags(postId, "potions, magic");
+        String contentId = cmsContentRepository.findAll().get(0).getId();
+        authoringManager.addContentTags(contentId, "potions, magic");
         assertEquals(2, cmsTagRepository.findAll().size());
         assertEquals(1, cmsTagRepository.findAll().get(0).getCommentIds().size());
-        assertEquals(2, cmsPostRepository.findAll().get(0).getTags().size());
+        assertEquals(2, cmsContentRepository.findAll().get(0).getTags().size());
 
-        authoringManager.removePostTags(postId, "Magic");
+        authoringManager.removeContentTags(contentId, "Magic");
         assertEquals(2, cmsTagRepository.findAll().size());
         assertEquals(1, cmsTagRepository.findAll().get(0).getCommentIds().size());
         assertEquals(0, cmsTagRepository.findAll().get(1).getPopularity().intValue());
-        assertEquals(1, cmsPostRepository.findAll().get(0).getTags().size());
+        assertEquals(1, cmsContentRepository.findAll().get(0).getTags().size());
 
         try {
-            authoringManager.removePostTags("error", "potions");
+            authoringManager.removeContentTags("error", "potions");
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }
 
         try {
-            authoringManager.removePostTags(postId, "error");
+            authoringManager.removeContentTags(contentId, "error");
         } catch (AuthoringException e) {
             assertEquals(AuthoringException.class, e.getClass());
         }

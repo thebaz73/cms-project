@@ -1,11 +1,11 @@
 package ms.cms.authoring.common.business;
 
+import ms.cms.data.CmsContentRepository;
 import ms.cms.data.CmsPageRepository;
-import ms.cms.data.CmsPostRepository;
 import ms.cms.data.CmsSiteRepository;
 import ms.cms.data.CmsTagRepository;
+import ms.cms.domain.CmsContent;
 import ms.cms.domain.CmsPage;
-import ms.cms.domain.CmsPost;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsTag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class AuthoringManager {
     @Autowired
     private CmsPageRepository cmsPageRepository;
     @Autowired
-    private CmsPostRepository cmsPostRepository;
+    private CmsContentRepository cmsContentRepository;
     @Autowired
     private CmsTagRepository cmsTagRepository;
     private int maxWidth;
@@ -38,6 +38,7 @@ public class AuthoringManager {
         this.maxWidth = maxWidth;
     }
 
+    @Deprecated
     public void createPage(String siteId, String name, String title, String uri, String summary, String content) throws AuthoringException {
         CmsSite cmsSite = cmsSiteRepository.findOne(siteId);
         if (cmsSite == null) {
@@ -57,6 +58,7 @@ public class AuthoringManager {
         cmsPageRepository.save(cmsPage);
     }
 
+    @Deprecated
     public CmsPage findPage(String id) throws AuthoringException {
         CmsPage cmsPage = cmsPageRepository.findOne(id);
         if (cmsPage != null) {
@@ -66,6 +68,7 @@ public class AuthoringManager {
         throw new AuthoringException("Wrong search parameter");
     }
 
+    @Deprecated
     public CmsPage findPageByUri(String siteId, String uri) throws AuthoringException {
         List<CmsPage> bySiteIdAndUri = cmsPageRepository.findBySiteIdAndUri(siteId, uri);
         if (!bySiteIdAndUri.isEmpty()) {
@@ -75,6 +78,7 @@ public class AuthoringManager {
         throw new AuthoringException("Wrong search parameter");
     }
 
+    @Deprecated
     public void editPage(String id, String name, String title, String uri, String summary, String content) throws AuthoringException {
         CmsPage cmsPage = cmsPageRepository.findOne(id);
         if (cmsPage == null) {
@@ -100,6 +104,7 @@ public class AuthoringManager {
         cmsPageRepository.save(cmsPage);
     }
 
+    @Deprecated
     public void deletePage(String id) throws AuthoringException {
         CmsPage cmsPage = cmsPageRepository.findOne(id);
         if (cmsPage == null) {
@@ -109,7 +114,7 @@ public class AuthoringManager {
         cmsPageRepository.delete(cmsPage);
     }
 
-    public void createPost(String siteId, String name, String title, String uri, String summary, String content) throws AuthoringException {
+    public void createContent(String siteId, String name, String title, String uri, String summary, String content) throws AuthoringException {
         CmsSite cmsSite = cmsSiteRepository.findOne(siteId);
         if (cmsSite == null) {
             throw new AuthoringException("Site not found");
@@ -124,21 +129,21 @@ public class AuthoringManager {
             summary = abbreviateHtml(content, maxWidth, false);
         }
 
-        CmsPost cmsPost = new CmsPost(cmsSite.getId(), name, title, uri, new Date(), summary, content);
-        cmsPostRepository.save(cmsPost);
+        CmsContent cmsContent = new CmsContent(cmsSite.getId(), name, title, uri, new Date(), summary, content);
+        cmsContentRepository.save(cmsContent);
     }
 
-    public CmsPost findPost(String id) throws AuthoringException {
-        CmsPost cmsPost = cmsPostRepository.findOne(id);
-        if (cmsPost != null) {
-            return cmsPost;
+    public CmsContent findContent(String id) throws AuthoringException {
+        CmsContent cmsContent = cmsContentRepository.findOne(id);
+        if (cmsContent != null) {
+            return cmsContent;
         }
 
         throw new AuthoringException("Wrong search parameter");
     }
 
-    public CmsPost findPostByUri(String siteId, String uri) throws AuthoringException {
-        List<CmsPost> bySiteIdAndUri = cmsPostRepository.findBySiteIdAndUri(siteId, uri);
+    public CmsContent findContentByUri(String siteId, String uri) throws AuthoringException {
+        List<CmsContent> bySiteIdAndUri = cmsContentRepository.findBySiteIdAndUri(siteId, uri);
         if (!bySiteIdAndUri.isEmpty()) {
             return bySiteIdAndUri.get(0);
         }
@@ -146,10 +151,10 @@ public class AuthoringManager {
         throw new AuthoringException("Wrong search parameter");
     }
 
-    public void editPost(String id, String name, String title, String uri, String summary, String content) throws AuthoringException {
-        CmsPost cmsPost = cmsPostRepository.findOne(id);
-        if (cmsPost == null) {
-            throw new AuthoringException("Post not found");
+    public void editContent(String id, String name, String title, String uri, String summary, String content) throws AuthoringException {
+        CmsContent cmsContent = cmsContentRepository.findOne(id);
+        if (cmsContent == null) {
+            throw new AuthoringException("Content not found");
         }
         if (name.isEmpty()) {
             name = title;
@@ -161,63 +166,63 @@ public class AuthoringManager {
             summary = abbreviateHtml(content, maxWidth, false);
         }
 
-        cmsPost.setName(name);
-        cmsPost.setTitle(title);
-        cmsPost.setUri(uri);
-        cmsPost.setModificationDate(new Date());
-        cmsPost.setSummary(summary);
-        cmsPost.setContent(content);
+        cmsContent.setName(name);
+        cmsContent.setTitle(title);
+        cmsContent.setUri(uri);
+        cmsContent.setModificationDate(new Date());
+        cmsContent.setSummary(summary);
+        cmsContent.setContent(content);
 
-        cmsPostRepository.save(cmsPost);
+        cmsContentRepository.save(cmsContent);
     }
 
-    public void deletePost(String id) throws AuthoringException {
-        CmsPost cmsPost = cmsPostRepository.findOne(id);
-        if (cmsPost == null) {
-            throw new AuthoringException("Post not found");
+    public void deleteContent(String id) throws AuthoringException {
+        CmsContent cmsContent = cmsContentRepository.findOne(id);
+        if (cmsContent == null) {
+            throw new AuthoringException("Content not found");
         }
-        for (CmsTag cmsTag : cmsPost.getTags()) {
-            cmsTag.getCommentIds().remove(cmsPost.getId());
+        for (CmsTag cmsTag : cmsContent.getTags()) {
+            cmsTag.getCommentIds().remove(cmsContent.getId());
             cmsTag.setPopularity(cmsTag.getPopularity() - 1);
             cmsTagRepository.save(cmsTag);
         }
-        cmsPostRepository.delete(cmsPost);
+        cmsContentRepository.delete(cmsContent);
     }
 
-    public void addPostTags(String id, String tags) throws AuthoringException {
-        CmsPost cmsPost = cmsPostRepository.findOne(id);
-        if (cmsPost == null) {
-            throw new AuthoringException("Post not found");
+    public void addContentTags(String id, String tags) throws AuthoringException {
+        CmsContent cmsContent = cmsContentRepository.findOne(id);
+        if (cmsContent == null) {
+            throw new AuthoringException("Content not found");
         }
         for (String tag : tags.split(",|:|;|\\|")) {
-            List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsPost.getSiteId(), tag.toUpperCase().trim());
+            List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsContent.getSiteId(), tag.toUpperCase().trim());
             CmsTag cmsTag;
             if (!bySiteIdAndTag.isEmpty()) {
                 cmsTag = bySiteIdAndTag.get(0);
             } else {
-                cmsTag = new CmsTag(cmsPost.getSiteId(), tag.toUpperCase().trim());
+                cmsTag = new CmsTag(cmsContent.getSiteId(), tag.toUpperCase().trim());
             }
-            cmsTag.getCommentIds().add(cmsPost.getId());
+            cmsTag.getCommentIds().add(cmsContent.getId());
             cmsTag.setPopularity(cmsTag.getPopularity() + 1);
             cmsTagRepository.save(cmsTag);
 
-            cmsPost.getTags().add(cmsTag);
+            cmsContent.getTags().add(cmsTag);
         }
-        cmsPostRepository.save(cmsPost);
+        cmsContentRepository.save(cmsContent);
     }
 
-    public void removePostTags(String id, String tag) throws AuthoringException {
-        CmsPost cmsPost = cmsPostRepository.findOne(id);
-        if (cmsPost == null) {
-            throw new AuthoringException("Post not found");
+    public void removeContentTags(String id, String tag) throws AuthoringException {
+        CmsContent cmsContent = cmsContentRepository.findOne(id);
+        if (cmsContent == null) {
+            throw new AuthoringException("Content not found");
         }
-        List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsPost.getSiteId(), tag.toUpperCase());
+        List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsContent.getSiteId(), tag.toUpperCase());
         if (bySiteIdAndTag.isEmpty()) {
             throw new AuthoringException("Tag not found");
         }
-        List<CmsTag> allTags = new ArrayList<>(cmsPost.getTags());
-        allTags.stream().filter(cmsTag -> cmsTag.getTag().equalsIgnoreCase(tag.trim())).forEach(cmsTag -> cmsPost.getTags().remove(cmsTag));
-        cmsPostRepository.save(cmsPost);
+        List<CmsTag> allTags = new ArrayList<>(cmsContent.getTags());
+        allTags.stream().filter(cmsTag -> cmsTag.getTag().equalsIgnoreCase(tag.trim())).forEach(cmsTag -> cmsContent.getTags().remove(cmsTag));
+        cmsContentRepository.save(cmsContent);
 
         CmsTag cmsTag = bySiteIdAndTag.get(0);
         List<String> allIds = new ArrayList<>(cmsTag.getCommentIds());

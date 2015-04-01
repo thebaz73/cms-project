@@ -2,7 +2,7 @@ package ms.cms.authoring.service.web;
 
 import ms.cms.authoring.common.business.AuthoringException;
 import ms.cms.authoring.common.business.AuthoringManager;
-import ms.cms.domain.CmsPost;
+import ms.cms.domain.CmsContent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,36 +13,36 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * PostService
+ * ContentService
  * Created by thebaz on 27/03/15.
  */
 @RestController
 @RequestMapping(value = "/api")
-public class PostService {
+public class ContentService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private AuthoringManager authoringManager;
 
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
-    @RequestMapping(value = "/post", method = RequestMethod.POST)
-    public void createPost(HttpServletResponse response, @RequestBody CmsPost cmsPost) throws IOException {
+    @RequestMapping(value = "/content", method = RequestMethod.POST)
+    public void createContent(HttpServletResponse response, @RequestBody CmsContent cmsContent) throws IOException {
         try {
-            authoringManager.createPost(cmsPost.getSiteId(), cmsPost.getName(), cmsPost.getTitle(), cmsPost.getUri(), cmsPost.getSummary(), cmsPost.getContent());
+            authoringManager.createContent(cmsContent.getSiteId(), cmsContent.getName(), cmsContent.getTitle(), cmsContent.getUri(), cmsContent.getSummary(), cmsContent.getContent());
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot create post. Reason: %s", e.toString());
+            String msg = String.format("Cannot create content. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
     }
 
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
-    @RequestMapping(value = "/post/{id}", method = RequestMethod.GET)
-    public CmsPost findPost(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
+    @RequestMapping(value = "/content/{id}", method = RequestMethod.GET)
+    public CmsContent findContent(HttpServletResponse response, @PathVariable("id") String id) throws IOException {
         try {
-            return authoringManager.findPost(id);
+            return authoringManager.findContent(id);
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot find post. Reason: %s", e.toString());
+            String msg = String.format("Cannot find content. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
@@ -51,14 +51,14 @@ public class PostService {
     }
 
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
-    @RequestMapping(value = "/post/byUri", method = RequestMethod.GET)
-    public CmsPost findPostByUri(HttpServletResponse response,
+    @RequestMapping(value = "/content/byUri", method = RequestMethod.GET)
+    public CmsContent findContentByUri(HttpServletResponse response,
                                  @RequestParam(value = "siteId") String siteId,
                                  @RequestParam(value = "uri") String uri) throws IOException {
         try {
-            return authoringManager.findPostByUri(siteId, uri);
+            return authoringManager.findContentByUri(siteId, uri);
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot find post. Reason: %s", e.toString());
+            String msg = String.format("Cannot find content. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
@@ -66,56 +66,56 @@ public class PostService {
         return null;
     }
 
-    //TODO change method to and json object post
+    //TODO change method to and json object content
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
-    @RequestMapping(value = "/post/{id}", method = RequestMethod.PUT)
-    public void editPost(HttpServletResponse response,
-                         @PathVariable(value = "id") String id, @RequestBody CmsPost cmsPost) throws IOException {
+    @RequestMapping(value = "/content/{id}", method = RequestMethod.PUT)
+    public void editContent(HttpServletResponse response,
+                            @PathVariable(value = "id") String id, @RequestBody CmsContent cmsContent) throws IOException {
         try {
-            authoringManager.editPost(id, cmsPost.getName(), cmsPost.getTitle(), cmsPost.getUri(), cmsPost.getSummary(), cmsPost.getContent());
+            authoringManager.editContent(id, cmsContent.getName(), cmsContent.getTitle(), cmsContent.getUri(), cmsContent.getSummary(), cmsContent.getContent());
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot edit post. Reason: %s", e.toString());
+            String msg = String.format("Cannot edit content. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
     }
 
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
-    @RequestMapping(value = "/post/{id}", method = RequestMethod.DELETE)
-    public void deletePost(HttpServletResponse response,
+    @RequestMapping(value = "/content/{id}", method = RequestMethod.DELETE)
+    public void deleteContent(HttpServletResponse response,
                            @PathVariable(value = "id") String id) throws IOException {
         try {
-            authoringManager.deletePost(id);
+            authoringManager.deleteContent(id);
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot delete post. Reason: %s", e.toString());
+            String msg = String.format("Cannot delete content. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
     }
 
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
-    @RequestMapping(value = "/post/{id}/tags", method = RequestMethod.POST)
-    public void addPostTags(HttpServletResponse response,
+    @RequestMapping(value = "/content/{id}/tags", method = RequestMethod.POST)
+    public void addContentTags(HttpServletResponse response,
                             @PathVariable(value = "id") String id,
                             @RequestParam(value = "tags") String tags) throws IOException {
         try {
-            authoringManager.addPostTags(id, tags);
+            authoringManager.addContentTags(id, tags);
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot add tags to post. Reason: %s", e.toString());
+            String msg = String.format("Cannot add tags to content. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
     }
 
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
-    @RequestMapping(value = "/post/{id}/tag", method = RequestMethod.DELETE)
-    public void removePostTags(HttpServletResponse response,
+    @RequestMapping(value = "/content/{id}/tag", method = RequestMethod.DELETE)
+    public void removeContentTags(HttpServletResponse response,
                                @PathVariable(value = "id") String id,
                                @RequestParam(value = "tag") String tag) throws IOException {
         try {
-            authoringManager.removePostTags(id, tag);
+            authoringManager.removeContentTags(id, tag);
         } catch (AuthoringException e) {
-            String msg = String.format("Cannot remove tags to post. Reason: %s", e.toString());
+            String msg = String.format("Cannot remove tags to content. Reason: %s", e.toString());
             logger.info(msg);
             response.sendError(400, msg);
         }
