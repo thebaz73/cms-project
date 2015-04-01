@@ -26,15 +26,9 @@ public class PostService {
 
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/post", method = RequestMethod.POST)
-    public void createPost(HttpServletResponse response,
-                           @RequestParam(value = "siteId") String siteId,
-                           @RequestParam(value = "name", defaultValue = "") String name,
-                           @RequestParam(value = "title") String title,
-                           @RequestParam(value = "uri", defaultValue = "") String uri,
-                           @RequestParam(value = "summary", defaultValue = "") String summary,
-                           @RequestParam(value = "content") String content) throws IOException {
+    public void createPost(HttpServletResponse response, @RequestBody CmsPost cmsPost) throws IOException {
         try {
-            authoringManager.createPost(siteId, name, title, uri, summary, content);
+            authoringManager.createPost(cmsPost.getSiteId(), cmsPost.getName(), cmsPost.getTitle(), cmsPost.getUri(), cmsPost.getSummary(), cmsPost.getContent());
         } catch (AuthoringException e) {
             String msg = String.format("Cannot create post. Reason: %s", e.toString());
             logger.info(msg);
@@ -76,14 +70,9 @@ public class PostService {
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/post/{id}", method = RequestMethod.PUT)
     public void editPost(HttpServletResponse response,
-                         @PathVariable(value = "id") String id,
-                         @RequestParam(value = "name", defaultValue = "") String name,
-                         @RequestParam(value = "title") String title,
-                         @RequestParam(value = "uri", defaultValue = "") String uri,
-                         @RequestParam(value = "summary", defaultValue = "") String summary,
-                         @RequestParam(value = "content") String content) throws IOException {
+                         @PathVariable(value = "id") String id, @RequestBody CmsPost cmsPost) throws IOException {
         try {
-            authoringManager.editPost(id, name, title, uri, summary, content);
+            authoringManager.editPost(id, cmsPost.getName(), cmsPost.getTitle(), cmsPost.getUri(), cmsPost.getSummary(), cmsPost.getContent());
         } catch (AuthoringException e) {
             String msg = String.format("Cannot edit post. Reason: %s", e.toString());
             logger.info(msg);

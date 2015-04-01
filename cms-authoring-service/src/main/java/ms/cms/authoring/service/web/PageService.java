@@ -26,15 +26,9 @@ public class PageService {
 
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/page", method = RequestMethod.POST)
-    public void createPage(HttpServletResponse response,
-                           @RequestParam(value = "siteId") String siteId,
-                           @RequestParam(value = "name", defaultValue = "") String name,
-                           @RequestParam(value = "title") String title,
-                           @RequestParam(value = "uri", defaultValue = "") String uri,
-                           @RequestParam(value = "summary", defaultValue = "") String summary,
-                           @RequestParam(value = "content") String content) throws IOException {
+    public void createPage(HttpServletResponse response, @RequestBody CmsPage cmsPage) throws IOException {
         try {
-            authoringManager.createPage(siteId, name, title, uri, summary, content);
+            authoringManager.createPage(cmsPage.getSiteId(), cmsPage.getName(), cmsPage.getTitle(), cmsPage.getUri(), cmsPage.getSummary(), cmsPage.getContent());
         } catch (AuthoringException e) {
             String msg = String.format("Cannot create page. Reason: %s", e.toString());
             logger.info(msg);
@@ -76,14 +70,9 @@ public class PageService {
     @Secured({"ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/page/{id}", method = RequestMethod.PUT)
     public void editPage(HttpServletResponse response,
-                         @PathVariable(value = "id") String id,
-                         @RequestParam(value = "name", defaultValue = "") String name,
-                         @RequestParam(value = "title") String title,
-                         @RequestParam(value = "uri", defaultValue = "") String uri,
-                         @RequestParam(value = "summary", defaultValue = "") String summary,
-                         @RequestParam(value = "content") String content) throws IOException {
+                         @PathVariable(value = "id") String id, @RequestBody CmsPage cmsPage) throws IOException {
         try {
-            authoringManager.editPage(id, name, title, uri, summary, content);
+            authoringManager.editPage(id, cmsPage.getName(), cmsPage.getTitle(), cmsPage.getUri(), cmsPage.getSummary(), cmsPage.getContent());
         } catch (AuthoringException e) {
             String msg = String.format("Cannot edit page. Reason: %s", e.toString());
             logger.info(msg);

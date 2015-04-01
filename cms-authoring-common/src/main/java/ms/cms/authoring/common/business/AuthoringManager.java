@@ -43,13 +43,13 @@ public class AuthoringManager {
         if (cmsSite == null) {
             throw new AuthoringException("Site not found");
         }
-        if (name.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             name = title;
         }
-        if (uri.isEmpty()) {
+        if (uri == null || uri.isEmpty()) {
             uri = toPrettyURL(title);
         }
-        if (summary.isEmpty()) {
+        if (summary == null || summary.isEmpty()) {
             summary = abbreviateHtml(content, maxWidth, false);
         }
 

@@ -1,6 +1,5 @@
 package ms.cms.authoring.service.web;
 
-import ms.cms.authoring.common.business.AuthoringException;
 import ms.cms.authoring.service.Application;
 import ms.cms.domain.CmsPost;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -16,6 +15,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -39,24 +41,19 @@ public class PostServiceTest extends AbstractServiceTest {
         String title = "Advanced Potions 2";
         String uri = "advanced_potions_2";
 
-        MultiValueMap<String, String> mvm = new LinkedMultiValueMap<>();
-        mvm.add("siteId", siteId);
-        mvm.add("title", title);
-        mvm.add("content", RandomStringUtils.randomAlphabetic(200));
+        CmsPost cmsPost = new CmsPost(siteId, "", title, "", null, "", RandomStringUtils.randomAlphabetic(200));
 
-        HttpHeaders requestHeaders = new HttpHeaders();
-        requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(mvm, requestHeaders);
+        // Prepare acceptable media type
+        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+        // Prepare header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(acceptableMediaTypes);
+        HttpEntity<CmsPost> requestEntity = new HttpEntity<>(cmsPost, headers);
 
         ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post", HttpMethod.POST, requestEntity, Void.class);
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        CmsPost postByUri = authoringManager.findPostByUri(siteId, uri);
-
-        assertNotNull(postByUri);
-        assertEquals(uri, postByUri.getUri());
-        assertEquals(title, postByUri.getTitle());
-        assertEquals("POST", postByUri.getType());
 
         //todo verify errors
     }
@@ -69,15 +66,17 @@ public class PostServiceTest extends AbstractServiceTest {
         CmsPost postByUri = authoringManager.findPostByUri(siteId, uri);
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
+        // Prepare acceptable media type
+        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+        // Prepare header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(acceptableMediaTypes);
+        // Pass the new person and header
+        HttpEntity<CmsPost> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<CmsPost> entity = template.exchange("http://localhost:9000/api/post/" + postByUri.getId(), HttpMethod.GET, null, CmsPost.class);
+        ResponseEntity<CmsPost> entity = template.exchange("http://localhost:9000/api/post/{id}", HttpMethod.GET, requestEntity, CmsPost.class, postByUri.getId());
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        CmsPost body = entity.getBody();
-
-        assertEquals(postByUri.getId(), body.getId());
-        assertEquals(uri, body.getUri());
-        assertEquals(title, body.getTitle());
-        assertEquals("POST", body.getType());
     }
 
     @Test
@@ -85,18 +84,19 @@ public class PostServiceTest extends AbstractServiceTest {
         String title = "Advanced Potions 2";
         String uri = "advanced_potions_2";
         authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
-        CmsPost postByUri = authoringManager.findPostByUri(siteId, uri);
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
+        // Prepare acceptable media type
+        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+        // Prepare header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(acceptableMediaTypes);
+        // Pass the new person and header
+        HttpEntity<CmsPost> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<CmsPost> entity = template.exchange("http://localhost:9000/api/post/byUri?siteId={siteId}&uri={uri}", HttpMethod.GET, null, CmsPost.class, siteId, uri);
+        ResponseEntity<CmsPost> entity = template.exchange("http://localhost:9000/api/post/byUri?siteId={siteId}&uri={uri}", HttpMethod.GET, requestEntity, CmsPost.class, siteId, uri);
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        CmsPost body = entity.getBody();
-
-        assertEquals(postByUri.getId(), body.getId());
-        assertEquals(uri, body.getUri());
-        assertEquals(title, body.getTitle());
-        assertEquals("POST", body.getType());
     }
 
     @Test
@@ -104,22 +104,22 @@ public class PostServiceTest extends AbstractServiceTest {
         String title = "Advanced Potions 2";
         String uri = "advanced_potions_2";
         authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
-        CmsPost postByUri = authoringManager.findPostByUri(siteId, uri);
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
+        // Prepare acceptable media type
+        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 
-        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post/{id}?title={title}&content={content}", HttpMethod.PUT, null, Void.class, postByUri.getId(), "a", "a");
+        CmsPost cmsPost = new CmsPost(siteId, "a", "a", "a", null, "a", "a");
+        // Prepare header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(acceptableMediaTypes);
+        // Pass the new person and header
+        HttpEntity<CmsPost> requestEntity = new HttpEntity<>(cmsPost, headers);
+
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post/{id}", HttpMethod.PUT, requestEntity, Void.class, authoringManager.findPostByUri(siteId, uri).getId());
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-        CmsPost editedPost = authoringManager.findPostByUri(siteId, "a");
-
-        assertNotNull(editedPost);
-        assertEquals("a", editedPost.getUri());
-        assertEquals("a", editedPost.getName());
-        assertEquals("a", editedPost.getTitle());
-        assertEquals("a", editedPost.getSummary());
-        assertEquals("a", editedPost.getContent());
-        assertEquals("POST", editedPost.getType());
     }
 
     @Test
@@ -127,18 +127,20 @@ public class PostServiceTest extends AbstractServiceTest {
         String title = "Advanced Potions 2";
         String uri = "advanced_potions_2";
         authoringManager.createPost(siteId, "", title, "", "", RandomStringUtils.randomAlphabetic(200));
-        CmsPost postByUri = authoringManager.findPostByUri(siteId, uri);
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
+        // Prepare acceptable media type
+        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+        // Prepare header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(acceptableMediaTypes);
+        // Pass the new person and header
+        HttpEntity<CmsPost> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post/" + postByUri.getId(), HttpMethod.DELETE, null, Void.class);
+
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/api/post/{id}", HttpMethod.DELETE, requestEntity, Void.class, authoringManager.findPostByUri(siteId, uri).getId());
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-
-        try {
-            authoringManager.findPostByUri(siteId, uri);
-        } catch (AuthoringException e) {
-            assertEquals(AuthoringException.class, e.getClass());
-        }
     }
 
     @Test
