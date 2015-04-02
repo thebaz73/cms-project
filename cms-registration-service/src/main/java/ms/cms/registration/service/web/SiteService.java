@@ -26,14 +26,13 @@ public class SiteService {
     private RegistrationManager registrationManager;
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
-    @RequestMapping(value = "/site", method = RequestMethod.POST)
-    public void createUser(HttpServletResponse response,
-                           @RequestParam(value = "userId") String userId,
-                           @RequestParam(value = "name") String name,
-                           @RequestParam(value = "address") String address,
-                           @RequestParam(value = "address") String workflowType) throws IOException {
+    @RequestMapping(value = "/site/{userId}", method = RequestMethod.POST)
+    public void createSite(HttpServletResponse response,
+                           @PathVariable(value = "userId") String userId,
+                           @RequestParam(value = "workflow", defaultValue = "SELF_APPROVAL_WF") String workflowType,
+                           @RequestBody CmsSite cmsSite) throws IOException {
         try {
-            registrationManager.createSite(userId, name, address, WorkflowType.forName(workflowType));
+            registrationManager.createSite(userId, cmsSite.getName(), cmsSite.getAddress(), WorkflowType.forName(workflowType.toUpperCase()));
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create site. Reason: %s", e.toString());
             logger.info(msg);
@@ -59,9 +58,9 @@ public class SiteService {
     @RequestMapping(value = "/site/{id}", method = RequestMethod.PUT)
     public void editSite(HttpServletResponse response,
                          @PathVariable(value = "id") String id,
-                         @RequestParam(value = "name", defaultValue = "") String name) throws IOException {
+                         @RequestBody CmsSite cmsSite) throws IOException {
         try {
-            registrationManager.editSite(id, name);
+            registrationManager.editSite(id, cmsSite.getName());
         } catch (RegistrationException e) {
             String msg = String.format("Cannot edit site. Reason: %s", e.toString());
             logger.info(msg);

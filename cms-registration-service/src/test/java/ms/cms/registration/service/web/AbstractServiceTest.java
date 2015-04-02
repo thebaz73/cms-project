@@ -1,6 +1,7 @@
 package ms.cms.registration.service.web;
 
 import ms.cms.data.CmsRoleRepository;
+import ms.cms.data.CmsSiteRepository;
 import ms.cms.data.CmsUserRepository;
 import ms.cms.domain.CmsRole;
 import ms.cms.domain.Role;
@@ -24,16 +25,20 @@ public class AbstractServiceTest {
     public static final String USERNAME = "lvoldemort";
     public static final String PASSWORD = "avada!kedavra";
     protected HttpClient client;
+    protected String userId;
     @Autowired
     protected RegistrationManager registrationManager;
     @Autowired
     private CmsUserRepository cmsUserRepository;
     @Autowired
     private CmsRoleRepository cmsRoleRepository;
+    @Autowired
+    private CmsSiteRepository cmsSiteRepository;
 
     protected void prepareEnvironment(boolean authenticated) throws Exception {
         cmsRoleRepository.deleteAll();
         cmsUserRepository.deleteAll();
+        cmsSiteRepository.deleteAll();
         for (Role role : Role.ALL) {
             List<CmsRole> byRole = cmsRoleRepository.findByRole(role.getName());
             if (byRole.isEmpty()) {
@@ -48,6 +53,7 @@ public class AbstractServiceTest {
                     PASSWORD,
                     "voldemort@evil.com",
                     "Tom Riddle");
+            userId = registrationManager.findUser("voldemort@evil.com").getId();
         }
     }
 
