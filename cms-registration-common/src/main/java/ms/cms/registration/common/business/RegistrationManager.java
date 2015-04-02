@@ -18,6 +18,7 @@ import java.util.List;
 @Component
 public class RegistrationManager {
     private CmsRole roleUser;
+    private CmsRole roleAdmin;
     private CmsRole roleManager;
     private CmsRole roleAuthor;
     private CmsRole roleViewer;
@@ -29,6 +30,7 @@ public class RegistrationManager {
     private CmsSiteRepository cmsSiteRepository;
 
     public static UserType getUserType(String type) throws RegistrationException {
+        if (type.equalsIgnoreCase("ADMIN")) return UserType.ADMIN;
         if (type.equalsIgnoreCase("MANAGER")) return UserType.MANAGER;
         if (type.equalsIgnoreCase("AUTHOR")) return UserType.AUTHOR;
         if (type.equalsIgnoreCase("VIEWER")) return UserType.VIEWER;
@@ -37,7 +39,15 @@ public class RegistrationManager {
     }
 
     public void initialize() {
+        for (Role role : Role.ALL) {
+            List<CmsRole> byRole = cmsRoleRepository.findByRole(role.getName());
+            if (byRole.isEmpty()) {
+                CmsRole cmsRole = new CmsRole(role.getName());
+                cmsRoleRepository.save(cmsRole);
+            }
+        }
         roleUser = cmsRoleRepository.findByRole("ROLE_USER").get(0);
+        roleAdmin = cmsRoleRepository.findByRole("ROLE_ADMIN").get(0);
         roleManager = cmsRoleRepository.findByRole("ROLE_MANAGER").get(0);
         roleAuthor = cmsRoleRepository.findByRole("ROLE_AUTHOR").get(0);
         roleViewer = cmsRoleRepository.findByRole("ROLE_VIEWER").get(0);
@@ -211,6 +221,9 @@ public class RegistrationManager {
         List<CmsRole> roles = new ArrayList<>();
         roles.add(roleUser);
         switch (userType) {
+            case ADMIN:
+                roles.add(roleAdmin);
+                break;
             case MANAGER:
                 roles.add(roleManager);
                 break;
@@ -226,6 +239,6 @@ public class RegistrationManager {
     }
 
     public static enum UserType {
-        MANAGER, AUTHOR, VIEWER
+        ADMIN, MANAGER, AUTHOR, VIEWER
     }
 }

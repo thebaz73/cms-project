@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
  * ReadOnlyUserManager
  * Created by thebaz on 21/03/15.
  */
+@Component(value = "userService")
 public class ReadOnlyUserManager implements UserDetailsManager {
     private final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
