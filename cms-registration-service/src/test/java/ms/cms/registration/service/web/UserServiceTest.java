@@ -35,7 +35,7 @@ public class UserServiceTest extends AbstractServiceTest {
     public void testCreateUser() throws Exception {
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 
         CmsUser cmsUser = new CmsUser();
@@ -63,7 +63,7 @@ public class UserServiceTest extends AbstractServiceTest {
                 "Tom Riddle");
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
@@ -85,7 +85,7 @@ public class UserServiceTest extends AbstractServiceTest {
                 "Tom Riddle");
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 
         CmsUser cmsUser = new CmsUser();
@@ -113,7 +113,7 @@ public class UserServiceTest extends AbstractServiceTest {
                 "Tom Riddle");
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
