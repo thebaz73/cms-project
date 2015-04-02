@@ -41,8 +41,8 @@ public class SiteService {
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
-    @RequestMapping(value = "/site/{param}", method = RequestMethod.GET)
-    public CmsSite findSite(HttpServletResponse response, @PathVariable(value = "param") String param) throws IOException {
+    @RequestMapping(value = "/site", method = RequestMethod.GET)
+    public CmsSite findSite(HttpServletResponse response, @RequestParam(value = "param") String param) throws IOException {
         try {
             return registrationManager.findSite(param);
         } catch (RegistrationException e) {
@@ -82,10 +82,10 @@ public class SiteService {
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
-    @RequestMapping(value = "/site/author/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/site/author/{id}/{userId}", method = RequestMethod.POST)
     public void addSiteAuthor(HttpServletResponse response,
                               @PathVariable("id") String id,
-                              @RequestParam(value = "userId") String userId) throws IOException {
+                              @PathVariable(value = "userId") String userId) throws IOException {
         try {
             registrationManager.addSiteAuthor(id, userId);
         } catch (RegistrationException e) {
@@ -96,10 +96,10 @@ public class SiteService {
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
-    @RequestMapping(value = "/site/author/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/site/author/{id}/{userId}", method = RequestMethod.DELETE)
     public void removeSiteAuthor(HttpServletResponse response,
                                  @PathVariable("id") String id,
-                                 @RequestParam(value = "userId") String userId) throws IOException {
+                                 @PathVariable(value = "userId") String userId) throws IOException {
         try {
             registrationManager.removeSiteAuthor(id, userId);
         } catch (RegistrationException e) {
