@@ -35,7 +35,7 @@ public class SiteServiceTest extends AbstractServiceTest {
     public void testCreateSite() throws Exception {
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 
         CmsSite cmsSite = new CmsSite();
@@ -57,7 +57,7 @@ public class SiteServiceTest extends AbstractServiceTest {
         registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
@@ -75,7 +75,7 @@ public class SiteServiceTest extends AbstractServiceTest {
         registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
 
         CmsSite cmsSite = new CmsSite();
@@ -96,7 +96,7 @@ public class SiteServiceTest extends AbstractServiceTest {
         registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
-        List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
         acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
         // Prepare header
         HttpHeaders headers = new HttpHeaders();
