@@ -2,7 +2,6 @@
  * Created by bazzoni on 03/04/2015.
  */
 var editMode;
-var map;
 var dashboardConfig;
 /**
  * Available widgets
@@ -10,11 +9,11 @@ var dashboardConfig;
 var WIDGETS = {
     sites: {
         template: "/template/sites",
-        data: "/tunnel/userSites",
-        page: 0,
-        pageSize: 5,
+        data: "/tunnel/sites",
+        username: 'thebaz',
+        password: 'q1w2e3r4',
         loadFunction: function (widget, element) {
-            var request = widget.data + "?page=" + widget.page + "&pageSize=" + widget.pageSize;
+            var request = widget.data + "?username=" + widget.username + "&password=" + widget.password;
             var response = $.getJSON(request);
             response.done(function (data) {
                 $.get(widget.template, function (template) {
@@ -25,7 +24,7 @@ var WIDGETS = {
             });
         },
         refresh: function (widget) {
-            var request = widget.data + "?page=" + widget.page + "&pageSize=" + widget.pageSize;
+            var request = widget.data + "?username=" + widget.username + "&password=" + widget.password;
             var response = $.getJSON(request);
             response.done(function (data) {
                 $.get("/template/sites_page", function (template) {
@@ -64,9 +63,9 @@ var DEFAULT_CONFIG = {
     columns: [{
         widgets: []
     }, {
-        widgets: ["map"]
+        widgets: []
     }, {
-        widgets: ["sites", "log"]
+        widgets: ["sites"]
     }, {
         widgets: []
     }]

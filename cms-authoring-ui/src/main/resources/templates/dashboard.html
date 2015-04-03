@@ -89,10 +89,11 @@
 <footer th:include="footer"></footer>
 <section th:replace="scripts"></section>
 <script  type="text/javascript" th:src="@{/webjars/jquery-ui/1.11.1/jquery-ui.min.js}" src="https://ajax.googleapis.com/ajax/libs/jquery-ui/1.11.1/jquery-ui.js"></script>
+<script type="text/javascript" th:src="@{/js/ms.cms.dashboard.js}" src="../public/js/ms.cms.dashboard.js"></script>
 <script type="text/javascript" th:inline="javascript">
-    var latitude = [[${configuration.map_latitude}]];
-    var longitude = [[${configuration.map_longitude}]];
-    var updateFrequency = [[${configuration.update_frequency_sec*1000}]];
+    //    var latitude = [[${configuration.map_latitude}]];
+    //    var longitude = [[${configuration.map_longitude}]];
+    var updateFrequency = 5000;//[[${configuration.update_frequency_sec*1000}]];
 </script>
 </body>
 </html>

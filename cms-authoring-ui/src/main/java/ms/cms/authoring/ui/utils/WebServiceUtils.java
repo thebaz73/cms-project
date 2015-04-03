@@ -7,7 +7,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
@@ -22,12 +21,12 @@ import javax.servlet.http.HttpSession;
 @Component
 public class WebServiceUtils {
     private static WebServiceUtils instance;
-    @Value(value = "service.connection.hostname")
+    //@Value(value = "service.connection.host")
     private final String hostname = "localhost";
-    @Value(value = "service.connection.port")
-    private final int port = 9000;
-    @Value(value = "service.connection.timeout")
-    private int timeout = 5 * 1000;
+    //@Value(value = "service.connection.port")
+    private final int port = 9100;
+    //@Value(value = "service.connection.timeout")
+    private final int timeout = 5 * 1000;
 
     private WebServiceUtils() {
         instance = this;
