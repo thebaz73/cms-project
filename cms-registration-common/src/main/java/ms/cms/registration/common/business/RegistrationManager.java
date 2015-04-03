@@ -231,6 +231,8 @@ public class RegistrationManager {
         if (cmsSite.getAuthors().stream().noneMatch(a -> a.getId().equals(cmsUser.getId()))) {
             cmsSite.getAuthors().add(cmsUser);
             cmsSiteRepository.save(cmsSite);
+            cmsUser.setAuthoredSite(cmsSite);
+            cmsUserRepository.save(cmsUser);
         }
     }
 
@@ -248,6 +250,8 @@ public class RegistrationManager {
         List<CmsUser> authors = new ArrayList<>(cmsSite.getAuthors());
         authors.stream().filter(user -> user.getId().equals(cmsUser.getId())).forEach(user -> cmsSite.getAuthors().remove(user));
         cmsSiteRepository.save(cmsSite);
+        cmsUser.setAuthoredSite(null);
+        cmsUserRepository.save(cmsUser);
     }
 
     private List<CmsRole> doGuessRoles(UserType userType) {
