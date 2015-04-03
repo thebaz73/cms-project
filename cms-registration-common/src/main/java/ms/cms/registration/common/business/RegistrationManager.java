@@ -193,7 +193,7 @@ public class RegistrationManager {
     public CmsSite findAuthoredSite(String param) throws RegistrationException {
         List<CmsUser> cmsUser = cmsUserRepository.findByUsername(param);
         if (!cmsUser.isEmpty()) {
-            return cmsUser.get(0).getAuthoredSite();
+            return cmsSiteRepository.findOne(cmsUser.get(0).getAuthoredSiteId());
         }
 
         throw new RegistrationException("Wrong search parameter");
@@ -231,7 +231,7 @@ public class RegistrationManager {
         if (cmsSite.getAuthors().stream().noneMatch(a -> a.getId().equals(cmsUser.getId()))) {
             cmsSite.getAuthors().add(cmsUser);
             cmsSiteRepository.save(cmsSite);
-            cmsUser.setAuthoredSite(cmsSite);
+            cmsUser.setAuthoredSiteId(cmsSite.getId());
             cmsUserRepository.save(cmsUser);
         }
     }
@@ -250,7 +250,7 @@ public class RegistrationManager {
         List<CmsUser> authors = new ArrayList<>(cmsSite.getAuthors());
         authors.stream().filter(user -> user.getId().equals(cmsUser.getId())).forEach(user -> cmsSite.getAuthors().remove(user));
         cmsSiteRepository.save(cmsSite);
-        cmsUser.setAuthoredSite(null);
+        cmsUser.setAuthoredSiteId(null);
         cmsUserRepository.save(cmsUser);
     }
 

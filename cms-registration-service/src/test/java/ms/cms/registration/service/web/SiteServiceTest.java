@@ -65,9 +65,13 @@ public class SiteServiceTest extends AbstractServiceTest {
         // Pass the new person and header
         HttpEntity<CmsSite> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<CmsSite> entity = template.exchange("http://localhost:9000/api/sites?param={param}", HttpMethod.GET, requestEntity, CmsSite.class, userId);
+        ResponseEntity<CmsSite> entity = template.exchange("http://localhost:9000/api/site?param={param}", HttpMethod.GET, requestEntity, CmsSite.class, "www.half-blood.com");
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
+
+        ResponseEntity<List> listEntity = template.exchange("http://localhost:9000/api/sites?param={param}", HttpMethod.GET, requestEntity, List.class, userId);
+
+        assertEquals(HttpStatus.OK, listEntity.getStatusCode());
     }
 
     @Test

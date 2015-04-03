@@ -31,8 +31,7 @@ public class CmsUser {
     @DBRef
     private List<CmsRole> roles;
     @Indexed
-    @DBRef
-    private CmsSite authoredSite;
+    private String authoredSiteId;
 
     public CmsUser() {
         this.roles = new ArrayList<>();
@@ -112,11 +111,11 @@ public class CmsUser {
         this.roles = roles;
     }
 
-    public CmsSite getAuthoredSite() {
-        return authoredSite;
+    public String getAuthoredSiteId() {
+        return authoredSiteId;
     }
 
-    public void setAuthoredSite(CmsSite authoredSite) {
-        this.authoredSite = authoredSite;
+    public void setAuthoredSiteId(String authoredSiteId) {
+        this.authoredSiteId = authoredSiteId;
     }
 }
