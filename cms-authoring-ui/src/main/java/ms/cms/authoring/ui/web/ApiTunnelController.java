@@ -53,7 +53,7 @@ public class ApiTunnelController {
         return entity.getBody();
     }
 
-    @RequestMapping(value = "/site/authored", params = {"username", "password"}, method = RequestMethod.GET)
+    @RequestMapping(value = "/tunnel/site/authored", params = {"username", "password"}, method = RequestMethod.GET)
     public CmsSite findAuthoredSite(HttpServletRequest request, String username, String password) {
         RestTemplate template = new RestTemplate(WebServiceUtils.getInstance().makeClient(request.getSession(), username, password));
         // Prepare acceptable media type
