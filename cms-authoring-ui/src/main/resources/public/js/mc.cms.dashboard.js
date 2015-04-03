@@ -7,7 +7,35 @@ var dashboardConfig;
 /**
  * Available widgets
  */
-var WIDGETS;
+var WIDGETS = {
+    sites: {
+        template: "/template/sites",
+        data: "/api/mysites",
+        page: 0,
+        pageSize: 5,
+        loadFunction: function (widget, element) {
+            var request = widget.data + "?page=" + widget.page + "&pageSize=" + widget.pageSize;
+            var response = $.getJSON(request);
+            response.done(function (data) {
+                $.get(widget.template, function (template) {
+                    var t = Handlebars.compile(template);
+                    element.append(t(data));
+                    //element.find("#site-widget div[data-action='panel-buttons']").toggle();
+                });
+            });
+        },
+        refresh: function (widget) {
+            var request = widget.data + "?page=" + widget.page + "&pageSize=" + widget.pageSize;
+            var response = $.getJSON(request);
+            response.done(function (data) {
+                $.get("/template/sites_page", function (template) {
+                    var t = Handlebars.compile(template);
+                    $('#site-page').html(t(data));
+                });
+            });
+        }
+    }
+};
 /**
  * Available layouts
  */
@@ -38,7 +66,7 @@ var DEFAULT_CONFIG = {
     }, {
         widgets: ["map"]
     }, {
-        widgets: ["inventory", "log"]
+        widgets: ["sites", "log"]
     }, {
         widgets: []
     }]
