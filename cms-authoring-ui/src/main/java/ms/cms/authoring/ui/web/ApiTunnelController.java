@@ -65,7 +65,7 @@ public class ApiTunnelController {
         // Pass the new person and header
         HttpEntity<CmsSite> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<CmsSite> entity = template.exchange(WebServiceUtils.getInstance().createUrl("/api/sites/authored?param={param}"), HttpMethod.GET, requestEntity, CmsSite.class, username);
+        ResponseEntity<CmsSite> entity = template.exchange(WebServiceUtils.getInstance().createUrl("/api/site/authored?param={param}"), HttpMethod.GET, requestEntity, CmsSite.class, username);
 
         return entity.getBody();
     }
