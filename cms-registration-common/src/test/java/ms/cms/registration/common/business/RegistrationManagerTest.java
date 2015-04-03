@@ -181,11 +181,11 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
     @Test
     public void testFindSite() throws Exception {
         String userId = createSite();
-        assertEquals(registrationManager.findSite(userId).getId(), cmsSiteRepository.findAll().get(0).getId());
-        assertEquals(registrationManager.findSite("lvoldemort").getId(), cmsSiteRepository.findAll().get(0).getId());
+        assertEquals(registrationManager.findSites(userId).get(0).getId(), cmsSiteRepository.findAll().get(0).getId());
+        assertEquals(registrationManager.findSites("lvoldemort").get(0).getId(), cmsSiteRepository.findAll().get(0).getId());
         assertEquals(registrationManager.findSite("www.half-blood.com").getId(), cmsSiteRepository.findAll().get(0).getId());
         try {
-            registrationManager.findSite("error");
+            registrationManager.findSites("error");
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }

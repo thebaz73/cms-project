@@ -10,7 +10,7 @@ import java.util.Map;
  * NavigationController
  * Created by thebaz on 02/04/15.
  */
-@Controller
+@Controller(value = "navigationController")
 public class NavigationController {
     @RequestMapping("/")
     public String dashboard(Map<String, Object> model) {

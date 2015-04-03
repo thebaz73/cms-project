@@ -10,7 +10,7 @@ var dashboardConfig;
 var WIDGETS = {
     sites: {
         template: "/template/sites",
-        data: "/api/mysites",
+        data: "/tunnel/userSites",
         page: 0,
         pageSize: 5,
         loadFunction: function (widget, element) {

@@ -130,12 +130,12 @@ public class RegistrationManager {
         cmsSiteRepository.save(cmsSite);
     }
 
-    public CmsSite findSite(String param) throws RegistrationException {
+    public List<CmsSite> findSites(String param) throws RegistrationException {
         CmsUser cmsUser = cmsUserRepository.findOne(param);
         if (cmsUser != null) {
             List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(cmsUser);
             if (!byWebMaster.isEmpty()) {
-                return byWebMaster.get(0);
+                return byWebMaster;
             }
         }
 
@@ -143,8 +143,17 @@ public class RegistrationManager {
         if (!byUsername.isEmpty()) {
             List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(byUsername.get(0));
             if (!byWebMaster.isEmpty()) {
-                return byWebMaster.get(0);
+                return byWebMaster;
             }
+        }
+
+        throw new RegistrationException("Wrong search parameter");
+    }
+
+    public CmsSite findSite(String param) throws RegistrationException {
+        CmsSite cmsSite = cmsSiteRepository.findOne(param);
+        if (cmsSite != null) {
+            return cmsSite;
         }
 
         List<CmsSite> byAddress = cmsSiteRepository.findByAddress(param);

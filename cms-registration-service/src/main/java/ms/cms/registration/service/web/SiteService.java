@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * SiteService
@@ -38,6 +39,20 @@ public class SiteService {
             logger.info(msg);
             response.sendError(400, msg);
         }
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @RequestMapping(value = "/sites", method = RequestMethod.GET)
+    public List<CmsSite> findSites(HttpServletResponse response, @RequestParam(value = "param") String param) throws IOException {
+        try {
+            return registrationManager.findSites(param);
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot find site. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
+
+        return null;
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})

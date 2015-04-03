@@ -10,7 +10,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
  * TemplateController
  * Created by bazzoni on 03/04/2015.
  */
-@Controller
+@Controller(value = "templateController")
 public class TemplateController {
 
     @RequestMapping(value = "/template/{name}", method = GET)
