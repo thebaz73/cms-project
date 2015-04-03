@@ -190,6 +190,30 @@ public class RegistrationManager {
         cmsSiteRepository.delete(cmsSite);
     }
 
+    public CmsSite findAuthoredSite(String param) throws RegistrationException {
+        List<CmsUser> cmsUser = cmsUserRepository.findByUsername(param);
+        if (!cmsUser.isEmpty()) {
+            return cmsUser.get(0).getAuthoredSite();
+        }
+
+        throw new RegistrationException("Wrong search parameter");
+    }
+
+    public List<CmsUser> findSiteAuthors(String param) throws RegistrationException {
+        ArrayList<CmsUser> cmsUsers = new ArrayList<>();
+        CmsUser cmsUser = cmsUserRepository.findOne(param);
+        if (cmsUser != null) {
+            cmsUsers.add(cmsUser);
+            List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(cmsUser);
+            for (CmsSite cmsSite : byWebMaster) {
+                cmsUsers.addAll(cmsSite.getAuthors());
+            }
+        } else {
+            throw new RegistrationException("Wrong search parameter");
+        }
+        return cmsUsers;
+    }
+
     public void addSiteAuthor(String id, String userId) throws RegistrationException {
         CmsUser cmsUser = cmsUserRepository.findOne(userId);
         if (cmsUser == null) {
@@ -246,6 +270,7 @@ public class RegistrationManager {
 
         return roles;
     }
+
 
     public static enum UserType {
         ADMIN, MANAGER, AUTHOR, VIEWER

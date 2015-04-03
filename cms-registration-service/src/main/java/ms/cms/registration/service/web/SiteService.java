@@ -1,6 +1,7 @@
 package ms.cms.registration.service.web;
 
 import ms.cms.domain.CmsSite;
+import ms.cms.domain.CmsUser;
 import ms.cms.domain.WorkflowType;
 import ms.cms.registration.common.business.RegistrationException;
 import ms.cms.registration.common.business.RegistrationManager;
@@ -26,7 +27,7 @@ public class SiteService {
     @Autowired
     private RegistrationManager registrationManager;
 
-    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/site/{userId}", method = RequestMethod.POST)
     public void createSite(HttpServletResponse response,
                            @PathVariable(value = "userId") String userId,
@@ -41,7 +42,7 @@ public class SiteService {
         }
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/sites", method = RequestMethod.GET)
     public List<CmsSite> findSites(HttpServletResponse response, @RequestParam(value = "param") String param) throws IOException {
         try {
@@ -55,7 +56,7 @@ public class SiteService {
         return null;
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/site", method = RequestMethod.GET)
     public CmsSite findSite(HttpServletResponse response, @RequestParam(value = "param") String param) throws IOException {
         try {
@@ -69,7 +70,21 @@ public class SiteService {
         return null;
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_AUTHOR"})
+    @RequestMapping(value = "/site/authored", method = RequestMethod.GET)
+    public CmsSite findAuthoredSite(HttpServletResponse response, @RequestParam(value = "param") String param) throws IOException {
+        try {
+            return registrationManager.findAuthoredSite(param);
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot find site. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
+
+        return null;
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/site/{id}", method = RequestMethod.PUT)
     public void editSite(HttpServletResponse response,
                          @PathVariable(value = "id") String id,
@@ -83,7 +98,7 @@ public class SiteService {
         }
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/site/{id}", method = RequestMethod.DELETE)
     public void deleteSite(HttpServletResponse response,
                            @PathVariable(value = "id") String id) throws IOException {
@@ -96,7 +111,21 @@ public class SiteService {
         }
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_AUTHOR"})
+    @RequestMapping(value = "/sites/authors", method = RequestMethod.GET)
+    public List<CmsUser> findSiteAuthors(HttpServletResponse response, @RequestParam(value = "param") String param) throws IOException {
+        try {
+            return registrationManager.findSiteAuthors(param);
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot find site. Reason: %s", e.toString());
+            logger.info(msg);
+            response.sendError(400, msg);
+        }
+
+        return null;
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/site/author/{id}/{userId}", method = RequestMethod.POST)
     public void addSiteAuthor(HttpServletResponse response,
                               @PathVariable("id") String id,
@@ -110,7 +139,7 @@ public class SiteService {
         }
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER", "ROLE_AUTHOR"})
     @RequestMapping(value = "/site/author/{id}/{userId}", method = RequestMethod.DELETE)
     public void removeSiteAuthor(HttpServletResponse response,
                                  @PathVariable("id") String id,

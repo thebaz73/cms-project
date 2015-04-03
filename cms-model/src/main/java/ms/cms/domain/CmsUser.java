@@ -30,6 +30,9 @@ public class CmsUser {
     private Date creationDate;
     @DBRef
     private List<CmsRole> roles;
+    @Indexed
+    @DBRef
+    private CmsSite authoredSite;
 
     public CmsUser() {
         this.roles = new ArrayList<>();
@@ -107,5 +110,13 @@ public class CmsUser {
 
     public void setRoles(List<CmsRole> roles) {
         this.roles = roles;
+    }
+
+    public CmsSite getAuthoredSite() {
+        return authoredSite;
+    }
+
+    public void setAuthoredSite(CmsSite authoredSite) {
+        this.authoredSite = authoredSite;
     }
 }
