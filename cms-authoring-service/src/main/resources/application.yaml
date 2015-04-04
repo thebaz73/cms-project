@@ -22,7 +22,7 @@ management:
 spring:
     profiles: test
     data:
-      mongodb.host: 52.16.117.190
+      mongodb.host: 172.31.10.154
       mongodb.port: 27017
       mongodb.name: cms-db
 
