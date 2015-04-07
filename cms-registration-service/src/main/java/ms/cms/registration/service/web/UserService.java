@@ -36,8 +36,8 @@ public class UserService {
         }
     }
 
-    @RequestMapping(value = "/user/{param}", method = RequestMethod.GET)
-    public CmsUser findUser(HttpServletResponse response, @PathVariable(value = "param") String param) throws IOException {
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public CmsUser findUser(HttpServletResponse response, @RequestParam(value = "param") String param) throws IOException {
         try {
             return registrationManager.findUser(param);
         } catch (RegistrationException e) {

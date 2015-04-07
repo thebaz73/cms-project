@@ -41,9 +41,9 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("index");
-        registry.addViewController("/index").setViewName("index");
-        registry.addViewController("/home").setViewName("home");
+//        registry.addViewController("/").setViewName("index");
+//        registry.addViewController("/index").setViewName("index");
+//        registry.addViewController("/home").setViewName("home");
     }
 
     @Override

@@ -118,14 +118,30 @@
             <div class="col-lg-8 col-lg-offset-2">
                 <h2>Sign up to <i class="fa fa-play-circle"></i> <span class="light">MS</span> CMS</h2>
 
-                <p>You can register for free ... .</p>
+                <p th:if="${(confirm == null) and (message == null)}">You can register for free ... .</p>
 
-                <form class="form-horizontal">
+                <!--@thymesVar id="userRegistration" type="ms.cms.registration.ui.domain.UserRegistration"-->
+                <form class="form-horizontal" th:action="@{/}" th:object="${userRegistration}" action="#" method="POST">
                     <fieldset>
 
                         <!-- Form Name -->
                         <legend></legend>
-
+                        <div th:if="${confirm != null}" class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert"><span
+                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <span th:text="${confirm}"></span>
+                            <script type="application/javascript">
+                                window.location.href = "#register";
+                            </script>
+                        </div>
+                        <div th:if="${message != null}" class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert"><span
+                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <span th:text="${message}"></span>
+                            <script type="application/javascript">
+                                window.location.href = "#register";
+                            </script>
+                        </div>
                         <!-- Prepended text-->
                         <div class="form-group">
                             <!--<label class="col-md-4 control-label" for="fullName">Full name:</label>-->
@@ -134,7 +150,8 @@
                                 <div class="input-group">
                                     <span class="input-group-addon" aria-hidden="true"><i class="fa fa-user fa-fw"></i></span>
                                     <input id="fullName" name="fullName" class="form-control" placeholder="Full name"
-                                           type="text" required="required"/>
+                                           type="text" required="required" th:field="*{name}"
+                                           th:errorclass="has-error"/>
                                 </div>
 
                             </div>
@@ -149,7 +166,8 @@
                                     <span class="input-group-addon" aria-hidden="true"><i
                                             class="fa fa-envelope-o fa-fw"></i></span>
                                     <input id="email" name="email" class="form-control" placeholder="Email address"
-                                           type="text" required="required"/>
+                                           type="email" required="required" th:field="*{email}"
+                                           th:errorclass="has-error"/>
                                 </div>
 
                             </div>
@@ -164,7 +182,7 @@
                                     <span class="input-group-addon" aria-hidden="true"><i
                                             class="fa fa-key fa-fw"></i></span>
                                     <input id="password" name="password" class="form-control" placeholder="Password"
-                                           type="password"
+                                           type="password" th:field="*{password}" th:errorclass="has-error"
                                            required="required"/>
                                 </div>
 
@@ -178,9 +196,9 @@
                             <div class="col-md-12">
                                 <div class="input-group" aria-hidden="true">
                                     <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-                                    <input id="passwordRepeat" name="passwordRepeat" class="form-control"
+                                    <input id="confirmPassword" name="confirmPassword" class="form-control"
                                            placeholder="Repeat password"
-                                           type="password"
+                                           type="password" th:field="*{confirmPassword}" th:errorclass="has-error"
                                            required="required"/>
                                 </div>
 
@@ -245,25 +263,26 @@
 <!-- Footer -->
 <footer>
     <div class="container text-center">
-        <p>Copyright &copy; Your Website 2014</p>
+        <p>Copyright &copy; - thebaz.it - <span
+                th:text="${#calendars.format(#calendars.createToday(), 'yyyy')}"></span></p>
     </div>
 </footer>
 
 <!-- jQuery -->
-<script src="js/jquery.js"></script>
+<script th:src="@{js/jquery.js}" src="../public/js/jquery.js"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="js/bootstrap.min.js"></script>
+<script th:src="@{js/bootstrap.min.js}" src="../public/js/bootstrap.min.js"></script>
 
 <!-- Plugin JavaScript -->
-<script src="js/jquery.easing.min.js"></script>
+<script th:src="@{js/jquery.easing.min.js}" src="../public/js/jquery.easing.min.js"></script>
 
 <!-- Google Maps API Key - Use your own API key to enable the map feature. More information on the Google Maps API can be found at https://developers.google.com/maps/ -->
 <script type="text/javascript"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRngKslUGJTlibkQ3FkfTxj3Xss1UlZDA&amp;sensor=false"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="js/grayscale.js"></script>
+<script th:src="@{js/grayscale.js}" src="../public/js/grayscale.js"></script>
 
 </body>
 

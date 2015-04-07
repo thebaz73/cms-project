@@ -71,7 +71,7 @@ public class UserServiceTest extends AbstractServiceTest {
         // Pass the new person and header
         HttpEntity<CmsUser> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<CmsUser> entity = template.exchange("http://localhost:9000/public/user/{param}", HttpMethod.GET, requestEntity, CmsUser.class, "tomriddle");
+        ResponseEntity<CmsUser> entity = template.exchange("http://localhost:9000/public/user?param={param}", HttpMethod.GET, requestEntity, CmsUser.class, "tomriddle");
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
     }
