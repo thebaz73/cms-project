@@ -21,6 +21,8 @@ import java.net.UnknownHostException;
 public class MongoConfig extends AbstractMongoConfiguration {
     @Value("${spring.data.mongodb.name}")
     private String databaseName;
+    @Value("${spring.data.mongodb.host}")
+    private String hostName;
 
     @Override
     protected String getDatabaseName() {
@@ -29,7 +31,7 @@ public class MongoConfig extends AbstractMongoConfiguration {
 
     @Bean
     public Mongo mongo() throws UnknownHostException {
-        MongoClient client = new MongoClient();
+        MongoClient client = new MongoClient(hostName);
         client.setWriteConcern(WriteConcern.SAFE);
         return client;
     }
@@ -39,3 +41,4 @@ public class MongoConfig extends AbstractMongoConfiguration {
         return new MongoTemplate(mongo(), getDatabaseName());
     }
 }
+

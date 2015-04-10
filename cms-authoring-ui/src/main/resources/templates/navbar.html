@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" th:href="@{/}" href="/">CMS</a>
+            <a class="navbar-brand" th:href="@{/}" href="/"><i class="fa fa-play-circle"></i> <span class="light">Sparkle</span> CMS</a>
         </div>
         <div class="collapse navbar-collapse">
             <p sec:authorize="isAuthenticated()" class="navbar-text" th:inline="text">Welcome, [[${#httpServletRequest.remoteUser}]]!</p>
