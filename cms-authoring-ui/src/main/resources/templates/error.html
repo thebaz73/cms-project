@@ -1,27 +1,44 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
-<head th:replace="head"/>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head th:replace="head"></head>
 
 <body>
-<header th:include="navbar" class="navbar navbar-inverse navbar-static-top" role="navigation"/>
-<section class="container">
-    <div class="page-header">
-        <h1 th:text="'Error '+${status}">Error</h1>
-    </div>
-    <div id="created" th:text="${#dates.format(timestamp)}">July 11,
-        2012 2:17:16 PM CDT</div>
-    <div>
-        There was an unexpected error (type=<span th:text="${error}">Bad</span>, status=<span th:text="${status}">500</span>).
-    </div>
-    <div th:text="${message}">Fake content</div>
-    <div>
-        Please contact the operator with the above information.
-    </div>
-</section>
 
-<footer th:include="footer"/>
-<section th:replace="scripts"/>
+<div id="wrapper">
+    <nav th:replace="navigation"></nav>
+    <!-- Navigation -->
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header" th:text="'Error '+${status}">Error</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div id="created" th:text="${#dates.format(timestamp)}">July 11,
+                2012 2:17:16 PM CDT</div>
+            <div>
+                There was an unexpected error (type=<span th:text="${error}">Bad</span>, status=<span th:text="${status}">500</span>).
+            </div>
+            <div th:text="${message}">Fake content</div>
+            <div>
+                Please contact the operator with the above information.
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- jQuery -->
+<script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="../public/bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}" src="../public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
 
 </body>
+
 </html>

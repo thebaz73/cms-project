@@ -108,7 +108,7 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
         registrationManager.initialize();
         try {
             CmsUser cmsUser = registrationManager.findUser("thebaz");
-            logger.info("Find user: %s", cmsUser.toString());
+            logger.info(String.format("Found user: %s", cmsUser.getUsername()));
         } catch (RegistrationException e) {
             registrationManager.createUser(RegistrationManager.UserType.valueOf("ADMIN"),
                     "thebaz",
@@ -128,8 +128,7 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .authorizeRequests()
-                    .antMatchers("/webjars/**", "/mktg/**").permitAll()
-                    .antMatchers("/settings/**").hasRole("ADMIN")
+                    .antMatchers("/webjars/**", "/dist/**").permitAll()
                     .anyRequest().authenticated();
             http
                     .formLogin()
