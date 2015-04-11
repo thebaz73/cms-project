@@ -150,4 +150,8 @@ public class AuthoringManager {
         cmsTag.setPopularity(cmsTag.getPopularity() - 1);
         cmsTagRepository.save(cmsTag);
     }
+
+    public int countContents(CmsSite cmsSite) {
+        return cmsContentRepository.countBySiteId(cmsSite.getId());
+    }
 }

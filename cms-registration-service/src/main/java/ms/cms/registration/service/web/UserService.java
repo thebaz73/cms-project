@@ -54,7 +54,7 @@ public class UserService {
                          @PathVariable(value = "id") String id,
                          @RequestBody CmsUser cmsUser) throws IOException {
         try {
-            registrationManager.editUser(id, cmsUser.getPassword(), cmsUser.getName());
+            registrationManager.editUser(id, cmsUser.getUsername(), cmsUser.getPassword(), cmsUser.getName());
         } catch (RegistrationException e) {
             String msg = String.format("Cannot edit user. Reason: %s", e.toString());
             logger.info(msg);

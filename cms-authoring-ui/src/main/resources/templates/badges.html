@@ -1,4 +1,5 @@
-<div class="row">
+<div xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+     class="row">
     <div class="col-lg-3 col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -7,12 +8,12 @@
                         <i class="fa fa-comments fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">26</div>
-                        <div>New Comments!</div>
+                        <div class="huge">0</div>
+                        <div>Comments!</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
+            <a th:href="@{/comments}" href="/">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -26,15 +27,15 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-tasks fa-5x"></i>
+                        <i class="fa fa-files-o fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">12</div>
-                        <div>New Tasks!</div>
+                        <div class="huge">0</div>
+                        <div>Contents!</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
+            <a th:href="@{/comments}" href="/">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -48,18 +49,26 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-shopping-cart fa-5x"></i>
+                        <i class="fa fa-users fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">124</div>
-                        <div>New Orders!</div>
+                        <div class="huge">0</div>
+                        <div>Authors!</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
+            <a th:href="@{/settings}" href="/" sec:authorize="hasRole('ROLE_ADMIN') || hasRole('ROLE_MANAGER')">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            <a th:href="@{/settings}" href="/" onclick="return false;" sec:authorize="hasRole('ROLE_AUTHOR')">
+                <div class="panel-footer">
+                    <span class="pull-left"></span>
+                    <span class="pull-right"><i class="fa fa-circle"></i></span>
+
                     <div class="clearfix"></div>
                 </div>
             </a>
@@ -70,18 +79,26 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-support fa-5x"></i>
+                        <i class="fa fa-sitemap fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">13</div>
-                        <div>Support Tickets!</div>
+                        <div class="huge">0</div>
+                        <div>Sites!</div>
                     </div>
                 </div>
             </div>
-            <a href="#">
+            <a th:href="@{/site}" href="/" sec:authorize="hasRole('ROLE_ADMIN') || hasRole('ROLE_MANAGER')">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            <a th:href="@{/site}" href="/" onclick="return false;" sec:authorize="hasRole('ROLE_AUTHOR')">
+                <div class="panel-footer">
+                    <span class="pull-left"></span>
+                    <span class="pull-right"><i class="fa fa-circle"></i></span>
                     <div class="clearfix"></div>
                 </div>
             </a>

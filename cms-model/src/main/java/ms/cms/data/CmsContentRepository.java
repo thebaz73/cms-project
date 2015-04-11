@@ -11,11 +11,27 @@ import java.util.List;
  */
 public interface CmsContentRepository extends MongoRepository<CmsContent, String> {
     /**
-     * Finds @CmsContent given its address
+     * Finds @CmsContent given its site id and uri
      *
      * @param siteId site id
      * @param uri    post uri
      * @return list of @CmsContent
      */
     List<CmsContent> findBySiteIdAndUri(String siteId, String uri);
+
+    /**
+     * Finds @CmsContents given is site id
+     *
+     * @param siteId site id
+     * @return list of @CmsContent
+     */
+    List<CmsContent> findBySiteId(String siteId);
+
+    /**
+     * Counts @CmsContents given is site id
+     *
+     * @param siteId site id
+     * @return number of @CmsContent
+     */
+    int countBySiteId(String siteId);
 }

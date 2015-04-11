@@ -82,12 +82,16 @@ public class RegistrationManager {
         throw new RegistrationException("Wrong search parameter");
     }
 
-    public void editUser(String id, String password, String fullName) throws RegistrationException {
+    public void editUser(String id, String username, String password, String fullName) throws RegistrationException {
         CmsUser cmsUser = cmsUserRepository.findOne(id);
         if (cmsUser == null) {
             throw new RegistrationException("User id not found");
         }
         boolean modified = false;
+        if (!username.isEmpty()) {
+            cmsUser.setUsername(username);
+            modified = true;
+        }
         if (!fullName.isEmpty()) {
             cmsUser.setName(fullName);
             modified = true;
@@ -133,18 +137,12 @@ public class RegistrationManager {
     public List<CmsSite> findSites(String param) throws RegistrationException {
         CmsUser cmsUser = cmsUserRepository.findOne(param);
         if (cmsUser != null) {
-            List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(cmsUser);
-            if (!byWebMaster.isEmpty()) {
-                return byWebMaster;
-            }
+            return cmsSiteRepository.findByWebMaster(cmsUser);
         }
 
         List<CmsUser> byUsername = cmsUserRepository.findByUsername(param);
         if (!byUsername.isEmpty()) {
-            List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(byUsername.get(0));
-            if (!byWebMaster.isEmpty()) {
-                return byWebMaster;
-            }
+            return cmsSiteRepository.findByWebMaster(byUsername.get(0));
         }
 
         throw new RegistrationException("Wrong search parameter");
@@ -191,9 +189,14 @@ public class RegistrationManager {
     }
 
     public CmsSite findAuthoredSite(String param) throws RegistrationException {
-        List<CmsUser> cmsUser = cmsUserRepository.findByUsername(param);
-        if (!cmsUser.isEmpty()) {
-            return cmsSiteRepository.findOne(cmsUser.get(0).getAuthoredSiteId());
+        CmsUser cmsUser = cmsUserRepository.findOne(param);
+        if (cmsUser != null && cmsUser.getAuthoredSiteId() != null) {
+            return cmsSiteRepository.findOne(cmsUser.getAuthoredSiteId());
+        }
+
+        List<CmsUser> cmsUsers = cmsUserRepository.findByUsername(param);
+        if (!cmsUsers.isEmpty()) {
+            return cmsSiteRepository.findOne(cmsUsers.get(0).getAuthoredSiteId());
         }
 
         throw new RegistrationException("Wrong search parameter");
