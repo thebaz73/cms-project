@@ -1,14 +1,17 @@
 package ms.cms.authoring.ui.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * Datatable
+ * DataTable
  * Created by thebaz on 12/04/15.
  */
 public class DataTable<T> {
     int draw;
     int recordsTotal;
     int recordsFiltered;
-    T[] data;
+    List<T> data;
 
     public int getDraw() {
         return draw;
@@ -34,11 +37,14 @@ public class DataTable<T> {
         this.recordsFiltered = recordsFiltered;
     }
 
-    public T[] getData() {
+    public List<T> getData() {
+        if (data == null) {
+            data = new ArrayList<>();
+        }
         return data;
     }
 
-    public void setData(T[] data) {
+    public void setData(List<T> data) {
         this.data = data;
     }
 }

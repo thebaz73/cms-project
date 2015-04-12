@@ -22,8 +22,10 @@
                         <thead>
                         <tr>
                             <th>Date</th>
+                            <th>Content</th>
                             <th>User</th>
                             <th>Comment</th>
+                            <th><i class="fa fa-cogs"></i></th>
                         </tr>
                         </thead>
                     </table>
@@ -33,8 +35,10 @@
                         <thead>
                         <tr>
                             <th>Date</th>
-                            <th>User</th>
                             <th>Title</th>
+                            <th>Uri</th>
+                            <th>Summary</th>
+                            <th><i class="fa fa-cogs"></i></th>
                         </tr>
                         </thead>
                     </table>
@@ -60,19 +64,87 @@
             src="../public/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.js"></script>
 
     <script type="application/javascript">
+        /* <![CDATA[ */
         $(document).ready(function () {
             setInterval(function () {
                 updateStatus();
             }, 10000);
+            updateStatus();
             $('#comments').dataTable({
+                "columnDefs": [
+                    {
+                        "render": function (data, type, row) {
+                            return dateFormat(Date(data), "dd-m-yy", true);
+                        },
+                        "targets": [0]
+                    },
+                    {
+                        "sortable": false,
+                        "targets": [1]
+                    },
+                    {
+                        "sortable": false,
+                        "targets": [2]
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            if (data.length > 15) {
+                                return data.substr(0, 15) + '...';
+                            }
+                            return data;
+                        },
+                        "sortable": false,
+                        "targets": [3]
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return "<a href='/comments/'" + data + "><i class='fa fa-cogs'></i></a>";
+                        },
+                        "sortable": false,
+                        "targets": [4]
+                    }
+                ],
                 "processing": true,
                 "serverSide": true,
                 "ajax": "/home/comments"
             });
             $('#contents').dataTable({
+                "columnDefs": [
+                    {
+                        "render": function (data, type, row) {
+                            return dateFormat(Date(data), "dd-m-yy", true);
+                        },
+                        "targets": [0]
+                    },
+                    {
+                        "sortable": false,
+                        "targets": [1]
+                    },
+                    {
+                        "sortable": false,
+                        "targets": [2]
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            if (data.length > 15) {
+                                return data.substr(0, 15) + '...';
+                            }
+                            return data;
+                        },
+                        "sortable": false,
+                        "targets": [3]
+                    },
+                    {
+                        "render": function (data, type, row) {
+                            return "<a href='/contents/'" + data + "><i class='fa fa-cogs'></i></a>";
+                        },
+                        "sortable": false,
+                        "targets": [4]
+                    }
+                ],
                 "processing": true,
                 "serverSide": true,
-                "ajax": "/home/comments"
+                "ajax": "/home/contents"
             });
         });
 
@@ -84,6 +156,7 @@
                 $("#sitesCount").html(data.sitesCount);
             });
         }
+        /* ]]> */
     </script>
 </body>
 

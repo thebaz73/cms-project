@@ -18,7 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 import static ms.cms.utils.UserUtils.*;
 
@@ -82,31 +85,35 @@ public class DashboardController {
 
     @RequestMapping(value = {"/home/comments"}, method = RequestMethod.GET)
     @ResponseBody
-    public DataTable<Map<String, String>> comments(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        DataTable<Map<String, String>> dataTable = new DataTable<>();
+    public DataTable<List<Object>> comments(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        DataTable<List<Object>> dataTable = new DataTable<>();
         dataTable.setDraw(1);
         dataTable.setRecordsFiltered(1);
         dataTable.setRecordsTotal(1);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("date", new Date().toString());
-        map.put("user", "Severus Snape");
-        map.put("comment", "bla bls");
-        dataTable.setData(Arrays.asList(map));
+        List<Object> list = new ArrayList<>();
+        list.add(new Date());
+        list.add("Half Blood prince");
+        list.add("Severus Snape");
+        list.add("I am Half Blood Prince");
+        list.add(UUID.randomUUID().toString());
+        dataTable.getData().add(list);
         return dataTable;
     }
 
     @RequestMapping(value = {"/home/contents"}, method = RequestMethod.GET)
     @ResponseBody
-    public DataTable<Map<String, String>> contents(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        DataTable<Map<String, String>> dataTable = new DataTable<>();
+    public DataTable<List<Object>> contents(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        DataTable<List<Object>> dataTable = new DataTable<>();
         dataTable.setDraw(1);
         dataTable.setRecordsFiltered(1);
         dataTable.setRecordsTotal(1);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("date", new Date().toString());
-        map.put("user", "Severus Snape");
-        map.put("title", "bla bls");
-        dataTable.setData(Arrays.asList(map));
+        List<Object> list = new ArrayList<>();
+        list.add(new Date());
+        list.add("Half Blood prince");
+        list.add("/half_blood_prince");
+        list.add("bla bls");
+        list.add(UUID.randomUUID().toString());
+        dataTable.getData().add(list);
         return dataTable;
     }
 
