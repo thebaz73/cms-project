@@ -10,25 +10,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static ms.cms.utils.UserUtils.isAdmin;
-import static ms.cms.utils.UserUtils.isWebmaster;
+import static ms.cms.utils.UserUtils.*;
 
 /**
  * NavigationController
  * Created by thebaz on 02/04/15.
  */
 @Controller(value = "navigationController")
-public class NavigationController {
+public class DashboardController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
@@ -63,7 +60,7 @@ public class NavigationController {
                 model.put("contentsCount", contentsCount);
                 model.put("authorCount", authorCount);
                 model.put("commentsCount", 0);
-            } else {
+            } else if (isAuthor(cmsUser)) {
                 model.put("siteCount", 1);
                 CmsSite cmsSite = registrationManager.findAuthoredSite(cmsUser.getId());
                 int contentsCount = authoringManager.countContents(cmsSite);
@@ -78,66 +75,5 @@ public class NavigationController {
             response.sendError(400, msg);
         }
         return "index";
-    }
-
-    @RequestMapping({"/user"})
-    public String userProfile(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws IOException {
-        model.put("date", new Date());
-        try {
-            CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
-            model.put("cmsUser", cmsUser);
-        } catch (RegistrationException e) {
-            String msg = String.format("Cannot find user. Reason: %s", e.getMessage());
-            logger.info(msg);
-            response.sendError(400, msg);
-        }
-        return "user";
-    }
-
-    @RequestMapping(value = {"/user"}, method = RequestMethod.PUT)
-    public String editUserProfile(HttpServletRequest request, HttpServletResponse response, CmsUser editUser, Map<String, Object> model) throws IOException {
-        model.put("date", new Date());
-        try {
-            registrationManager.editUser(editUser.getId(), editUser.getUsername(), editUser.getPassword(), editUser.getName());
-            CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
-            model.put("cmsUser", cmsUser);
-        } catch (RegistrationException e) {
-            String msg = String.format("Cannot edit user. Reason: %s", e.getMessage());
-            logger.info(msg);
-            response.sendError(400, msg);
-        }
-        return "user";
-    }
-
-    @RequestMapping({"/settings"})
-    public String appSettings(Map<String, Object> model) {
-        model.put("date", new Date());
-        return "settings";
-    }
-
-    @RequestMapping({"/contents"})
-    public String contentsAuthoring(Map<String, Object> model) {
-        model.put("date", new Date());
-        return "contents";
-    }
-
-    @RequestMapping({"/comments"})
-    public String commentsManagement(Map<String, Object> model) {
-        model.put("date", new Date());
-        return "comments";
-    }
-
-    @RequestMapping({"/site"})
-    public String siteManagement(Map<String, Object> model) {
-        model.put("date", new Date());
-        return "site";
-    }
-
-    @RequestMapping(value = {"/search"}, params = {"query"}, method = RequestMethod.GET)
-    public String search(Map<String, Object> model, String query) {
-        model.put("date", new Date());
-        model.put("docs", new ArrayList<>());
-        model.put("query", query);
-        return "search";
     }
 }
