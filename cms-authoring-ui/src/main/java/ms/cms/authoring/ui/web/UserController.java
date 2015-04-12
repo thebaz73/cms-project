@@ -38,7 +38,7 @@ public class UserController {
             model.put("cmsUser", cmsUser);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot find user. Reason: %s", e.getMessage());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
         return "profile";
@@ -53,7 +53,7 @@ public class UserController {
             model.put("cmsUser", cmsUser);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot edit user. Reason: %s", e.getMessage());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
         return "profile";

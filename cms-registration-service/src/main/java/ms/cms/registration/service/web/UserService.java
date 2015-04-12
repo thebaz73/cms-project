@@ -31,7 +31,7 @@ public class UserService {
             registrationManager.createUser(RegistrationManager.getUserType(type.toUpperCase()), cmsUser.getUsername(), cmsUser.getPassword(), cmsUser.getEmail(), cmsUser.getName());
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create user. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }
@@ -42,7 +42,7 @@ public class UserService {
             return registrationManager.findUser(param);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot find user. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
 
@@ -57,7 +57,7 @@ public class UserService {
             registrationManager.editUser(id, cmsUser.getUsername(), cmsUser.getPassword(), cmsUser.getName());
         } catch (RegistrationException e) {
             String msg = String.format("Cannot edit user. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }
@@ -69,7 +69,7 @@ public class UserService {
             registrationManager.deleteUser(id);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot edit user. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }

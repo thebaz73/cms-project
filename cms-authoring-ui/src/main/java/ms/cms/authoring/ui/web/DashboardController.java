@@ -1,6 +1,8 @@
 package ms.cms.authoring.ui.web;
 
 import ms.cms.authoring.common.business.AuthoringManager;
+import ms.cms.authoring.ui.domain.AuthoringStatus;
+import ms.cms.authoring.ui.domain.DataTable;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsUser;
 import ms.cms.registration.common.business.RegistrationException;
@@ -10,13 +12,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ms.cms.utils.UserUtils.*;
 
@@ -35,45 +37,72 @@ public class DashboardController {
 
     @RequestMapping({"/"})
     public String home() {
-        return "redirect:home";
+        return "redirect:/home";
     }
 
-    @RequestMapping({"home"})
-    public String dashboard(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws IOException {
-        model.put("date", new Date());
+    @RequestMapping(value = {"/home/status"}, method = RequestMethod.GET)
+    @ResponseBody
+    public AuthoringStatus authoringStatus(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        AuthoringStatus authoringStatus = new AuthoringStatus();
         try {
             CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
             if (isAdmin(cmsUser)) {
-                model.put("siteCount", 0);
-                model.put("contentsCount", 0);
-                model.put("authorCount", 0);
-                model.put("commentsCount", 0);
+                authoringStatus.setSitesCount(0);
+                authoringStatus.setContentsCount(0);
+                authoringStatus.setAuthorsCount(0);
+                authoringStatus.setCommentsCount(0);
             } else if (isWebmaster(cmsUser)) {
                 List<CmsSite> cmsSites = registrationManager.findSites(cmsUser.getId());
-                model.put("siteCount", cmsSites.size());
+                authoringStatus.setSitesCount(cmsSites.size());
                 int contentsCount = 0;
-                int authorCount = 0;
+                int authorsCount = 0;
                 for (CmsSite cmsSite : cmsSites) {
                     contentsCount += authoringManager.countContents(cmsSite);
-                    authorCount += registrationManager.findSiteAuthors(cmsSite.getId()).size();
+                    authorsCount += registrationManager.findSiteAuthors(cmsSite.getId()).size();
                 }
-                model.put("contentsCount", contentsCount);
-                model.put("authorCount", authorCount);
-                model.put("commentsCount", 0);
+                authoringStatus.setContentsCount(contentsCount);
+                authoringStatus.setAuthorsCount(authorsCount);
+                authoringStatus.setCommentsCount(0);
             } else if (isAuthor(cmsUser)) {
-                model.put("siteCount", 1);
+                authoringStatus.setSitesCount(1);
                 CmsSite cmsSite = registrationManager.findAuthoredSite(cmsUser.getId());
                 int contentsCount = authoringManager.countContents(cmsSite);
-                int authorCount = registrationManager.findSiteAuthors(cmsSite.getId()).size();
-                model.put("contentsCount", contentsCount);
-                model.put("authorCount", authorCount);
-                model.put("commentsCount", 0);
+                int authorsCount = registrationManager.findSiteAuthors(cmsSite.getId()).size();
+                authoringStatus.setContentsCount(contentsCount);
+                authoringStatus.setAuthorsCount(authorsCount);
+                authoringStatus.setCommentsCount(0);
             }
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create dashboard. Reason: %s", e.getMessage());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
+        return authoringStatus;
+    }
+
+    @RequestMapping(value = {"/home/comments"}, method = RequestMethod.GET)
+    @ResponseBody
+    public DataTable<Map<String, String>> comments(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        DataTable<Map<String, String>> dataTable = new DataTable<>();
+        dataTable.setDraw(1);
+        dataTable.setRecordsFiltered(1);
+        dataTable.setRecordsTotal(1);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("date", new Date().toString());
+        map.put("user", "Severus Snape");
+        map.put("comment", "bla bls");
+        dataTable.setData((Map<String, String>[]) Arrays.asList(map).toArray());
+        return dataTable;
+    }
+
+    @RequestMapping(value = {"/home/contents"}, method = RequestMethod.GET)
+    @ResponseBody
+    public DataTable<Map<String, String>> contents(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        return new DataTable<>();
+    }
+
+    @RequestMapping({"/home"})
+    public String dashboard() {
         return "index";
     }
 }

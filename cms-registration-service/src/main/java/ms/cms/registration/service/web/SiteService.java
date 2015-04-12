@@ -37,7 +37,7 @@ public class SiteService {
             registrationManager.createSite(userId, cmsSite.getName(), cmsSite.getAddress(), WorkflowType.forName(workflowType.toUpperCase()));
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create site. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }
@@ -49,7 +49,7 @@ public class SiteService {
             return registrationManager.findSites(param);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot find site. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
 
@@ -63,7 +63,7 @@ public class SiteService {
             return registrationManager.findSite(param);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot find site. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
 
@@ -77,7 +77,7 @@ public class SiteService {
             return registrationManager.findAuthoredSite(param);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot find site. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
 
@@ -93,7 +93,7 @@ public class SiteService {
             registrationManager.editSite(id, cmsSite.getName());
         } catch (RegistrationException e) {
             String msg = String.format("Cannot edit site. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }
@@ -106,7 +106,7 @@ public class SiteService {
             registrationManager.deleteSite(id);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot edit site. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }
@@ -118,7 +118,7 @@ public class SiteService {
             return registrationManager.findSiteAuthors(param);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot find site. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
 
@@ -134,7 +134,7 @@ public class SiteService {
             registrationManager.addSiteAuthor(id, userId);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot add author site. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }
@@ -148,7 +148,7 @@ public class SiteService {
             registrationManager.removeSiteAuthor(id, userId);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot remove author site. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }

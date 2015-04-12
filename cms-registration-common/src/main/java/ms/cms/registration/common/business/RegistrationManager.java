@@ -113,9 +113,7 @@ public class RegistrationManager {
         }
 
         List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(cmsUser);
-        for (CmsSite cmsSite : byWebMaster) {
-            cmsSiteRepository.delete(cmsSite);
-        }
+        byWebMaster.forEach(cmsSiteRepository::delete);
 
         cmsUserRepository.delete(cmsUser);
     }
@@ -180,10 +178,11 @@ public class RegistrationManager {
     }
 
     public void deleteSite(String id) throws RegistrationException {
-        CmsSite cmsSite = cmsSiteRepository.findOne(id);
+        final CmsSite cmsSite = cmsSiteRepository.findOne(id);
         if (cmsSite == null) {
             throw new RegistrationException("Site id not found");
         }
+        cmsSite.getAuthors().forEach(a -> removeSiteAuthor(cmsSite, a));
 
         cmsSiteRepository.delete(cmsSite);
     }
@@ -204,16 +203,10 @@ public class RegistrationManager {
 
     public List<CmsUser> findSiteAuthors(String param) throws RegistrationException {
         ArrayList<CmsUser> cmsUsers = new ArrayList<>();
-        CmsUser cmsUser = cmsUserRepository.findOne(param);
-        if (cmsUser != null) {
-            cmsUsers.add(cmsUser);
-            List<CmsSite> byWebMaster = cmsSiteRepository.findByWebMaster(cmsUser);
-            for (CmsSite cmsSite : byWebMaster) {
-                cmsUsers.addAll(cmsSite.getAuthors());
-            }
-        } else {
-            throw new RegistrationException("Wrong search parameter");
-        }
+        CmsSite cmsSite = cmsSiteRepository.findOne(param);
+        cmsUsers.add(cmsSite.getWebMaster());
+        cmsUsers.addAll(cmsSite.getAuthors());
+
         return cmsUsers;
     }
 
@@ -250,6 +243,10 @@ public class RegistrationManager {
             throw new RegistrationException("Site id not found");
         }
 
+        removeSiteAuthor(cmsSite, cmsUser);
+    }
+
+    private void removeSiteAuthor(CmsSite cmsSite, CmsUser cmsUser) {
         List<CmsUser> authors = new ArrayList<>(cmsSite.getAuthors());
         authors.stream().filter(user -> user.getId().equals(cmsUser.getId())).forEach(user -> cmsSite.getAuthors().remove(user));
         cmsSiteRepository.save(cmsSite);

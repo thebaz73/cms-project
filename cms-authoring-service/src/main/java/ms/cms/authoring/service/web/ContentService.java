@@ -31,7 +31,7 @@ public class ContentService {
             authoringManager.createContent(cmsContent.getSiteId(), cmsContent.getName(), cmsContent.getTitle(), cmsContent.getUri(), cmsContent.getSummary(), cmsContent.getContent());
         } catch (AuthoringException e) {
             String msg = String.format("Cannot create content. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }
@@ -43,7 +43,7 @@ public class ContentService {
             return authoringManager.findContent(id);
         } catch (AuthoringException e) {
             String msg = String.format("Cannot find content. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
 
@@ -59,7 +59,7 @@ public class ContentService {
             return authoringManager.findContentByUri(siteId, uri);
         } catch (AuthoringException e) {
             String msg = String.format("Cannot find content. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
 
@@ -75,7 +75,7 @@ public class ContentService {
             authoringManager.editContent(id, cmsContent.getName(), cmsContent.getTitle(), cmsContent.getUri(), cmsContent.getSummary(), cmsContent.getContent());
         } catch (AuthoringException e) {
             String msg = String.format("Cannot edit content. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }
@@ -88,7 +88,7 @@ public class ContentService {
             authoringManager.deleteContent(id);
         } catch (AuthoringException e) {
             String msg = String.format("Cannot delete content. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }
@@ -102,7 +102,7 @@ public class ContentService {
             authoringManager.addContentTags(id, tags);
         } catch (AuthoringException e) {
             String msg = String.format("Cannot add tags to content. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }
@@ -116,7 +116,7 @@ public class ContentService {
             authoringManager.removeContentTags(id, tag);
         } catch (AuthoringException e) {
             String msg = String.format("Cannot remove tags to content. Reason: %s", e.toString());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
     }

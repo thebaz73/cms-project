@@ -60,6 +60,7 @@
                     <!--@thymesVar id="emsSite" type="ms.cms.domain.CmsSite"-->
                     <form class="form-horizontal" role="form" th:action="@{/site}" th:object="${cmsSite}" action="#"
                           method="POST">
+                        <div class="lead" th:text="#{site.data}">Site Data</div>
 
                         <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger alert-dismissible"
                              role="alert">

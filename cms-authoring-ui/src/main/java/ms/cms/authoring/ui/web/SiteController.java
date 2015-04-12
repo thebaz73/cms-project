@@ -11,10 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +21,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import static ms.cms.utils.UserUtils.isAuthor;
 import static ms.cms.utils.UserUtils.isWebmaster;
@@ -57,7 +55,7 @@ public class SiteController {
             }
         } catch (RegistrationException e) {
             String msg = String.format("Cannot manage sites. Reason: %s", e.getMessage());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
         return null;
@@ -65,7 +63,7 @@ public class SiteController {
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = {"/site"}, method = RequestMethod.GET)
-    public String siteManagement(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws IOException {
+    public String siteManagement(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws IOException {
         model.put("date", new Date());
         try {
             CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
@@ -74,9 +72,44 @@ public class SiteController {
             model.put("cmsSite", new CmsSite());
         } catch (RegistrationException e) {
             String msg = String.format("Cannot manage sites. Reason: %s", e.getMessage());
-            logger.info(msg);
+            logger.info(msg, e);
             response.sendError(400, msg);
         }
         return "site";
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @RequestMapping(value = {"/site"}, method = RequestMethod.POST)
+    public String addSite(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("cmsSite") CmsSite cmsSite,
+                          final BindingResult bindingResult, final ModelMap model) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return "site";
+        }
+        try {
+            //TODO check whois for domain access
+            //TODO WHOIS_URL="http://www.whoisxmlapi.com/whoisserver/WhoisService";
+
+            CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
+            registrationManager.createSite(cmsUser.getId(), cmsSite.getName(), cmsSite.getAddress(), cmsSite.getWorkflowType());
+            model.clear();
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot create site. Reason: %s", e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
+        return "redirect:/site";
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @RequestMapping(value = {"/site/{siteId}"}, method = RequestMethod.DELETE)
+    public String deleteSite(HttpServletResponse response, @PathVariable("siteId") String siteId) throws IOException {
+        try {
+            registrationManager.deleteSite(siteId);
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot create site. Reason: %s", e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
+        return "redirect:/site";
     }
 }
