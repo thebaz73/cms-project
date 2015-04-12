@@ -31,7 +31,7 @@
                 <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
-                <li><a th:href="@{/user}" href="/"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                <li><a th:href="@{/profile}" href="/"><i class="fa fa-user fa-fw"></i> User Profile</a>
                 </li>
                 <li sec:authorize="hasRole('ROLE_MANAGER')"><a th:href="@{/settings}" href="/"><i
                         class="fa fa-gear fa-fw"></i> Settings</a>

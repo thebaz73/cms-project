@@ -3,6 +3,7 @@ package ms.cms.authoring.ui.web;
 import ms.cms.authoring.common.business.AuthoringManager;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsUser;
+import ms.cms.domain.WorkflowType;
 import ms.cms.registration.common.business.RegistrationException;
 import ms.cms.registration.common.business.RegistrationManager;
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -38,14 +40,14 @@ public class SiteController {
     @Autowired
     private AuthoringManager authoringManager;
 
-//    @ModelAttribute("allSites")
-//    List<CmsSite> allSites() {
-//
-//    }
+    @ModelAttribute("allWorkflowTypes")
+    public List<WorkflowType> allRoles() {
+        return Arrays.asList(WorkflowType.ALL);
+    }
 
     @RequestMapping(value = {"/sites"}, method = RequestMethod.GET)
     @ResponseBody
-    List<CmsSite> getUserSites(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    List<CmsSite> userSites(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
             if (isWebmaster(cmsUser)) {
