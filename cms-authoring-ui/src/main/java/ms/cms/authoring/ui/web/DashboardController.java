@@ -91,14 +91,23 @@ public class DashboardController {
         map.put("date", new Date().toString());
         map.put("user", "Severus Snape");
         map.put("comment", "bla bls");
-        dataTable.setData((Map<String, String>[]) Arrays.asList(map).toArray());
+        dataTable.setData(Arrays.asList(map));
         return dataTable;
     }
 
     @RequestMapping(value = {"/home/contents"}, method = RequestMethod.GET)
     @ResponseBody
     public DataTable<Map<String, String>> contents(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        return new DataTable<>();
+        DataTable<Map<String, String>> dataTable = new DataTable<>();
+        dataTable.setDraw(1);
+        dataTable.setRecordsFiltered(1);
+        dataTable.setRecordsTotal(1);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("date", new Date().toString());
+        map.put("user", "Severus Snape");
+        map.put("title", "bla bls");
+        dataTable.setData(Arrays.asList(map));
+        return dataTable;
     }
 
     @RequestMapping({"/home"})
