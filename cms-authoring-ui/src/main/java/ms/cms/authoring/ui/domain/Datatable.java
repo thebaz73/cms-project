@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Datatable
+ * DataTable
  * Created by thebaz on 12/04/15.
  */
-public class Datatable<T> {
+public class DataTable<T> {
     int draw;
     int recordsTotal;
     int recordsFiltered;
