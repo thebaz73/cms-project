@@ -2,7 +2,7 @@ package ms.cms.authoring.ui.web;
 
 import ms.cms.authoring.common.business.AuthoringManager;
 import ms.cms.authoring.ui.domain.AuthoringStatus;
-import ms.cms.authoring.ui.domain.DataTable;
+import ms.cms.authoring.ui.domain.Datatable;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsUser;
 import ms.cms.registration.common.business.RegistrationException;
@@ -85,36 +85,36 @@ public class DashboardController {
 
     @RequestMapping(value = {"/home/comments"}, method = RequestMethod.GET)
     @ResponseBody
-    public DataTable<List<Object>> comments(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        DataTable<List<Object>> dataTable = new DataTable<>();
-        dataTable.setDraw(1);
-        dataTable.setRecordsFiltered(1);
-        dataTable.setRecordsTotal(1);
+    public Datatable<List<Object>> comments(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Datatable<List<Object>> datatable = new Datatable<>();
+        datatable.setDraw(1);
+        datatable.setRecordsFiltered(1);
+        datatable.setRecordsTotal(1);
         List<Object> list = new ArrayList<>();
         list.add(new Date());
         list.add("Half Blood prince");
         list.add("Severus Snape");
         list.add("I am Half Blood Prince");
         list.add(UUID.randomUUID().toString());
-        dataTable.getData().add(list);
-        return dataTable;
+        datatable.getData().add(list);
+        return datatable;
     }
 
     @RequestMapping(value = {"/home/contents"}, method = RequestMethod.GET)
     @ResponseBody
-    public DataTable<List<Object>> contents(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        DataTable<List<Object>> dataTable = new DataTable<>();
-        dataTable.setDraw(1);
-        dataTable.setRecordsFiltered(1);
-        dataTable.setRecordsTotal(1);
+    public Datatable<List<Object>> contents(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Datatable<List<Object>> datatable = new Datatable<>();
+        datatable.setDraw(1);
+        datatable.setRecordsFiltered(1);
+        datatable.setRecordsTotal(1);
         List<Object> list = new ArrayList<>();
         list.add(new Date());
         list.add("Half Blood prince");
         list.add("/half_blood_prince");
         list.add("bla bls");
         list.add(UUID.randomUUID().toString());
-        dataTable.getData().add(list);
-        return dataTable;
+        datatable.getData().add(list);
+        return datatable;
     }
 
     @RequestMapping({"/home"})
