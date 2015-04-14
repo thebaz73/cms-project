@@ -39,7 +39,7 @@ public class CmsContent {
     @DBRef
     private List<CmsTag> tags;
 
-    protected CmsContent() {
+    public CmsContent() {
         this.type = "CONTENT";
     }
 

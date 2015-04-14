@@ -1,14 +1,18 @@
 package ms.cms.authoring.ui.web;
 
-import ms.cms.authoring.common.business.AuthoringManager;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsUser;
 import ms.cms.domain.WorkflowType;
 import ms.cms.registration.common.business.RegistrationException;
 import ms.cms.registration.common.business.RegistrationManager;
+import ms.cms.registration.common.business.SiteManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -36,22 +40,24 @@ public class SiteController {
     @Autowired
     private RegistrationManager registrationManager;
     @Autowired
-    private AuthoringManager authoringManager;
+    private SiteManager siteManager;
 
     @ModelAttribute("allWorkflowTypes")
     public List<WorkflowType> allRoles() {
         return Arrays.asList(WorkflowType.ALL);
     }
 
-    @RequestMapping(value = {"/sites"}, method = RequestMethod.GET)
-    @ResponseBody
-    List<CmsSite> userSites(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @ModelAttribute("allSites")
+    public Page<CmsSite> allSites(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) throws IOException {
         try {
             CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
+            Pageable pageable = new PageRequest(page, pageSize, Sort.Direction.ASC, "name");
             if (isWebmaster(cmsUser)) {
-                return registrationManager.findSites(cmsUser.getId());
+                return siteManager.findAllSites(cmsUser, pageable);
             } else if (isAuthor(cmsUser)) {
-                return Arrays.asList(registrationManager.findAuthoredSite(cmsUser.getId()));
+                return siteManager.findAuthoredSites(cmsUser, pageable);
             }
         } catch (RegistrationException e) {
             String msg = String.format("Cannot manage sites. Reason: %s", e.getMessage());
@@ -63,18 +69,9 @@ public class SiteController {
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = {"/site"}, method = RequestMethod.GET)
-    public String siteManagement(HttpServletRequest request, HttpServletResponse response, ModelMap model) throws IOException {
+    public String show(ModelMap model) {
         model.put("date", new Date());
-        try {
-            CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
-            List<CmsSite> cmsSites = registrationManager.findSites(cmsUser.getId());
-            model.put("allSites", cmsSites);
-            model.put("cmsSite", new CmsSite());
-        } catch (RegistrationException e) {
-            String msg = String.format("Cannot manage sites. Reason: %s", e.getMessage());
-            logger.info(msg, e);
-            response.sendError(400, msg);
-        }
+        model.put("cmsSite", new CmsSite());
         return "site";
     }
 
@@ -90,7 +87,7 @@ public class SiteController {
             //TODO WHOIS_URL="http://www.whoisxmlapi.com/whoisserver/WhoisService";
 
             CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
-            registrationManager.createSite(cmsUser.getId(), cmsSite.getName(), cmsSite.getAddress(), cmsSite.getWorkflowType());
+            siteManager.createSite(cmsUser, cmsSite.getName(), cmsSite.getAddress(), cmsSite.getWorkflowType());
             model.clear();
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create site. Reason: %s", e.getMessage());

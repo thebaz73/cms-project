@@ -112,35 +112,34 @@
 
     <script type="application/javascript">
         /* <![CDATA[ */
+        //var authors, sites, comments, contents;
         $(document).ready(function () {
-            setInterval(function () {
-                updateStatus();
-            }, 10000);
-            updateStatus();
-            $('#authors').dataTable({
-                "columnDefs": [
+            var authors = $('#authors').dataTable({
+                pagingType: 'full_numbers',
+                scrollY: "200px",
+                columnDefs: [
                     {
                         "sortable": false,
                         "targets": [1]
                     }
                 ],
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/home/authors"
+                processing: true,
+                serverSide: true,
+                ajax: "/home/authors"
             });
-            $('#sites').dataTable({
-                "columnDefs": [
+            var sites = $('#sites').dataTable({
+                columnDefs: [
                     {
                         "sortable": false,
                         "targets": [1]
                     }
                 ],
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/home/sites"
+                processing: true,
+                serverSide: true,
+                ajax: "/home/sites"
             });
-            $('#comments').dataTable({
-                "columnDefs": [
+            var comments = $('#comments').dataTable({
+                columnDefs: [
                     {
                         "render": function (data, type, row) {
                             return dateFormat(Date(data), "dd-m-yy", true);
@@ -173,12 +172,12 @@
                         "targets": [4]
                     }
                 ],
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/home/comments"
+                processing: true,
+                serverSide: true,
+                ajax: "/home/comments"
             });
-            $('#contents').dataTable({
-                "columnDefs": [
+            var contents = $('#contents').dataTable({
+                columnDefs: [
                     {
                         "render": function (data, type, row) {
                             return dateFormat(Date(data), "dd-m-yy", true);
@@ -211,20 +210,23 @@
                         "targets": [4]
                     }
                 ],
-                "processing": true,
-                "serverSide": true,
-                "ajax": "/home/contents"
+                processing: true,
+                serverSide: true,
+                ajax: "/home/contents"
             });
+            setInterval(function () {
+                $.get("/home/status", function (data) {
+                    $("#commentsCount").html(data.commentsCount);
+                    $("#contentsCount").html(data.contentsCount);
+                    $("#authorsCount").html(data.authorsCount);
+                    $("#sitesCount").html(data.sitesCount);
+                });
+//                authors.ajax.reload();
+//                sites.ajax.reload();
+//                comments.ajax.reload();
+//                contents.ajax.reload();
+            }, 10000);
         });
-
-        function updateStatus() {
-            $.get("/home/status", function (data) {
-                $("#commentsCount").html(data.commentsCount);
-                $("#contentsCount").html(data.contentsCount);
-                $("#authorsCount").html(data.authorsCount);
-                $("#sitesCount").html(data.sitesCount);
-            });
-        }
         /* ]]> */
     </script>
 </body>

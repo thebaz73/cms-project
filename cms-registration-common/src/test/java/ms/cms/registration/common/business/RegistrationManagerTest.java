@@ -37,6 +37,8 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
     @Autowired
     private RegistrationManager registrationManager;
     @Autowired
+    private SiteManager siteManager;
+    @Autowired
     private CmsUserRepository cmsUserRepository;
     @Autowired
     private CmsRoleRepository cmsRoleRepository;

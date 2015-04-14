@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
       xmlns="http://www.w3.org/1999/xhtml">
 <head th:replace="head"></head>
 
@@ -16,6 +16,146 @@
                 </div>
             </div>
             <div class="row">
+                <!--@thymesVar id="allContents" type="org.springframework.data.domain.Page"-->
+                <!--@thymesVar id="allSites" type="java.util.List"-->
+                <section class="col-lg-12" th:unless="${#lists.isEmpty(allContents.content)}">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title" th:text="#{title.content.list}">List of</h3>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-condensed table-hover">
+                                <thead>
+                                <tr>
+                                    <th th:text="#{content.title}">Title</th>
+                                    <th th:text="#{content.date}">Date</th>
+                                    <th th:if="${allSites.size() > 1}" th:text="#{content.site}">Site</th>
+                                    <th th:text="#{content.summary}">Summary</th>
+                                    <th colspan="2"><i class="fa fa-cogs"></i></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!--@thymesVar id="aContent" type="ms.cms.domain.CmsContent"-->
+                                <tr th:each="aContent : ${allContents}" valign="middle">
+                                    <td th:text="${aContent.title}">Name</td>
+                                    <td th:text="${aContent.modificationDate}">Date</td>
+                                    <td th:if="${allSites.size() > 1}">
+                                        <span th:each="id,name : ${allSites}" th:text="${name}"
+                                              th:if="${id == aContent.siteId}">Site</span>
+                                    </td>
+                                    <td th:text="${aContent.summary}">Address</td>
+                                    <td>
+                                        <form class="form-inline" role="form" th:action="@{${'/contents/'+aContent.id}}"
+                                              action="#" method="GET">
+                                            <button type="submit" class="btn btn-primary btn-xs" value="put"><span
+                                                    class="glyphicon glyphicon-edit"></span> <span
+                                                    th:text="#{content.edit}">Edit</span></button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form class="form-inline" role="form" th:action="@{${'/contents/'+aContent.id}}"
+                                              action="#" method="POST">
+                                            <input type="hidden" name="_method" value="DELETE"/>
+                                            <button type="submit" class="btn btn-danger btn-xs" value="delete"><span
+                                                    class="glyphicon glyphicon-trash"></span> <span
+                                                    th:text="#{content.delete}">Delete</span></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel-footer text-center">
+                            <ul class="pagination" style="margin:0">
+                                <li th:class="${allContents.number eq 0} ? 'disabled' : ''">
+                                    <a th:if="${not allContents.first}"
+                                       th:href="@{${'contents'}(page=${allContents.number-1},pageSize=${allContents.size})}">&laquo;</a>
+                                </li>
+
+                                <li th:each="pageNo : ${#numbers.sequence(0, allContents.totalPages - 1)}"
+                                    th:class="${allContents.number eq pageNo}? 'active' : ''">
+                                    <a th:if="${allContents.number  eq pageNo}" href="javascript:void(0);"
+                                       th:text="${pageNo + 1}">
+                                        1
+                                    </a>
+                                    <a th:if="${not (allContents.number  eq pageNo)}"
+                                       th:href="@{${'contents'}(page=${pageNo},pageSize=${allContents.size})}"
+                                       th:text="${pageNo + 1}">
+                                        1
+                                    </a>
+
+                                </li>
+                                <li th:class="${allContents.number + 1 ge allContents.totalPages} ? 'disabled' : ''">
+                                    <a th:if="${not allContents.last}"
+                                       th:href="@{${'contents'}(page=${allContents.number+1},pageSize=${allContents.size})}">&raquo;</a>
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </section>
+                <section class="col-lg-12">
+                    <!--@thymesVar id="contentData" type="ms.cms.authoring.ui.domain.ContentData"-->
+                    <form class="form-horizontal" role="form" th:action="@{/contents}" th:object="${contentData}"
+                          action="#"
+                          method="POST">
+                        <input type="hidden" name="siteId" th:value="${allSites[0].id}"
+                               th:if="${allSites.size() == 1}"/>
+
+                        <div class="lead" th:text="#{content.data}">Content Data</div>
+
+                        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger alert-dismissible"
+                             role="alert">
+                            <button type="button" class="close" data-dismiss="alert"><span
+                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                            <ul>
+                                <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                            </ul>
+                        </div>
+                        <div class="form-group" th:if="${allSites.size() > 1}">
+                            <label for="siteId" class="col-sm-2 control-label" th:text="#{content.site}">Site</label>
+
+                            <div class="col-sm-10">
+                                <select type="text" class="form-control" id="siteId" name="siteId"
+                                        th:errorclass="has-error" required="required">
+                                    <!--@thymesVar id="aSite" type="ms.cms.domain.CmsSite"-->
+                                    <option th:each="aSite : ${allSites}"
+                                            th:value="${aSite.id}"
+                                            th:text="${aSite.name + ' [' + aSite.address + ']'}"
+                                            th:selected="${(contentData.siteId != null) and (contentData.siteId == aSite.id)}">
+                                        Site
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label" th:text="#{content.title}">Title</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="name" th:field="*{title}"
+                                       th:errorclass="has-error" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label"
+                                   th:text="#{content.summary}">Summary</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="address" th:field="*{summary}"
+                                       th:errorclass="has-error" required="required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 text-right">
+                                <button type="submit" class="btn btn-default" th:text="#{content.create}">Add Content
+                                </button>
+                                <button type="reset" class="btn btn-default">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </section>
             </div>
         </div>
 

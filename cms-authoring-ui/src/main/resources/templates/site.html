@@ -16,6 +16,7 @@
                 </div>
             </div>
             <div class="row">
+                <!--@thymesVar id="allSites" type="org.springframework.data.domain.Page"-->
                 <section class="col-lg-12" th:unless="${#lists.isEmpty(allSites)}">
                     <div class="panel panel-default">
                         <!-- Default panel contents -->
@@ -31,16 +32,16 @@
                                     <th th:text="#{site.creationDate}">Creation Date</th>
                                     <th th:text="#{site.address}">Address</th>
                                     <th th:text="#{site.workflowType}">Workflow Type</th>
+                                    <th><i class="fa fa-cogs"></i></th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!--@thymesVar id="allSites" type="java.util.List"-->
                                 <!--@thymesVar id="aSite" type="ms.cms.domain.CmsSite"-->
                                 <tr th:each="aSite : ${allSites}" valign="middle">
                                     <td th:text="${aSite.name}">Name</td>
                                     <td th:text="${aSite.creationDate}">Creation Date</td>
                                     <td th:text="${aSite.address}">Address</td>
-                                    <td th:text="${aSite.workflowType}">Workflow type</td>
+                                    <td th:text="#{${'site.workflow.'+aSite.workflowType}}">Workflow type</td>
                                     <td>
                                         <form class="form-inline" role="form" th:action="@{${'/site/'+aSite.id}}"
                                               action="#" method="POST">
@@ -54,10 +55,37 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="panel-footer text-center">
+                            <ul class="pagination" style="margin:0">
+                                <li th:class="${allSites.number eq 0} ? 'disabled' : ''">
+                                    <a th:if="${not allSites.first}"
+                                       th:href="@{${'site'}(page=${allSites.number-1},pageSize=${allSites.size})}">&laquo;</a>
+                                </li>
+
+                                <li th:each="pageNo : ${#numbers.sequence(0, allSites.totalPages - 1)}"
+                                    th:class="${allSites.number eq pageNo}? 'active' : ''">
+                                    <a th:if="${allSites.number  eq pageNo}" href="javascript:void(0);"
+                                       th:text="${pageNo + 1}">
+                                        1
+                                    </a>
+                                    <a th:if="${not (allSites.number  eq pageNo)}"
+                                       th:href="@{${'site'}(page=${pageNo},pageSize=${allSites.size})}"
+                                       th:text="${pageNo + 1}">
+                                        1
+                                    </a>
+
+                                </li>
+                                <li th:class="${allSites.number + 1 ge allSites.totalPages} ? 'disabled' : ''">
+                                    <a th:if="${not allSites.last}"
+                                       th:href="@{${'site'}(page=${allSites.number+1},pageSize=${allSites.size})}">&raquo;</a>
+                                </li>
+                            </ul>
+
+                        </div>
                     </div>
                 </section>
                 <section class="col-lg-12">
-                    <!--@thymesVar id="emsSite" type="ms.cms.domain.CmsSite"-->
+                    <!--@thymesVar id="cmsSite" type="ms.cms.domain.CmsSite"-->
                     <form class="form-horizontal" role="form" th:action="@{/site}" th:object="${cmsSite}" action="#"
                           method="POST">
                         <div class="lead" th:text="#{site.data}">Site Data</div>
