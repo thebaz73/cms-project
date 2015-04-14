@@ -2,7 +2,7 @@ package ms.cms.authoring.ui.web;
 
 import ms.cms.authoring.common.business.AuthoringManager;
 import ms.cms.authoring.ui.domain.AuthoringStatus;
-import ms.cms.authoring.ui.domain.DataTable;
+import ms.cms.authoring.ui.domain.Datatable;
 import ms.cms.domain.CmsComment;
 import ms.cms.domain.CmsContent;
 import ms.cms.domain.CmsSite;
@@ -72,8 +72,8 @@ public class DashboardController {
 
     @RequestMapping(value = {"/home/sites"}, method = RequestMethod.GET)
     @ResponseBody
-    public DataTable<List<Object>> sites(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        DataTable<List<Object>> dataTable = new DataTable<>();
+    public Datatable<List<Object>> sites(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Datatable<List<Object>> dataTable = new Datatable<>();
         try {
             int draw = 0;
             try {
@@ -101,8 +101,8 @@ public class DashboardController {
 
     @RequestMapping(value = {"/home/authors"}, method = RequestMethod.GET)
     @ResponseBody
-    public DataTable<List<Object>> authors(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        DataTable<List<Object>> dataTable = new DataTable<>();
+    public Datatable<List<Object>> authors(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Datatable<List<Object>> dataTable = new Datatable<>();
         try {
             int draw = 0;
             try {
@@ -135,8 +135,8 @@ public class DashboardController {
 
     @RequestMapping(value = {"/home/comments"}, method = RequestMethod.GET)
     @ResponseBody
-    public DataTable<List<Object>> comments(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        DataTable<List<Object>> dataTable = new DataTable<>();
+    public Datatable<List<Object>> comments(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Datatable<List<Object>> dataTable = new Datatable<>();
         try {
             int draw = 0;
             try {
@@ -168,8 +168,8 @@ public class DashboardController {
 
     @RequestMapping(value = {"/home/contents"}, method = RequestMethod.GET)
     @ResponseBody
-    public DataTable<List<Object>> contents(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        DataTable<List<Object>> dataTable = new DataTable<>();
+    public Datatable<List<Object>> contents(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Datatable<List<Object>> dataTable = new Datatable<>();
         try {
             int draw = 0;
             try {
