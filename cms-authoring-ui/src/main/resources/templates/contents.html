@@ -50,8 +50,7 @@
                                         <form class="form-inline" role="form" th:action="@{${'/contents/'+aContent.id}}"
                                               action="#" method="GET">
                                             <button type="submit" class="btn btn-primary btn-xs" value="put"><span
-                                                    class="glyphicon glyphicon-edit"></span> <span
-                                                    th:text="#{content.edit}">Edit</span></button>
+                                                    class="glyphicon glyphicon-edit"></span></button>
                                         </form>
                                     </td>
                                     <td>
@@ -59,8 +58,7 @@
                                               action="#" method="POST">
                                             <input type="hidden" name="_method" value="DELETE"/>
                                             <button type="submit" class="btn btn-danger btn-xs" value="delete"><span
-                                                    class="glyphicon glyphicon-trash"></span> <span
-                                                    th:text="#{content.delete}">Delete</span></button>
+                                                    class="glyphicon glyphicon-trash"></span></button>
                                         </form>
                                     </td>
                                 </tr>
@@ -157,6 +155,7 @@
                     </form>
                 </section>
             </div>
+            <footer th:replace="footer"></footer>
         </div>
 
     </div>

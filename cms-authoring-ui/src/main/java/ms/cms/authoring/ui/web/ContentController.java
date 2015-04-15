@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import static ms.cms.utils.UserUtils.isAuthor;
@@ -90,7 +89,6 @@ public class ContentController {
 
     @RequestMapping({"/contents"})
     public String show(ModelMap model) {
-        model.put("date", new Date());
         model.put("contentData", new ContentData());
         return "contents";
     }

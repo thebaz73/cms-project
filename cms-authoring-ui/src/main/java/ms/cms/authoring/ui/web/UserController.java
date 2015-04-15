@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -32,7 +31,6 @@ public class UserController {
 
     @RequestMapping({"/profile"})
     public String userProfile(HttpServletRequest request, HttpServletResponse response, Map<String, Object> model) throws IOException {
-        model.put("date", new Date());
         try {
             CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
             model.put("cmsUser", cmsUser);
@@ -46,7 +44,6 @@ public class UserController {
 
     @RequestMapping(value = {"/profile"}, method = RequestMethod.PUT)
     public String editUserProfile(HttpServletRequest request, HttpServletResponse response, CmsUser editUser, Map<String, Object> model) throws IOException {
-        model.put("date", new Date());
         try {
             registrationManager.editUser(editUser.getId(), editUser.getUsername(), editUser.getPassword(), editUser.getName());
             CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());

@@ -1,0 +1,6 @@
+<footer xmlns:th="http://www.thymeleaf.org" class="row">
+    <div class="text-center text-muted">Page created at <span
+            th:text="${#calendars.format(#calendars.createNow(), 'HH:mm:ss')}"></span> - <i
+            class="glyphicon glyphicon-copyright-mark"></i> - thebaz.it - <span
+            th:text="${#calendars.format(#calendars.createToday(), 'yyyy')}"></span></div>
+</footer>

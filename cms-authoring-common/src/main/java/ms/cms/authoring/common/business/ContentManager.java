@@ -42,4 +42,26 @@ public class ContentManager {
         List<CmsContent> cmsContents = cmsContentRepository.findBySiteId(cmsSite.getId());
         return new PageImpl<>(cmsContents, pageable, cmsContents.size());
     }
+
+    public List<CmsContent> findAllContents(CmsUser cmsUser) {
+        List<CmsSite> cmsSites = cmsSiteRepository.findByWebMaster(cmsUser);
+        List<CmsContent> cmsContents = new ArrayList<>();
+        for (CmsSite cmsSite : cmsSites) {
+            cmsContents.addAll(cmsContentRepository.findBySiteId(cmsSite.getId()));
+        }
+        return cmsContents;
+    }
+
+    public List<CmsContent> findAuthoredContents(CmsUser cmsUser) {
+        CmsSite cmsSite = cmsSiteRepository.findOne(cmsUser.getAuthoredSiteId());
+        return cmsContentRepository.findBySiteId(cmsSite.getId());
+    }
+
+    public List<CmsContent> findSitesContents(List<CmsSite> cmsSites) {
+        List<CmsContent> cmsContents = new ArrayList<>();
+        for (CmsSite cmsSite : cmsSites) {
+            cmsContents.addAll(cmsContentRepository.findBySiteId(cmsSite.getId()));
+        }
+        return cmsContents;
+    }
 }

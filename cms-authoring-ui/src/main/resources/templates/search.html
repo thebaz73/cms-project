@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
       xmlns="http://www.w3.org/1999/xhtml">
 <head th:replace="head"></head>
 
@@ -21,6 +21,7 @@
                     <span th:text="${docs.size()}"></span> documents, searching for: '<span th:text="${query}"></span>'
                 </div>
             </div>
+            <footer th:replace="footer"></footer>
         </div>
 
     </div>

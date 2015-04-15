@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static ms.cms.utils.UserUtils.isAuthor;
@@ -70,7 +69,6 @@ public class SiteController {
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = {"/site"}, method = RequestMethod.GET)
     public String show(ModelMap model) {
-        model.put("date", new Date());
         model.put("cmsSite", new CmsSite());
         return "site";
     }

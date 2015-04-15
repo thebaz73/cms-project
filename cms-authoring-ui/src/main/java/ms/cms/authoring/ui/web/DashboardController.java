@@ -1,6 +1,7 @@
 package ms.cms.authoring.ui.web;
 
 import ms.cms.authoring.common.business.AuthoringManager;
+import ms.cms.authoring.common.business.ContentManager;
 import ms.cms.authoring.ui.domain.AuthoringStatus;
 import ms.cms.authoring.ui.domain.Datatable;
 import ms.cms.domain.CmsComment;
@@ -9,6 +10,7 @@ import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsUser;
 import ms.cms.registration.common.business.RegistrationException;
 import ms.cms.registration.common.business.RegistrationManager;
+import ms.cms.registration.common.business.SiteManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,10 @@ public class DashboardController {
     private RegistrationManager registrationManager;
     @Autowired
     private AuthoringManager authoringManager;
+    @Autowired
+    private ContentManager contentManager;
+    @Autowired
+    private SiteManager siteManager;
     private List<CmsSite> cmsSites = new ArrayList<>();
 
     @RequestMapping({"/"})
@@ -179,7 +185,7 @@ public class DashboardController {
             }
             dataTable.setDraw(draw);
             loadUserSites(registrationManager.findUser(request.getRemoteUser()));
-            List<CmsContent> contents = authoringManager.findSitesContents(cmsSites);
+            List<CmsContent> contents = contentManager.findSitesContents(cmsSites);
             for (CmsContent content : contents) {
                 List<Object> list = new ArrayList<>();
                 list.add(content.getModificationDate());
@@ -206,9 +212,9 @@ public class DashboardController {
 
     private List<CmsSite> loadUserSites(CmsUser cmsUser) throws RegistrationException {
         if (isWebmaster(cmsUser)) {
-            cmsSites = registrationManager.findSites(cmsUser.getId());
+            cmsSites = siteManager.findSites(cmsUser);
         } else if (isAuthor(cmsUser)) {
-            cmsSites = Arrays.asList(registrationManager.findAuthoredSite(cmsUser.getId()));
+            cmsSites = Arrays.asList(siteManager.findAuthoredSite(cmsUser));
         }
 
         return cmsSites;

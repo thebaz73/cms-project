@@ -92,6 +92,7 @@
                     </div>
                 </div>
             </div>
+            <footer th:replace="footer"></footer>
         </div>
 
     </div>
@@ -115,8 +116,6 @@
         //var authors, sites, comments, contents;
         $(document).ready(function () {
             var authors = $('#authors').dataTable({
-                pagingType: 'full_numbers',
-                scrollY: "200px",
                 columnDefs: [
                     {
                         "sortable": false,
@@ -142,7 +141,7 @@
                 columnDefs: [
                     {
                         "render": function (data, type, row) {
-                            return dateFormat(Date(data), "dd-m-yy", true);
+                            return dateFormat(Date(data), "dd-mm-yyyy", true);
                         },
                         "targets": [0]
                     },
@@ -180,7 +179,7 @@
                 columnDefs: [
                     {
                         "render": function (data, type, row) {
-                            return dateFormat(Date(data), "dd-m-yy", true);
+                            return dateFormat(Date(data), "dd-mm-yyyy", true);
                         },
                         "targets": [0]
                     },

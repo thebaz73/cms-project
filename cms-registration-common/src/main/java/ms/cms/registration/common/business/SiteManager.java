@@ -50,4 +50,12 @@ public class SiteManager {
 
         cmsSiteRepository.save(cmsSite);
     }
+
+    public List<CmsSite> findSites(CmsUser cmsUser) {
+        return cmsSiteRepository.findByWebMaster(cmsUser);
+    }
+
+    public CmsSite findAuthoredSite(CmsUser cmsUser) {
+        return cmsSiteRepository.findOne(cmsUser.getId());
+    }
 }
