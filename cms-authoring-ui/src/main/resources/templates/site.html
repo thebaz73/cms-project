@@ -17,6 +17,15 @@
             </div>
             <div class="row">
                 <!--@thymesVar id="allSites" type="org.springframework.data.domain.Page"-->
+                <section class="col-lg-12" th:if="${#lists.isEmpty(allSites)}">
+                    <div class="panel panel-default">
+                        <!-- Default panel comments -->
+                        <div class="panel-heading">
+                            <h3 class="panel-title" th:text="#{title.comment.list}">List of</h3>
+                        </div>
+                        <div class="panel-body" th:text="#{comment.none}">No comments found</div>
+                    </div>
+                </section>
                 <section class="col-lg-12" th:unless="${#lists.isEmpty(allSites)}">
                     <div class="panel panel-default">
                         <!-- Default panel contents -->
@@ -54,11 +63,10 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="panel-footer text-center">
-                            <ul class="pagination" style="margin:0">
+                        <div class="panel-footer text-right">
+                            <ul class="pagination" style="margin:0 10px">
                                 <li th:class="${allSites.number eq 0} ? 'disabled' : ''">
-                                    <a th:if="${not allSites.first}"
-                                       th:href="@{${'site'}(page=${allSites.number-1},pageSize=${allSites.size})}">&laquo;</a>
+                                    <a th:href="@{${(not allSites.first)?'site':'#'}(page=${allSites.number-1},pageSize=${allSites.size})}">&laquo;</a>
                                 </li>
 
                                 <li th:each="pageNo : ${#numbers.sequence(0, allSites.totalPages - 1)}"
@@ -75,8 +83,7 @@
 
                                 </li>
                                 <li th:class="${allSites.number + 1 ge allSites.totalPages} ? 'disabled' : ''">
-                                    <a th:if="${not allSites.last}"
-                                       th:href="@{${'site'}(page=${allSites.number+1},pageSize=${allSites.size})}">&raquo;</a>
+                                    <a th:href="@{${(not allSites.last)?'site':'#'}(page=${allSites.number+1},pageSize=${allSites.size})}">&raquo;</a>
                                 </li>
                             </ul>
 

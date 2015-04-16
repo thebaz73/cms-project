@@ -20,10 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -90,6 +87,7 @@ public class ContentController {
     @RequestMapping({"/contents"})
     public String show(ModelMap model) {
         model.put("contentData", new ContentData());
+        model.put("mode", "add");
         return "contents";
     }
 
@@ -102,6 +100,37 @@ public class ContentController {
         try {
             authoringManager.createContent(contentData.getSiteId(), "", contentData.getTitle(), "", contentData.getSummary(), contentData.getContent());
             model.clear();
+        } catch (AuthoringException e) {
+            String msg = String.format("Cannot author contents. Reason: %s", e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
+        return "redirect:/contents";
+    }
+
+    @RequestMapping(value = {"/contents/{contentId}"}, method = RequestMethod.GET)
+    public String editMode(HttpServletResponse response, ModelMap model, @PathVariable("contentId") String contentId) throws IOException {
+        try {
+            CmsContent cmsContent = authoringManager.findContent(contentId);
+            ContentData contentData = new ContentData();
+            contentData.setSiteId(cmsContent.getSiteId());
+            contentData.setTitle(cmsContent.getTitle());
+            contentData.setSummary(cmsContent.getSummary());
+            contentData.setContent(cmsContent.getContent());
+            model.put("contentData", contentData);
+            model.put("mode", "edit");
+        } catch (AuthoringException e) {
+            String msg = String.format("Cannot author contents. Reason: %s", e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
+        return "contents";
+    }
+
+    @RequestMapping(value = {"/contents/{contentId}"}, method = RequestMethod.DELETE)
+    public String delete(HttpServletResponse response, @PathVariable("contentId") String contentId) throws IOException {
+        try {
+            authoringManager.deleteContent(contentId);
         } catch (AuthoringException e) {
             String msg = String.format("Cannot author contents. Reason: %s", e.getMessage());
             logger.info(msg, e);
