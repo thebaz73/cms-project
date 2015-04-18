@@ -33,10 +33,7 @@ public class CommentManager {
         List<CmsSite> cmsSites = cmsSiteRepository.findByWebMaster(cmsUser);
         List<CmsComment> cmsComments = new ArrayList<>();
         for (CmsSite cmsSite : cmsSites) {
-            List<CmsContent> cmsContents = cmsContentRepository.findBySiteId(cmsSite.getId());
-            for (CmsContent cmsContent : cmsContents) {
-                cmsComments.addAll(cmsCommentRepository.findByContentId(cmsContent.getId()));
-            }
+            cmsComments.addAll(cmsCommentRepository.findBySiteId(cmsSite.getId()));
         }
         return new PageImpl<>(cmsComments, pageable, cmsComments.size());
     }
@@ -49,5 +46,33 @@ public class CommentManager {
             cmsComments.addAll(cmsCommentRepository.findByContentId(cmsContent.getId()));
         }
         return new PageImpl<>(cmsComments, pageable, cmsComments.size());
+    }
+
+    public List<CmsComment> findAllComments(CmsUser cmsUser) {
+        List<CmsSite> cmsSites = cmsSiteRepository.findByWebMaster(cmsUser);
+        List<CmsComment> cmsComments = new ArrayList<>();
+        for (CmsSite cmsSite : cmsSites) {
+            cmsComments.addAll(cmsCommentRepository.findBySiteId(cmsSite.getId()));
+        }
+
+        return cmsComments;
+    }
+
+    public List<CmsComment> findAuthoredComments(CmsUser cmsUser) {
+        CmsSite cmsSite = cmsSiteRepository.findOne(cmsUser.getAuthoredSiteId());
+        List<CmsComment> cmsComments = new ArrayList<>();
+        List<CmsContent> cmsContents = cmsContentRepository.findBySiteId(cmsSite.getId());
+        for (CmsContent cmsContent : cmsContents) {
+            cmsComments.addAll(cmsCommentRepository.findByContentId(cmsContent.getId()));
+        }
+        return cmsComments;
+    }
+
+    public void deleteSiteComments(String siteId) {
+        cmsCommentRepository.deleteBySiteId(siteId);
+    }
+
+    public void deleteContentComments(String contentId) {
+        cmsCommentRepository.deleteByContentId(contentId);
     }
 }

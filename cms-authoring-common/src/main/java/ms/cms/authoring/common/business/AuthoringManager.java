@@ -3,7 +3,6 @@ package ms.cms.authoring.common.business;
 import ms.cms.data.CmsContentRepository;
 import ms.cms.data.CmsSiteRepository;
 import ms.cms.data.CmsTagRepository;
-import ms.cms.domain.CmsComment;
 import ms.cms.domain.CmsContent;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsTag;
@@ -154,15 +153,5 @@ public class AuthoringManager {
 
     public int countContents(CmsSite cmsSite) {
         return cmsContentRepository.countBySiteId(cmsSite.getId());
-    }
-
-    public List<CmsComment> findSitesComments(List<CmsSite> cmsSites) {
-        //TODO implement
-        return new ArrayList<>();
-    }
-
-    public List<CmsContent> findSitesContents(List<CmsSite> cmsSites) {
-        //TODO implement
-        return new ArrayList<>();
     }
 }

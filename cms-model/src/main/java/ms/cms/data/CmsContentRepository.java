@@ -20,7 +20,7 @@ public interface CmsContentRepository extends MongoRepository<CmsContent, String
     List<CmsContent> findBySiteIdAndUri(String siteId, String uri);
 
     /**
-     * Finds @CmsContents given is site id
+     * Finds @CmsContents given its site id
      *
      * @param siteId site id
      * @return list of @CmsContent
@@ -28,10 +28,17 @@ public interface CmsContentRepository extends MongoRepository<CmsContent, String
     List<CmsContent> findBySiteId(String siteId);
 
     /**
-     * Counts @CmsContents given is site id
+     * Counts @CmsContents given its site id
      *
      * @param siteId site id
      * @return number of @CmsContent
      */
     int countBySiteId(String siteId);
+
+    /**
+     * Deletes @CmsContents given its site id
+     *
+     * @param siteId site id
+     */
+    List<CmsContent> deleteBySiteId(String siteId);
 }

@@ -2,6 +2,7 @@ package ms.cms.authoring.ui.web;
 
 import ms.cms.authoring.common.business.AuthoringException;
 import ms.cms.authoring.common.business.AuthoringManager;
+import ms.cms.authoring.common.business.CommentManager;
 import ms.cms.authoring.common.business.ContentManager;
 import ms.cms.authoring.ui.domain.ContentData;
 import ms.cms.domain.CmsContent;
@@ -46,6 +47,8 @@ public class ContentController {
     private SiteManager siteManager;
     @Autowired
     private ContentManager contentManager;
+    @Autowired
+    private CommentManager commentManager;
 
     @ModelAttribute("allSites")
     public List<CmsSite> allSites(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -130,6 +133,7 @@ public class ContentController {
     @RequestMapping(value = {"/contents/{contentId}"}, method = RequestMethod.DELETE)
     public String delete(HttpServletResponse response, @PathVariable("contentId") String contentId) throws IOException {
         try {
+            commentManager.deleteContentComments(contentId);
             authoringManager.deleteContent(contentId);
         } catch (AuthoringException e) {
             String msg = String.format("Cannot author contents. Reason: %s", e.getMessage());

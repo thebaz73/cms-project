@@ -15,6 +15,8 @@ public class CmsComment {
     @Id
     private String id;
     @Indexed
+    private String siteId;
+    @Indexed
     private String contentId;
     @Indexed
     private Date timestamp;
@@ -42,6 +44,14 @@ public class CmsComment {
     public void setId(String id) {
         this.id = id;
     }
+//
+//    public String getSiteId() {
+//        return siteId;
+//    }
+//
+//    public void setSiteId(String siteId) {
+//        this.siteId = siteId;
+//    }
 
     public String getContentId() {
         return contentId;

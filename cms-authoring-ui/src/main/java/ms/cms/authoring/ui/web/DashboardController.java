@@ -1,6 +1,7 @@
 package ms.cms.authoring.ui.web;
 
 import ms.cms.authoring.common.business.AuthoringManager;
+import ms.cms.authoring.common.business.CommentManager;
 import ms.cms.authoring.common.business.ContentManager;
 import ms.cms.authoring.ui.domain.AuthoringStatus;
 import ms.cms.authoring.ui.domain.Datatable;
@@ -43,6 +44,8 @@ public class DashboardController {
     private AuthoringManager authoringManager;
     @Autowired
     private ContentManager contentManager;
+    @Autowired
+    private CommentManager commentManager;
     @Autowired
     private SiteManager siteManager;
     private List<CmsSite> cmsSites = new ArrayList<>();
@@ -151,8 +154,15 @@ public class DashboardController {
                 //ignore
             }
             dataTable.setDraw(draw);
-            loadUserSites(registrationManager.findUser(request.getRemoteUser()));
-            List<CmsComment> comments = authoringManager.findSitesComments(cmsSites);
+            CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
+            loadUserSites(cmsUser);
+
+            List<CmsComment> comments = new ArrayList<>();
+            if (isWebmaster(cmsUser)) {
+                comments = commentManager.findAllComments(cmsUser);
+            } else if (isAuthor(cmsUser)) {
+                comments = commentManager.findAuthoredComments(cmsUser);
+            }
             for (CmsComment comment : comments) {
                 List<Object> list = new ArrayList<>();
                 list.add(comment.getTimestamp());

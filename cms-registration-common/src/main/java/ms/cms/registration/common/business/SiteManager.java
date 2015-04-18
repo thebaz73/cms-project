@@ -58,4 +58,8 @@ public class SiteManager {
     public CmsSite findAuthoredSite(CmsUser cmsUser) {
         return cmsSiteRepository.findOne(cmsUser.getId());
     }
+
+    public CmsSite findSite(String siteId) {
+        return cmsSiteRepository.findOne(siteId);
+    }
 }

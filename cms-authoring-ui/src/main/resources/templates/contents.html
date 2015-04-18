@@ -16,9 +16,9 @@
                 </div>
             </div>
             <!--@thymesVar id="mode" type="java.lang.String"-->
+            <!--@thymesVar id="allContents" type="org.springframework.data.domain.Page"-->
+            <!--@thymesVar id="allSites" type="java.util.List"-->
             <div class="row" th:if="${mode=='add'}">
-                <!--@thymesVar id="allContents" type="org.springframework.data.domain.Page"-->
-                <!--@thymesVar id="allSites" type="java.util.List"-->
                 <section class="col-lg-12" th:if="${#lists.isEmpty(allContents.content)}">
                     <div class="panel panel-default">
                         <!-- Default panel comments -->
@@ -163,6 +163,60 @@
                     </form>
                 </section>
             </div>
+            <div class="row" th:if="${mode=='edit'}">
+                <section class="col-lg-12">
+                    <!--@thymesVar id="contentData" type="ms.cms.authoring.ui.domain.ContentData"-->
+                    <form class="form-horizontal" role="form" th:action="@{/contents}" th:object="${contentData}"
+                          action="#"
+                          method="POST">
+                        <input type="hidden" name="siteId" th:value="${allSites[0].id}"
+                               th:if="${allSites.size() == 1}"/>
+
+                        <div class="panel panel-default">
+                            <!-- Default panel comments -->
+                            <div class="panel-heading">
+                                <div id="wysihtml5-toolbar" style="display: none;">
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-default btn-sm" data-wysihtml5-command="bold"><i
+                                                class="fa fa-bold fa-fw"></i></a>
+                                        <a class="btn btn-default btn-sm" data-wysihtml5-command="italic"><i
+                                                class="fa fa-italic fa-fw"></i></a>
+                                        <a class="btn btn-default btn-sm" data-wysihtml5-command="underline"><i
+                                                class="fa fa-underline fa-fw"></i></a>
+                                    </div>
+
+                                    <div class="btn-group" role="group">
+                                        <a class="btn btn-default btn-sm" data-wysihtml5-command="justifyRight"><i
+                                                class="fa fa-align-left fa-fw"></i></a>
+                                        <a class="btn btn-default btn-sm" data-wysihtml5-command="justifyCenter"><i
+                                                class="fa fa-align-center fa-fw"></i></a>
+                                        <a class="btn btn-default btn-sm" data-wysihtml5-command="justifyLeft"><i
+                                                class="fa fa-align-right fa-fw"></i></a>
+                                    </div>
+
+                                    <!-- Some wysihtml5 commands like 'createLink' require extra paramaters specified by the user (eg. href) -->
+                                    <a class="btn btn-default btn-sm" data-wysihtml5-command="createLink"><i
+                                            class="fa fa-link fa-fw"></i></a>
+
+                                    <div class="input-group" data-wysihtml5-dialog="createLink" style="display: none;">
+                                        <input class="form-control input-sm" data-wysihtml5-dialog-field="href"
+                                               placeholder="http://"/>
+                                        <span class="input-group-btn">
+                                            <a class="btn btn-default btn-sm" data-wysihtml5-dialog-action="save">OK</a> <a
+                                                class="btn btn-default btn-sm" data-wysihtml5-dialog-action="cancel">Cancel</a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <textarea class="form-control" id="wysihtml5-textarea" placeholder="Enter your text ..."
+                                          autofocus="autofocus"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
             <footer th:replace="footer"></footer>
         </div>
 
@@ -177,6 +231,18 @@
     <!-- Custom Theme JavaScript -->
     <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
 
+    <!-- Custom Theme JavaScript -->
+    <script th:src="@{/dist/js/parser-rules-advanced.js}" src="../public/dist/js/parser-rules-advanced.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script th:src="@{/dist/js/wysihtml5-0.3.0.min.js}" src="../public/dist/js/wysihtml5-0.3.0.js"></script>
+
+    <script th:if="${mode=='edit'}">
+        var editor = new wysihtml5.Editor("wysihtml5-textarea", { // id of textarea element
+            toolbar: "wysihtml5-toolbar", // id of toolbar element
+            parserRules: wysihtml5ParserRules // defined in parser rules set
+        });
+    </script>
 </body>
 
 </html>

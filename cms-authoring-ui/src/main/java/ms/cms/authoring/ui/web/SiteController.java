@@ -1,5 +1,7 @@
 package ms.cms.authoring.ui.web;
 
+import ms.cms.authoring.common.business.CommentManager;
+import ms.cms.authoring.common.business.ContentManager;
 import ms.cms.domain.CmsSite;
 import ms.cms.domain.CmsUser;
 import ms.cms.domain.WorkflowType;
@@ -40,6 +42,10 @@ public class SiteController {
     private RegistrationManager registrationManager;
     @Autowired
     private SiteManager siteManager;
+    @Autowired
+    private ContentManager contentManager;
+    @Autowired
+    private CommentManager commentManager;
 
     @ModelAttribute("allWorkflowTypes")
     public List<WorkflowType> allRoles() {
@@ -99,6 +105,8 @@ public class SiteController {
     @RequestMapping(value = {"/site/{siteId}"}, method = RequestMethod.DELETE)
     public String deleteSite(HttpServletResponse response, @PathVariable("siteId") String siteId) throws IOException {
         try {
+            contentManager.deleteSiteContents(siteManager.findSite(siteId));
+            commentManager.deleteSiteComments(siteId);
             registrationManager.deleteSite(siteId);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create site. Reason: %s", e.getMessage());

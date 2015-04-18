@@ -64,4 +64,8 @@ public class ContentManager {
         }
         return cmsContents;
     }
+
+    public void deleteSiteContents(CmsSite cmsSite) {
+        cmsContentRepository.deleteBySiteId(cmsSite.getId());
+    }
 }
