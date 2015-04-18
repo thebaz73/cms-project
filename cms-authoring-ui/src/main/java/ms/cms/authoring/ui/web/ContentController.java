@@ -111,6 +111,24 @@ public class ContentController {
         return "redirect:/contents";
     }
 
+    @RequestMapping(value = {"/contents/{contentId}"}, method = RequestMethod.PUT)
+    public String editContent(HttpServletResponse response, @ModelAttribute("contentData") ContentData contentData,
+                              final BindingResult bindingResult, final ModelMap model, @PathVariable("contentId") String contentId) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return "contents";
+        }
+        try {
+            CmsContent cmsContent = authoringManager.findContent(contentId);
+            authoringManager.editContent(contentId, cmsContent.getName(), cmsContent.getTitle(), cmsContent.getUri(), cmsContent.getSummary(), contentData.getContent());
+            model.clear();
+        } catch (AuthoringException e) {
+            String msg = String.format("Cannot author contents. Reason: %s", e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
+        return "redirect:/contents";
+    }
+
     @RequestMapping(value = {"/contents/{contentId}"}, method = RequestMethod.GET)
     public String editMode(HttpServletResponse response, ModelMap model, @PathVariable("contentId") String contentId) throws IOException {
         try {
@@ -121,6 +139,7 @@ public class ContentController {
             contentData.setSummary(cmsContent.getSummary());
             contentData.setContent(cmsContent.getContent());
             model.put("contentData", contentData);
+            model.put("contentId", cmsContent.getId());
             model.put("mode", "edit");
         } catch (AuthoringException e) {
             String msg = String.format("Cannot author contents. Reason: %s", e.getMessage());

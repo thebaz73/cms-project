@@ -114,6 +114,18 @@
     <script type="application/javascript">
         /* <![CDATA[ */
         //var authors, sites, comments, contents;
+        function update() {
+            $.get("/home/status", function (data) {
+                $("#commentsCount").html(data.commentsCount);
+                $("#contentsCount").html(data.contentsCount);
+                $("#authorsCount").html(data.authorsCount);
+                $("#sitesCount").html(data.sitesCount);
+            });
+//            authors.ajax.reload();
+//            sites.ajax.reload();
+//            comments.ajax.reload();
+//            contents.ajax.reload();
+        }
         $(document).ready(function () {
             var authors = $('#authors').dataTable({
                 columnDefs: [
@@ -214,17 +226,9 @@
                 ajax: "/home/contents"
             });
             setInterval(function () {
-                $.get("/home/status", function (data) {
-                    $("#commentsCount").html(data.commentsCount);
-                    $("#contentsCount").html(data.contentsCount);
-                    $("#authorsCount").html(data.authorsCount);
-                    $("#sitesCount").html(data.sitesCount);
-                });
-//                authors.ajax.reload();
-//                sites.ajax.reload();
-//                comments.ajax.reload();
-//                contents.ajax.reload();
+                update();
             }, 10000);
+            update();
         });
         /* ]]> */
     </script>
