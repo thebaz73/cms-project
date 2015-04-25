@@ -1,6 +1,8 @@
 package ms.cms.data;
 
 import ms.cms.domain.CmsContent;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
@@ -20,12 +22,32 @@ public interface CmsContentRepository extends MongoRepository<CmsContent, String
     List<CmsContent> findBySiteIdAndUri(String siteId, String uri);
 
     /**
+     * Finds @CmsContent given its site id and uri
+     *
+     * @param siteId site id
+     * @param uri    post uri
+     * @param pageable page info
+     *
+     * @return page of @CmsContent
+     */
+    Page<CmsContent> findBySiteIdAndUri(String siteId, String uri, Pageable pageable);
+
+    /**
      * Finds @CmsContents given its site id
      *
      * @param siteId site id
      * @return list of @CmsContent
      */
     List<CmsContent> findBySiteId(String siteId);
+
+    /**
+     * Finds @CmsContents given its site id
+     *
+     * @param siteId   site id
+     * @param pageable page info
+     * @return page of @CmsContent
+     */
+    Page<CmsContent> findBySiteId(String siteId, Pageable pageable);
 
     /**
      * Counts @CmsContents given its site id
