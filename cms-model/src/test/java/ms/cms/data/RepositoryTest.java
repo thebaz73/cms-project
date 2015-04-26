@@ -10,6 +10,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -296,6 +299,36 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         contentRepository.save(post01);
 
         assertEquals(2, contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getTags().size());
+
+
+        //POSTs
+        CmsContent post02 = createCmsContent(site.getId(), "post02", "Post 02", "/post_02", randomAlphanumeric(20), randomAlphabetic(200));
+        contentRepository.save(post02);
+
+        assertEquals(3, contentRepository.countBySiteId(site.getId()));
+
+        assertEquals(3, contentRepository.findAll(new PageRequest(0, 10, Sort.Direction.DESC, "modificationDate")).getContent().size());
+
+        Page<CmsContent> bySite;
+        bySite = contentRepository.findBySiteIdAndPublished(site.getId(), true, new PageRequest(0, 10, Sort.Direction.DESC, "modificationDate"));
+        assertEquals(0, bySite.getContent().size());
+        bySite = contentRepository.findBySiteIdAndPublished(site.getId(), false, new PageRequest(0, 10, Sort.Direction.DESC, "modificationDate"));
+        assertEquals(3, bySite.getContent().size());
+        assertEquals(bySite.getContent().get(0).getUri(), "/post_02");
+        assertEquals(bySite.getContent().get(1).getUri(), "/post_01");
+        assertEquals(bySite.getContent().get(2).getUri(), "/content_01");
+        bySite = contentRepository.findBySiteIdAndPublished(site.getId(), false, new PageRequest(0, 10, Sort.Direction.ASC, "modificationDate"));
+        assertEquals(3, bySite.getContent().size());
+        assertEquals(bySite.getContent().get(2).getUri(), "/post_02");
+        assertEquals(bySite.getContent().get(1).getUri(), "/post_01");
+        assertEquals(bySite.getContent().get(0).getUri(), "/content_01");
+
+        post02.setPublished(true);
+        contentRepository.save(post02);
+        bySite = contentRepository.findBySiteIdAndPublished(site.getId(), true, new PageRequest(1, 10, Sort.Direction.DESC, "modificationDate"));
+        assertEquals(1, bySite.getTotalElements());
+        bySite = contentRepository.findBySiteIdAndPublished(site.getId(), false, new PageRequest(1, 10, Sort.Direction.DESC, "modificationDate"));
+        assertEquals(2, bySite.getTotalElements());
     }
 
     private CmsContent createCmsContent(String siteId, String name, String title, String uri, String summary, String content) {

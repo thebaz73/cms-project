@@ -44,10 +44,11 @@ public interface CmsContentRepository extends MongoRepository<CmsContent, String
      * Finds @CmsContents given its site id
      *
      * @param siteId   site id
+     * @param published published
      * @param pageable page info
      * @return page of @CmsContent
      */
-    Page<CmsContent> findBySiteId(String siteId, Pageable pageable);
+    Page<CmsContent> findBySiteIdAndPublished(String siteId, boolean published, Pageable pageable);
 
     /**
      * Counts @CmsContents given its site id

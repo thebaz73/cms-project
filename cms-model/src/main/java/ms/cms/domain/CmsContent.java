@@ -32,6 +32,7 @@ public class CmsContent {
     private String uri;
     @Indexed
     private Date modificationDate;
+    private boolean published;
     private String summary;
     private String content;
     @DBRef
@@ -105,6 +106,14 @@ public class CmsContent {
 
     public void setModificationDate(Date modificationDate) {
         this.modificationDate = modificationDate;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
     }
 
     public String getSummary() {
