@@ -56,7 +56,6 @@ public class ContentServiceTest extends AbstractServiceTest {
         assertEquals(HttpStatus.OK, entity.getStatusCode());
 //        HttpEntity httpEntity = entity.getBody();
 //        Page<CmsContent> page = (Page<CmsContent>) httpEntity.getBody();
-        //todo verify errors
     }
 
     @Test
@@ -84,7 +83,6 @@ public class ContentServiceTest extends AbstractServiceTest {
             assertEquals(HttpStatus.OK, entity.getStatusCode());
 //            HttpEntity httpEntity = entity.getBody();
 //            Page<CmsContent> page = (Page<CmsContent>) httpEntity.getBody();
-            //todo verify errors
         }
     }
 }
