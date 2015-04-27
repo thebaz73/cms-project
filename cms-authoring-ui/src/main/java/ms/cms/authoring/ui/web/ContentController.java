@@ -149,6 +149,18 @@ public class ContentController {
         return "contents";
     }
 
+    @RequestMapping(value = {"/publish/{contentId}"}, method = RequestMethod.GET)
+    public String publish(HttpServletResponse response, ModelMap model, @PathVariable("contentId") String contentId) throws IOException {
+        contentManager.publish(contentId, true);
+        return "redirect:/contents";
+    }
+
+    @RequestMapping(value = {"/unpublish/{contentId}"}, method = RequestMethod.GET)
+    public String unpublish(HttpServletResponse response, ModelMap model, @PathVariable("contentId") String contentId) throws IOException {
+        contentManager.publish(contentId, false);
+        return "redirect:/contents";
+    }
+
     @RequestMapping(value = {"/contents/{contentId}"}, method = RequestMethod.DELETE)
     public String delete(HttpServletResponse response, @PathVariable("contentId") String contentId) throws IOException {
         try {

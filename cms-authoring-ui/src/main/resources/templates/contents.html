@@ -43,7 +43,7 @@
                                     <th th:text="#{content.date}">Date</th>
                                     <th th:if="${allSites.size() > 1}" th:text="#{content.site}">Site</th>
                                     <th th:text="#{content.summary}">Summary</th>
-                                    <th colspan="2"><i class="fa fa-cogs"></i></th>
+                                    <th colspan="3"><i class="fa fa-cogs"></i></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -56,10 +56,28 @@
                                               th:if="${id == aContent.siteId}">Site</span>
                                     </td>
                                     <td th:text="${aContent.summary}">Address</td>
+                                    <td th:if="${!aContent.published}">
+                                        <form class="form-inline" role="form" th:action="@{${'/publish/'+aContent.id}}"
+                                              action="#" method="GET">
+                                            <button type="submit" class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                    data-placement="top" title="Publish"><span
+                                                    class="glyphicon glyphicon-export"></span></button>
+                                        </form>
+                                    </td>
+                                    <td th:if="${aContent.published}">
+                                        <form class="form-inline" role="form"
+                                              th:action="@{${'/unpublish/'+aContent.id}}"
+                                              action="#" method="GET">
+                                            <button type="submit" class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                    data-placement="top" title="Hide"><span
+                                                    class="glyphicon glyphicon-import"></span></button>
+                                        </form>
+                                    </td>
                                     <td>
                                         <form class="form-inline" role="form" th:action="@{${'/contents/'+aContent.id}}"
                                               action="#" method="GET">
-                                            <button type="submit" class="btn btn-primary btn-xs" value="put"><span
+                                            <button type="submit" class="btn btn-primary btn-xs" value="put"
+                                                    data-toggle="tooltip" data-placement="top" title="Edit"><span
                                                     class="glyphicon glyphicon-edit"></span></button>
                                         </form>
                                     </td>
@@ -67,7 +85,8 @@
                                         <form class="form-inline" role="form" th:action="@{${'/contents/'+aContent.id}}"
                                               action="#" method="POST">
                                             <input type="hidden" name="_method" value="DELETE"/>
-                                            <button type="submit" class="btn btn-danger btn-xs" value="delete"><span
+                                            <button type="submit" class="btn btn-danger btn-xs" value="delete"
+                                                    data-toggle="tooltip" data-placement="top" title="Delete"><span
                                                     class="glyphicon glyphicon-trash"></span></button>
                                         </form>
                                     </td>

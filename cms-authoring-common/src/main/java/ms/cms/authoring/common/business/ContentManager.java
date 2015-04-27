@@ -68,4 +68,10 @@ public class ContentManager {
     public void deleteSiteContents(CmsSite cmsSite) {
         cmsContentRepository.deleteBySiteId(cmsSite.getId());
     }
+
+    public void publish(String contentId, boolean b) {
+        CmsContent cmsContent = cmsContentRepository.findOne(contentId);
+        cmsContent.setPublished(b);
+        cmsContentRepository.save(cmsContent);
+    }
 }
