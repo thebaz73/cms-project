@@ -142,7 +142,7 @@ public class AuthoringManager {
         if (cmsContent == null) {
             throw new AuthoringException("Content not found");
         }
-        List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsContent.getSiteId(), tag.toUpperCase());
+        List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsContent.getSiteId(), tag);
         if (bySiteIdAndTag.isEmpty()) {
             throw new AuthoringException("Tag not found");
         }
