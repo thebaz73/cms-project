@@ -167,8 +167,8 @@ public class ContentServiceTest extends AbstractServiceTest {
         assertNotNull(contentByUri);
         assertEquals(uri, contentByUri.getUri());
         assertEquals(title, contentByUri.getTitle());
-        assertEquals("potions".toUpperCase(), contentByUri.getTags().get(0).getTag());
-        assertEquals("magic".toUpperCase(), contentByUri.getTags().get(1).getTag());
+        assertEquals("potions", contentByUri.getTags().get(0).getTag());
+        assertEquals("magic", contentByUri.getTags().get(1).getTag());
         assertEquals("CONTENT", contentByUri.getType());
     }
 
@@ -190,7 +190,7 @@ public class ContentServiceTest extends AbstractServiceTest {
         assertNotNull(contentByUri);
         assertEquals(uri, contentByUri.getUri());
         assertEquals(title, contentByUri.getTitle());
-        assertEquals("potions".toUpperCase(), contentByUri.getTags().get(0).getTag());
+        assertEquals("potions", contentByUri.getTags().get(0).getTag());
         assertEquals("CONTENT", contentByUri.getType());
     }
 }
