@@ -226,7 +226,7 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
         assertEquals(1, cmsTagRepository.findAll().get(0).getContentIds().size());
         assertEquals(2, cmsContentRepository.findAll().get(0).getTags().size());
 
-        authoringManager.removeContentTags(contentId, "Magic");
+        authoringManager.removeContentTags(contentId, "magic");
         assertEquals(2, cmsTagRepository.findAll().size());
         assertEquals(1, cmsTagRepository.findAll().get(0).getContentIds().size());
         assertEquals(0, cmsTagRepository.findAll().get(1).getPopularity().intValue());
