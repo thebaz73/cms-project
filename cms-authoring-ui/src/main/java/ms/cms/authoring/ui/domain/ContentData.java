@@ -1,5 +1,7 @@
 package ms.cms.authoring.ui.domain;
 
+import java.util.List;
+
 /**
  * ContentData
  * Created by thebaz on 14/04/15.
@@ -9,6 +11,7 @@ public class ContentData {
     private String summary;
     private String content;
     private String siteId;
+    private String tags;
 
     public String getTitle() {
         return title;
@@ -40,5 +43,13 @@ public class ContentData {
 
     public void setSiteId(String siteId) {
         this.siteId = siteId;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

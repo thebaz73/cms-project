@@ -206,8 +206,8 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
         assertNotNull(cmsTagRepository.findAll().get(0).getId());
         assertEquals(siteId, cmsTagRepository.findAll().get(0).getSiteId());
         assertEquals(1, cmsTagRepository.findAll().get(0).getPopularity().intValue());
-        assertEquals(1, cmsTagRepository.findAll().get(0).getCommentIds().size());
-        assertEquals(contentId, cmsTagRepository.findAll().get(0).getCommentIds().iterator().next());
+        assertEquals(1, cmsTagRepository.findAll().get(0).getContentIds().size());
+        assertEquals(contentId, cmsTagRepository.findAll().get(0).getContentIds().iterator().next());
 
         try {
             authoringManager.addContentTags("error", "potions");
@@ -223,12 +223,12 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
         String contentId = cmsContentRepository.findAll().get(0).getId();
         authoringManager.addContentTags(contentId, "potions, magic");
         assertEquals(2, cmsTagRepository.findAll().size());
-        assertEquals(1, cmsTagRepository.findAll().get(0).getCommentIds().size());
+        assertEquals(1, cmsTagRepository.findAll().get(0).getContentIds().size());
         assertEquals(2, cmsContentRepository.findAll().get(0).getTags().size());
 
         authoringManager.removeContentTags(contentId, "Magic");
         assertEquals(2, cmsTagRepository.findAll().size());
-        assertEquals(1, cmsTagRepository.findAll().get(0).getCommentIds().size());
+        assertEquals(1, cmsTagRepository.findAll().get(0).getContentIds().size());
         assertEquals(0, cmsTagRepository.findAll().get(1).getPopularity().intValue());
         assertEquals(1, cmsContentRepository.findAll().get(0).getTags().size());
 

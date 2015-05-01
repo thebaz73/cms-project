@@ -1,12 +1,10 @@
 package ms.cms.authoring.ui.web;
 
-import ms.cms.authoring.common.business.AuthoringException;
-import ms.cms.authoring.common.business.AuthoringManager;
-import ms.cms.authoring.common.business.CommentManager;
-import ms.cms.authoring.common.business.ContentManager;
+import ms.cms.authoring.common.business.*;
 import ms.cms.authoring.ui.domain.ContentData;
 import ms.cms.domain.CmsContent;
 import ms.cms.domain.CmsSite;
+import ms.cms.domain.CmsTag;
 import ms.cms.domain.CmsUser;
 import ms.cms.registration.common.business.RegistrationException;
 import ms.cms.registration.common.business.RegistrationManager;
@@ -26,7 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ms.cms.utils.UserUtils.isAuthor;
 import static ms.cms.utils.UserUtils.isWebmaster;
@@ -49,6 +49,8 @@ public class ContentController {
     private ContentManager contentManager;
     @Autowired
     private CommentManager commentManager;
+    @Autowired
+    private TagManager tagManager;
 
     @ModelAttribute("allSites")
     public List<CmsSite> allSites(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -87,6 +89,31 @@ public class ContentController {
         return null;
     }
 
+    @RequestMapping(value = {"/tags"}, method = RequestMethod.GET)
+    @ResponseBody
+    public List<String> tags(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        List<String> tagList = new ArrayList<>();
+        try {
+            List<CmsSite> allSites = new ArrayList<>();
+            CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
+            if (isWebmaster(cmsUser)) {
+                allSites = siteManager.findAllSites(cmsUser);
+            } else if (isAuthor(cmsUser)) {
+                allSites = siteManager.findAuthoredSites(cmsUser);
+            }
+            for (CmsSite site : allSites) {
+                List<CmsTag> siteTags = tagManager.findSiteTags(site.getId());
+                tagList.addAll(siteTags.stream().map(CmsTag::getTag).collect(Collectors.toList()));
+            }
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot manage sites. Reason: %s", e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
+        return tagList;
+    }
+
+
     @RequestMapping({"/contents"})
     public String show(ModelMap model) {
         model.put("contentData", new ContentData());
@@ -120,6 +147,7 @@ public class ContentController {
         try {
             CmsContent cmsContent = authoringManager.findContent(contentId);
             authoringManager.editContent(contentId, cmsContent.getName(), cmsContent.getTitle(), cmsContent.getUri(), cmsContent.getSummary(), contentData.getContent());
+            authoringManager.addContentTags(contentId, contentData.getTags());
             model.clear();
         } catch (AuthoringException e) {
             String msg = String.format("Cannot author contents. Reason: %s", e.getMessage());
@@ -138,6 +166,11 @@ public class ContentController {
             contentData.setTitle(cmsContent.getTitle());
             contentData.setSummary(cmsContent.getSummary());
             contentData.setContent(cmsContent.getContent());
+            StringBuilder tagList = new StringBuilder();
+            for (CmsTag tag : cmsContent.getTags()) {
+                tagList.append(",").append(tag.getTag());
+            }
+            contentData.setTags(tagList.toString());
             model.put("contentData", contentData);
             model.put("contentId", cmsContent.getId());
             model.put("mode", "edit");

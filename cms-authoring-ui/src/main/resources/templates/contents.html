@@ -190,6 +190,12 @@
                           action="#"
                           method="POST">
                         <input type="hidden" name="_method" value="PUT"/>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <input type="hidden" id="tags" th:field="*{tags}"/>
+                                <input type="text" id="tagsText" placeholder="Tags" class="tm-input"/>
+                            </div>
+                        </div>
 
                         <div class="panel panel-default">
                             <!-- Default panel comments -->
@@ -301,18 +307,46 @@
     <!-- Custom Theme JavaScript -->
     <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
 
-    <!-- Custom Theme JavaScript -->
+    <!-- Custom JavaScript -->
     <script th:src="@{/dist/js/parser-rules-advanced.js}" src="../public/dist/js/parser-rules-advanced.js"></script>
 
-    <!-- Custom Theme JavaScript -->
+    <!-- Custom JavaScript -->
     <script th:src="@{/dist/js/wysihtml5-0.3.0.min.js}" src="../public/dist/js/wysihtml5-0.3.0.js"></script>
 
-    <script th:if="${mode=='edit'}">
-        var editor = new wysihtml5.Editor("wysihtml5-textarea", { // id of textarea element
-            toolbar: "wysihtml5-toolbar", // id of toolbar element
-            parserRules: wysihtml5ParserRules // defined in parser rules set
+    <!-- Custom JavaScript -->
+    <script th:src="@{/dist/js/tagmanager.js}" src="../public/dist/js/tagmanager.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script th:src="@{/dist/js/typeahead.js}" src="../public/dist/js/typeahead.js"></script>
+
+    <script th:if="${mode=='edit'}" th:inline="javascript">
+        var editor = new wysihtml5.Editor("wysihtml5-textarea", {
+            toolbar: "wysihtml5-toolbar",
+            parserRules: wysihtml5ParserRules
+        });
+        var $tagInput = $(".tm-input");
+
+        var tags = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.whitespace,
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/tags'
+            }
+        });
+        tags.initialize();
+
+        var tagApi = $tagInput.tagsManager({
+            prefilled: [[${contentData.tags}]].split(","),
+            hiddenTagListId: "tags",
+            hiddenTagListName: "tags"
+        });
+
+        $tagInput.typeahead(null, {
+            name: 'tags',
+            source: tags.ttAdapter()
         });
     </script>
+
 </body>
 
 </html>

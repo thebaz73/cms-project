@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static ms.cms.authoring.common.utils.AuthoringUtils.abbreviateHtml;
 import static ms.cms.authoring.common.utils.AuthoringUtils.toPrettyURL;
@@ -102,7 +103,7 @@ public class AuthoringManager {
             throw new AuthoringException("Content not found");
         }
         for (CmsTag cmsTag : cmsContent.getTags()) {
-            cmsTag.getCommentIds().remove(cmsContent.getId());
+            cmsTag.getContentIds().remove(cmsContent.getId());
             cmsTag.setPopularity(cmsTag.getPopularity() - 1);
             cmsTagRepository.save(cmsTag);
         }
@@ -114,19 +115,24 @@ public class AuthoringManager {
         if (cmsContent == null) {
             throw new AuthoringException("Content not found");
         }
-        for (String tag : tags.split(",|:|;|\\|")) {
-            List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsContent.getSiteId(), tag.toUpperCase().trim());
-            CmsTag cmsTag;
-            if (!bySiteIdAndTag.isEmpty()) {
-                cmsTag = bySiteIdAndTag.get(0);
-            } else {
-                cmsTag = new CmsTag(cmsContent.getSiteId(), tag.toUpperCase().trim());
-            }
-            cmsTag.getCommentIds().add(cmsContent.getId());
-            cmsTag.setPopularity(cmsTag.getPopularity() + 1);
-            cmsTagRepository.save(cmsTag);
+        for (String tag : tags.split(",")) {
+            if(!tag.isEmpty()) {
+                List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsContent.getSiteId(), tag.trim());
+                CmsTag cmsTag;
+                if (!bySiteIdAndTag.isEmpty()) {
+                    cmsTag = bySiteIdAndTag.get(0);
+                } else {
+                    cmsTag = new CmsTag(cmsContent.getSiteId(), tag.trim());
+                }
+                Set<String> contentIds = cmsTag.getContentIds();
+                if(!contentIds.contains(cmsContent.getId())) {
+                    contentIds.add(cmsContent.getId());
+                    cmsTag.setPopularity(cmsTag.getPopularity() + 1);
+                    cmsTagRepository.save(cmsTag);
 
-            cmsContent.getTags().add(cmsTag);
+                    cmsContent.getTags().add(cmsTag);
+                }
+            }
         }
         cmsContentRepository.save(cmsContent);
     }
@@ -145,8 +151,8 @@ public class AuthoringManager {
         cmsContentRepository.save(cmsContent);
 
         CmsTag cmsTag = bySiteIdAndTag.get(0);
-        List<String> allIds = new ArrayList<>(cmsTag.getCommentIds());
-        allIds.stream().filter(commentId -> commentId.equals(id)).forEach(commentId -> cmsTag.getCommentIds().remove(commentId));
+        List<String> allIds = new ArrayList<>(cmsTag.getContentIds());
+        allIds.stream().filter(commentId -> commentId.equals(id)).forEach(commentId -> cmsTag.getContentIds().remove(commentId));
         cmsTag.setPopularity(cmsTag.getPopularity() - 1);
         cmsTagRepository.save(cmsTag);
     }

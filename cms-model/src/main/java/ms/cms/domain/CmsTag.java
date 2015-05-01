@@ -23,7 +23,7 @@ public class CmsTag {
     private String siteId;
     private String tag;
     private Integer popularity;
-    private Set<String> commentIds;
+    private Set<String> contentIds;
 
     public CmsTag() {
         this.popularity = 0;
@@ -68,15 +68,15 @@ public class CmsTag {
         this.popularity = popularity;
     }
 
-    public Set<String> getCommentIds() {
-        if (commentIds == null) {
-            commentIds = new HashSet<>();
+    public Set<String> getContentIds() {
+        if (contentIds == null) {
+            contentIds = new HashSet<>();
         }
-        return commentIds;
+        return contentIds;
     }
 
-    public void setCommentIds(Set<String> commentIds) {
-        this.commentIds = commentIds;
+    public void setContentIds(Set<String> contentIds) {
+        this.contentIds = contentIds;
     }
 
     @Override
