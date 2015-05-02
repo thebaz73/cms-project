@@ -11,7 +11,7 @@
     <link th:href="@{/webjars/bootstrap/3.1.0/css/bootstrap.min.css}" href="../public/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"/>
 
     <!-- DataTables CSS -->
-    <link th:href="@{/dist/css/dataTables.bootstrap.css}"
+    <link th:if="${#httpServletRequest.requestURI == '/'}" th:href="@{/dist/css/dataTables.bootstrap.css}"
           href="../public/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css"
           rel="stylesheet"/>
 
@@ -20,11 +20,11 @@
           href="../public/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet"/>-->
 
     <!-- Timeline CSS -->
-    <link th:href="@{/dist/css/timeline.css}" href="../public/dist/css/timeline.css" rel="stylesheet"/>
+    <link th:if="${#httpServletRequest.requestURI == '/'}" th:href="@{/dist/css/timeline.css}" href="../public/dist/css/timeline.css" rel="stylesheet"/>
 
     <!-- Custom CSS -->
     <link th:href="@{/dist/css/sb-admin-2.css}" href="../public/dist/css/sb-admin-2.css" rel="stylesheet"/>
-    <link th:href="@{/dist/css/tagmanager.css}" href="../public/dist/css/tagmanager.css" rel="stylesheet"/>
+    <link th:if="${#httpServletRequest.requestURI.startsWith('/content')}" th:href="@{/dist/css/tagmanager.css}" href="../public/dist/css/tagmanager.css" rel="stylesheet"/>
 
     <!-- Custom Fonts -->
     <link th:href="@{/webjars/font-awesome/4.2.0/css/font-awesome.min.css}" href="../public/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>

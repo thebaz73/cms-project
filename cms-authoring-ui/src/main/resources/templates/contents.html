@@ -317,7 +317,7 @@
     <script th:src="@{/dist/js/tagmanager.js}" src="../public/dist/js/tagmanager.js"></script>
 
     <!-- Custom JavaScript -->
-    <script th:src="@{/dist/js/typeahead.js}" src="../public/dist/js/typeahead.js"></script>
+    <script th:src="@{/dist/js/bootstrap3-typeahead.min.js}" src="../public/dist/js/bootstrap3-typeahead.js"></script>
 
     <script th:if="${mode=='edit'}" th:inline="javascript">
         var editor = new wysihtml5.Editor("wysihtml5-textarea", {
@@ -326,25 +326,15 @@
         });
         var $tagInput = $(".tm-input");
 
-        var tags = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.whitespace,
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: {
-                url: '/tags'
-            }
-        });
-        tags.initialize();
-
         var tagApi = $tagInput.tagsManager({
             prefilled: [[${contentData.tags}]].split(","),
             hiddenTagListId: "tags",
             hiddenTagListName: "tags"
         });
 
-        $tagInput.typeahead(null, {
-            name: 'tags',
-            source: tags.ttAdapter()
-        });
+        $.get('/tags', function(data){
+            $tagInput.typeahead({ source:data });
+        },'json');
     </script>
 
 </body>
