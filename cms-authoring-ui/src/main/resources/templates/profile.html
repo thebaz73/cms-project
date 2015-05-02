@@ -17,7 +17,7 @@
             </div>
             <div class="row">
                 <!--@thymesVar id="cmsUser" type="ms.cms.domain.CmsUser"-->
-                <form class="col-xs-12" th:action="@{/user}" th:object="${cmsUser}" action="#" method="POST">
+                <form class="col-xs-12" th:action="@{/profile}" th:object="${cmsUser}" action="#" method="POST">
                     <fieldset>
                         <input type="hidden" name="_method" value="PUT"/>
                         <input type="hidden" id="id" th:field="*{id}"/>
