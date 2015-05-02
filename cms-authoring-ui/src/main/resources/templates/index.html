@@ -121,11 +121,8 @@
                 $("#authorsCount").html(data.authorsCount);
                 $("#sitesCount").html(data.sitesCount);
             });
-//            authors.ajax.reload();
-//            sites.ajax.reload();
-//            comments.ajax.reload();
-//            contents.ajax.reload();
         }
+
         $(document).ready(function () {
             var authors = $('#authors').dataTable({
                 columnDefs: [
@@ -134,6 +131,8 @@
                         "targets": [1]
                     }
                 ],
+                searching: false,
+                info: false,
                 processing: true,
                 serverSide: true,
                 ajax: "/home/authors"
@@ -145,6 +144,8 @@
                         "targets": [1]
                     }
                 ],
+                searching: false,
+                info: false,
                 processing: true,
                 serverSide: true,
                 ajax: "/home/sites"
@@ -183,6 +184,8 @@
                         "targets": [4]
                     }
                 ],
+                searching: false,
+                info: false,
                 processing: true,
                 serverSide: true,
                 ajax: "/home/comments"
@@ -221,13 +224,17 @@
                         "targets": [4]
                     }
                 ],
+                searching: false,
+                info: false,
                 processing: true,
                 serverSide: true,
                 ajax: "/home/contents"
             });
+
             setInterval(function () {
                 update();
             }, 10000);
+
             update();
         });
         /* ]]> */
