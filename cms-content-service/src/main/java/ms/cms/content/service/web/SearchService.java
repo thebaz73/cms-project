@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * ContentService
  * Created by bazzoni on 02/04/2015.
  */
-@RestController(value = "authorWebService")
+@RestController(value = "searchWebService")
 @RequestMapping(value = "/api")
 public class SearchService {
     @Autowired

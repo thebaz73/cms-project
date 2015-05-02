@@ -21,11 +21,15 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * TagServiceTest
+ * Created by thebaz on 02/05/15.
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {Application.class})
 @WebAppConfiguration
 @IntegrationTest
-public class ContentServiceTest extends AbstractServiceTest {
+public class TagServiceTest extends AbstractServiceTest {
 
     @Before
     public void setUp() throws Exception {
@@ -34,7 +38,7 @@ public class ContentServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void testContentService() throws Exception {
+    public void testTags() throws Exception {
         for (int i = 0; i < 25; i++) {
             CmsContent cmsContent = new CmsContent(siteId, "name" + i, "title" + i, "uri" + i, new Date(), RandomStringUtils.randomAlphabetic(100), RandomStringUtils.randomAlphabetic(200));
             cmsContent.setPublished(true);
@@ -58,39 +62,8 @@ public class ContentServiceTest extends AbstractServiceTest {
 
         HttpEntity<CmsContent> requestEntity = new HttpEntity<>(headers);
         // Pass the new person and header
-        ResponseEntity<HttpEntity> entity = template.exchange("http://localhost:9000/api/contents/" + siteId, HttpMethod.GET, requestEntity, HttpEntity.class);
+        ResponseEntity<List> entity = template.exchange("http://localhost:9000/api/tags/" + siteId, HttpMethod.GET, requestEntity, List.class);
         assertEquals(HttpStatus.OK, entity.getStatusCode());
-
-        for (CmsContent cmsContent : cmsContentRepository.findAll()) {
-            template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
-
-            // Prepare acceptable media type
-            acceptableMediaTypes = new ArrayList<>();
-            acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
-            // Prepare header
-            headers = new HttpHeaders();
-            headers.setAccept(acceptableMediaTypes);
-
-            requestEntity = new HttpEntity<>(headers);
-            // Pass the new person and header
-            entity = template.exchange("http://localhost:9000/api/contents/" + siteId + "/" + cmsContent.getUri(), HttpMethod.GET, requestEntity, HttpEntity.class);
-            assertEquals(HttpStatus.OK, entity.getStatusCode());
-        }
-
-        template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
-
-        // Prepare acceptable media type
-        acceptableMediaTypes = new ArrayList<>();
-        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
-        // Prepare header
-        headers = new HttpHeaders();
-        headers.setAccept(acceptableMediaTypes);
-
-        requestEntity = new HttpEntity<>(headers);
-
-        ResponseEntity<Iterable> entityIterable = template.exchange("http://localhost:9000/api/contents/" + siteId + "?tag=tag1", HttpMethod.GET, requestEntity, Iterable.class);
-        assertEquals(HttpStatus.OK, entityIterable.getStatusCode());
-        List it = (List) entityIterable.getBody();
-        assertEquals(1, it.size());
+        assertEquals(25, entity.getBody().size());
     }
 }

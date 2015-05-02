@@ -1,7 +1,9 @@
 package ms.cms.content.service.web;
 
 import ms.cms.data.CmsContentRepository;
+import ms.cms.data.CmsTagRepository;
 import ms.cms.domain.CmsContent;
+import ms.cms.domain.CmsTag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * ContentService
  * Created by bazzoni on 02/04/2015.
@@ -24,6 +29,8 @@ import org.springframework.web.bind.annotation.*;
 public class ContentService {
     @Autowired
     private CmsContentRepository contentRepository;
+    @Autowired
+    private CmsTagRepository tagRepository;
 
     @Secured({"ROLE_MANAGER"})
     @RequestMapping(value = "/contents/{siteId}", method = RequestMethod.GET)
@@ -35,6 +42,18 @@ public class ContentService {
         PageRequest pageable = new PageRequest(page, size, Sort.Direction.DESC, "modificationDate");
         Page<CmsContent> contents = contentRepository.findBySiteIdAndPublished(siteId, true, pageable);
         return new ResponseEntity<>(assembler.toResource(contents), HttpStatus.OK);
+    }
+
+    @Secured({"ROLE_MANAGER"})
+    @RequestMapping(value = "/contents/{siteId}", params = {"tag"}, method = RequestMethod.GET)
+    Iterable<CmsContent> tagContents(@PathVariable("siteId") String siteId,
+                                     @RequestParam("tag") String tag) {
+        Iterable<CmsContent> contents = new ArrayList<>();
+        List<CmsTag> bySiteIdAndTag = tagRepository.findBySiteIdAndTag(siteId, tag);
+        if (!bySiteIdAndTag.isEmpty()) {
+            contents = contentRepository.findAll(bySiteIdAndTag.get(0).getContentIds());
+        }
+        return contents;
     }
 
     @Secured({"ROLE_MANAGER"})

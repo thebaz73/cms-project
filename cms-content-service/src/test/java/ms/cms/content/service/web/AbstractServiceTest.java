@@ -1,9 +1,6 @@
 package ms.cms.content.service.web;
 
-import ms.cms.data.CmsContentRepository;
-import ms.cms.data.CmsRoleRepository;
-import ms.cms.data.CmsSiteRepository;
-import ms.cms.data.CmsUserRepository;
+import ms.cms.data.*;
 import ms.cms.domain.*;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
@@ -36,12 +33,15 @@ public abstract class AbstractServiceTest {
     protected CmsSiteRepository cmsSiteRepository;
     @Autowired
     protected CmsContentRepository cmsContentRepository;
+    @Autowired
+    protected CmsTagRepository cmsTagRepository;
 
     protected void prepareEnvironment() {
         cmsRoleRepository.deleteAll();
         cmsUserRepository.deleteAll();
         cmsSiteRepository.deleteAll();
         cmsContentRepository.deleteAll();
+        cmsTagRepository.deleteAll();
         for (Role role : Role.ALL) {
             List<CmsRole> byRole = cmsRoleRepository.findByRole(role.getName());
             if (byRole.isEmpty()) {
