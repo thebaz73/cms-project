@@ -15,13 +15,14 @@ import java.util.Set;
  */
 @Document
 @CompoundIndexes({
-        @CompoundIndex(name = "site_tag_idx", def = "{'siteId' : 1, 'tag' : 1}")
+        @CompoundIndex(name = "tag_site_uri_idx", def = "{'siteId' : 1, 'uri' : 1}")
 })
 public class CmsTag {
     @Id
     private String id;
     private String siteId;
     private String tag;
+    private String uri;
     private Integer popularity;
     private Set<String> contentIds;
 
@@ -30,10 +31,11 @@ public class CmsTag {
     }
 
     @PersistenceConstructor
-    public CmsTag(String siteId, String tag) {
+    public CmsTag(String siteId, String tag, String uri) {
         this();
         this.siteId = siteId;
         this.tag = tag;
+        this.uri = uri;
     }
 
     public String getId() {
@@ -58,6 +60,14 @@ public class CmsTag {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public Integer getPopularity() {
@@ -86,9 +96,8 @@ public class CmsTag {
 
         CmsTag cmsTag = (CmsTag) o;
 
-        if (id != null ? !id.equals(cmsTag.id) : cmsTag.id != null) return false;
+        return !(id != null ? !id.equals(cmsTag.id) : cmsTag.id != null);
 
-        return true;
     }
 
     @Override

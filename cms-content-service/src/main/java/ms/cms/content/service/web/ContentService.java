@@ -49,7 +49,7 @@ public class ContentService {
     Iterable<CmsContent> tagContents(@PathVariable("siteId") String siteId,
                                      @RequestParam("tag") String tag) {
         Iterable<CmsContent> contents = new ArrayList<>();
-        List<CmsTag> bySiteIdAndTag = tagRepository.findBySiteIdAndTag(siteId, tag);
+        List<CmsTag> bySiteIdAndTag = tagRepository.findBySiteIdAndUri(siteId, tag);
         if (!bySiteIdAndTag.isEmpty()) {
             contents = contentRepository.findAll(bySiteIdAndTag.get(0).getContentIds());
         }

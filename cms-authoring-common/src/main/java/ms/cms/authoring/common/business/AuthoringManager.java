@@ -1,5 +1,6 @@
 package ms.cms.authoring.common.business;
 
+import ms.cms.authoring.common.utils.AuthoringUtils;
 import ms.cms.data.CmsContentRepository;
 import ms.cms.data.CmsSiteRepository;
 import ms.cms.data.CmsTagRepository;
@@ -117,12 +118,12 @@ public class AuthoringManager {
         }
         for (String tag : tags.split(",")) {
             if(!tag.isEmpty()) {
-                List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsContent.getSiteId(), tag.trim());
+                List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndUri(cmsContent.getSiteId(), tag.trim());
                 CmsTag cmsTag;
                 if (!bySiteIdAndTag.isEmpty()) {
                     cmsTag = bySiteIdAndTag.get(0);
                 } else {
-                    cmsTag = new CmsTag(cmsContent.getSiteId(), tag.trim());
+                    cmsTag = new CmsTag(cmsContent.getSiteId(), tag.trim(), AuthoringUtils.toPrettyURL(tag.trim()));
                 }
                 Set<String> contentIds = cmsTag.getContentIds();
                 if(!contentIds.contains(cmsContent.getId())) {
@@ -142,7 +143,7 @@ public class AuthoringManager {
         if (cmsContent == null) {
             throw new AuthoringException("Content not found");
         }
-        List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndTag(cmsContent.getSiteId(), tag);
+        List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndUri(cmsContent.getSiteId(), tag);
         if (bySiteIdAndTag.isEmpty()) {
             throw new AuthoringException("Tag not found");
         }

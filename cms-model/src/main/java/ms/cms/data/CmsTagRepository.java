@@ -17,7 +17,7 @@ public interface CmsTagRepository extends MongoRepository<CmsTag, String> {
      * @param tag    tag tag
      * @return list of @CmsTag
      */
-    List<CmsTag> findBySiteIdAndTag(String siteId, String tag);
+    List<CmsTag> findBySiteIdAndUri(String siteId, String uri);
 
     /**
      * Finds @CmsTag given its address

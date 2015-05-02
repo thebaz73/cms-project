@@ -43,7 +43,7 @@ public class TagServiceTest extends AbstractServiceTest {
             CmsContent cmsContent = new CmsContent(siteId, "name" + i, "title" + i, "uri" + i, new Date(), RandomStringUtils.randomAlphabetic(100), RandomStringUtils.randomAlphabetic(200));
             cmsContent.setPublished(true);
             cmsContentRepository.save(cmsContent);
-            CmsTag cmsTag = new CmsTag(siteId, "tag" + i);
+            CmsTag cmsTag = new CmsTag(siteId, "tag" + i, "tag" + i);
             cmsTag.getContentIds().add(cmsContent.getId());
             cmsTag.setPopularity(i);
             cmsTagRepository.save(cmsTag);

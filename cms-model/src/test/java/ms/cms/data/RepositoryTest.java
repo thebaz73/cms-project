@@ -270,7 +270,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(comment02.getTitle(), commentRepository.findByContentId(post01.getId()).get(1).getTitle());
         assertEquals(comment02.getContent(), commentRepository.findByContentId(post01.getId()).get(1).getContent());
 
-        CmsTag tag01 = new CmsTag(site.getId(), "potions");
+        CmsTag tag01 = new CmsTag(site.getId(), "potions", "potions");
         tag01.getContentIds().add(post01.getId());
         tag01.setPopularity(tag01.getPopularity() + 1);
         tag01.setPopularity(tag01.getPopularity() + 1);
@@ -278,15 +278,15 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         assertEquals(1, tagRepository.findAll().size());
         assertNotNull(tagRepository.findAll().get(0).getId());
-        assertEquals(1, tagRepository.findBySiteIdAndTag(site.getId(), "potions").size());
-        assertNotNull(tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getId());
-        assertEquals(1, tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getContentIds().size());
-        assertEquals(tagRepository.findAll().get(0).getId(), tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getId());
-        assertEquals(tagRepository.findAll().get(0).getTag(), tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getTag());
-        assertEquals("potions", tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getTag());
-        assertEquals(2, tagRepository.findBySiteIdAndTag(site.getId(), "potions").get(0).getPopularity().intValue());
+        assertEquals(1, tagRepository.findBySiteIdAndUri(site.getId(), "potions").size());
+        assertNotNull(tagRepository.findBySiteIdAndUri(site.getId(), "potions").get(0).getId());
+        assertEquals(1, tagRepository.findBySiteIdAndUri(site.getId(), "potions").get(0).getContentIds().size());
+        assertEquals(tagRepository.findAll().get(0).getId(), tagRepository.findBySiteIdAndUri(site.getId(), "potions").get(0).getId());
+        assertEquals(tagRepository.findAll().get(0).getTag(), tagRepository.findBySiteIdAndUri(site.getId(), "potions").get(0).getTag());
+        assertEquals("potions", tagRepository.findBySiteIdAndUri(site.getId(), "potions").get(0).getTag());
+        assertEquals(2, tagRepository.findBySiteIdAndUri(site.getId(), "potions").get(0).getPopularity().intValue());
 
-        CmsTag tag02 = new CmsTag(site.getId(), "magic");
+        CmsTag tag02 = new CmsTag(site.getId(), "magic", "magic");
         tag02.getContentIds().add(post01.getId());
         tag02.setPopularity(tag02.getPopularity() + 1);
         tagRepository.save(tag02);
