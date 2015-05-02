@@ -116,6 +116,7 @@ public class AuthoringManager {
         if (cmsContent == null) {
             throw new AuthoringException("Content not found");
         }
+        cmsContent.getTags().clear();
         for (String tag : tags.split(",")) {
             if(!tag.isEmpty()) {
                 List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndUri(cmsContent.getSiteId(), tag.trim());
@@ -130,9 +131,9 @@ public class AuthoringManager {
                     contentIds.add(cmsContent.getId());
                     cmsTag.setPopularity(cmsTag.getPopularity() + 1);
                     cmsTagRepository.save(cmsTag);
-
-                    cmsContent.getTags().add(cmsTag);
                 }
+
+                cmsContent.getTags().add(cmsTag);
             }
         }
         cmsContentRepository.save(cmsContent);
