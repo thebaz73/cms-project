@@ -119,12 +119,13 @@ public class AuthoringManager {
         cmsContent.getTags().clear();
         for (String tag : tags.split(",")) {
             if(!tag.isEmpty()) {
-                List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndUri(cmsContent.getSiteId(), tag.trim());
+                String uri = AuthoringUtils.toPrettyURL(tag.trim());
+                List<CmsTag> bySiteIdAndTag = cmsTagRepository.findBySiteIdAndUri(cmsContent.getSiteId(), uri);
                 CmsTag cmsTag;
                 if (!bySiteIdAndTag.isEmpty()) {
                     cmsTag = bySiteIdAndTag.get(0);
                 } else {
-                    cmsTag = new CmsTag(cmsContent.getSiteId(), tag.trim(), AuthoringUtils.toPrettyURL(tag.trim()));
+                    cmsTag = new CmsTag(cmsContent.getSiteId(), tag.trim(), uri);
                 }
                 Set<String> contentIds = cmsTag.getContentIds();
                 if(!contentIds.contains(cmsContent.getId())) {
