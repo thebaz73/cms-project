@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Map;
 
 /**
- * UserController
+ * SettingsController
  * Created by thebaz on 12/04/15.
  */
 @Controller(value = "settingsController")

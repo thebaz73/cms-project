@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * UserController
+ * SearchController
  * Created by thebaz on 12/04/15.
  */
 @Controller(value = "searchController")

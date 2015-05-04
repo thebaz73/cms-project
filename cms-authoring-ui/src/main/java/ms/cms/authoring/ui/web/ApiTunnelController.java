@@ -18,9 +18,8 @@ import java.util.List;
  */
 @RestController(value = "apiTunnelController")
 public class ApiTunnelController {
-
     @RequestMapping(value = "/tunnel/sites", params = {"username", "password"}, method = RequestMethod.GET)
-    public List findSites(HttpServletRequest request, String username, String password) {
+    public List<CmsSite> findSites(HttpServletRequest request, String username, String password) {
         RestTemplate template = new RestTemplate(WebServiceUtils.getInstance().makeClient(request.getSession(), username, password, WebServiceUtils.ServiceType.REGISTRATION));
         // Prepare acceptable media type
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
@@ -31,13 +30,13 @@ public class ApiTunnelController {
         // Pass the new person and header
         HttpEntity<CmsSite> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<List> entity = template.exchange(WebServiceUtils.getInstance().createUrl(WebServiceUtils.ServiceType.REGISTRATION, "/api/sites?param={param}"), HttpMethod.GET, requestEntity, List.class, username);
+        ResponseEntity<SiteList> entity = template.exchange(WebServiceUtils.getInstance().createUrl(WebServiceUtils.ServiceType.REGISTRATION, "/api/sites?param={param}"), HttpMethod.GET, requestEntity, SiteList.class, username);
 
         return entity.getBody();
     }
 
     @RequestMapping(value = "/tunnel/sites/authors", params = {"username", "password"}, method = RequestMethod.GET)
-    public List findSiteAuthors(HttpServletRequest request, String username, String password) {
+    public List<CmsSite> findSiteAuthors(HttpServletRequest request, String username, String password) {
         RestTemplate template = new RestTemplate(WebServiceUtils.getInstance().makeClient(request.getSession(), username, password, WebServiceUtils.ServiceType.REGISTRATION));
         // Prepare acceptable media type
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
@@ -48,7 +47,7 @@ public class ApiTunnelController {
         // Pass the new person and header
         HttpEntity<CmsSite> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<List> entity = template.exchange(WebServiceUtils.getInstance().createUrl(WebServiceUtils.ServiceType.REGISTRATION, "/api/sites/authors?param={param}"), HttpMethod.GET, requestEntity, List.class, username);
+        ResponseEntity<SiteList> entity = template.exchange(WebServiceUtils.getInstance().createUrl(WebServiceUtils.ServiceType.REGISTRATION, "/api/sites/authors?param={param}"), HttpMethod.GET, requestEntity, SiteList.class, username);
 
         return entity.getBody();
     }
@@ -68,5 +67,8 @@ public class ApiTunnelController {
         ResponseEntity<CmsSite> entity = template.exchange(WebServiceUtils.getInstance().createUrl(WebServiceUtils.ServiceType.REGISTRATION, "/api/site/authored?param={param}"), HttpMethod.GET, requestEntity, CmsSite.class, username);
 
         return entity.getBody();
+    }
+
+    private class SiteList extends ArrayList<CmsSite> {
     }
 }

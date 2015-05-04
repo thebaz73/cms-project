@@ -31,7 +31,7 @@ import static ms.cms.utils.UserUtils.isAuthor;
 import static ms.cms.utils.UserUtils.isWebmaster;
 
 /**
- * NavigationController
+ * DashboardController
  * Created by thebaz on 02/04/15.
  */
 @Controller(value = "navigationController")

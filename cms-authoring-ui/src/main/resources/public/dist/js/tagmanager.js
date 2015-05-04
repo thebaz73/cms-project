@@ -83,7 +83,7 @@
 
       // call the validator (if any) and do not let the tag pass if invalid
       if (opts.validator && !opts.validator(tag)) {
-        $self.trigger('tm:invalid', tag)
+        $self.trigger('tm:invalid', tag);
         return;
       }
 
@@ -314,7 +314,7 @@
 
     prefill: function (pta) {
       var $self = $(this);
-      var opts = $self.data('opts')
+      var opts = $self.data('opts');
       $.each(pta, function (key, val) {
         if (opts.externalTagId === true) {
           publicMethods.pushTag.call($self, val[opts.prefillValueFieldName], true, val[opts.prefillIdFieldName]);

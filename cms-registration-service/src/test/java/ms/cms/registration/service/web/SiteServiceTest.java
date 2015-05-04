@@ -24,7 +24,6 @@ import static org.junit.Assert.assertEquals;
 @WebAppConfiguration
 @IntegrationTest
 public class SiteServiceTest extends AbstractServiceTest {
-
     @Before
     public void setUp() throws Exception {
         prepareEnvironment(true);
@@ -69,7 +68,7 @@ public class SiteServiceTest extends AbstractServiceTest {
 
         assertEquals(HttpStatus.OK, entity.getStatusCode());
 
-        ResponseEntity<List> listEntity = template.exchange("http://localhost:9000/api/sites?param={param}", HttpMethod.GET, requestEntity, List.class, userId);
+        ResponseEntity<SiteList> listEntity = template.exchange("http://localhost:9000/api/sites?param={param}", HttpMethod.GET, requestEntity, SiteList.class, userId);
 
         assertEquals(HttpStatus.OK, listEntity.getStatusCode());
     }
@@ -121,5 +120,8 @@ public class SiteServiceTest extends AbstractServiceTest {
     @Test
     public void testRemoveSiteAuthor() throws Exception {
 
+    }
+
+    private class SiteList extends ArrayList<CmsSite> {
     }
 }

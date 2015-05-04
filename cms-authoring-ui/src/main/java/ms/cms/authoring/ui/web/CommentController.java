@@ -31,7 +31,7 @@ import static ms.cms.utils.UserUtils.isAuthor;
 import static ms.cms.utils.UserUtils.isWebmaster;
 
 /**
- * UserController
+ * CommentController
  * Created by thebaz on 12/04/15.
  */
 @Controller(value = "commentController")

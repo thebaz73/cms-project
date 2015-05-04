@@ -15,6 +15,9 @@ import java.util.Date;
 public class CmsAsset {
     @Id
     private String id;
+    @Indexed
+    private String siteId;
+    private AssetType type = AssetType.BINARY;
     private String name;
     private Date modificationDate;
     private String title;
@@ -25,7 +28,8 @@ public class CmsAsset {
     }
 
     @PersistenceConstructor
-    public CmsAsset(String name, Date modificationDate, String title, String uri) {
+    public CmsAsset(String siteId, String name, Date modificationDate, String title, String uri) {
+        this.siteId = siteId;
         this.name = name;
         this.modificationDate = modificationDate;
         this.title = title;
@@ -38,6 +42,22 @@ public class CmsAsset {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
+    }
+
+    public AssetType getType() {
+        return type;
+    }
+
+    public void setType(AssetType type) {
+        this.type = type;
     }
 
     public String getName() {

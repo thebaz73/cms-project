@@ -32,7 +32,7 @@ import static ms.cms.utils.UserUtils.isAuthor;
 import static ms.cms.utils.UserUtils.isWebmaster;
 
 /**
- * UserController
+ * ContentController
  * Created by thebaz on 12/04/15.
  */
 @Controller(value = "contentController")

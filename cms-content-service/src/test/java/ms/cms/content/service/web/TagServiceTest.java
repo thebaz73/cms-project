@@ -30,7 +30,6 @@ import static org.junit.Assert.assertEquals;
 @WebAppConfiguration
 @IntegrationTest
 public class TagServiceTest extends AbstractServiceTest {
-
     @Before
     public void setUp() throws Exception {
         prepareEnvironment();
@@ -62,8 +61,11 @@ public class TagServiceTest extends AbstractServiceTest {
 
         HttpEntity<CmsContent> requestEntity = new HttpEntity<>(headers);
         // Pass the new person and header
-        ResponseEntity<List> entity = template.exchange("http://localhost:9000/api/tags/" + siteId, HttpMethod.GET, requestEntity, List.class);
+        ResponseEntity<TagList> entity = template.exchange("http://localhost:9000/api/tags/" + siteId, HttpMethod.GET, requestEntity, TagList.class);
         assertEquals(HttpStatus.OK, entity.getStatusCode());
         assertEquals(25, entity.getBody().size());
+    }
+
+    class TagList extends ArrayList<CmsTag> {
     }
 }

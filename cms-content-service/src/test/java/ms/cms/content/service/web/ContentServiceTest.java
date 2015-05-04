@@ -26,7 +26,6 @@ import static org.junit.Assert.assertEquals;
 @WebAppConfiguration
 @IntegrationTest
 public class ContentServiceTest extends AbstractServiceTest {
-
     @Before
     public void setUp() throws Exception {
         prepareEnvironment();
@@ -88,9 +87,11 @@ public class ContentServiceTest extends AbstractServiceTest {
 
         requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<Iterable> entityIterable = template.exchange("http://localhost:9000/api/contents/" + siteId + "?tag=tag1", HttpMethod.GET, requestEntity, Iterable.class);
+        ResponseEntity<ContentList> entityIterable = template.exchange("http://localhost:9000/api/contents/" + siteId + "?tag=tag1", HttpMethod.GET, requestEntity, ContentList.class);
         assertEquals(HttpStatus.OK, entityIterable.getStatusCode());
-        List it = (List) entityIterable.getBody();
-        assertEquals(1, it.size());
+        assertEquals(1, entityIterable.getBody().size());
+    }
+
+    private class ContentList extends ArrayList<CmsContent> {
     }
 }

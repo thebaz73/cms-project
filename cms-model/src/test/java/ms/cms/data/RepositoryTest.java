@@ -184,7 +184,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         assertEquals(0, contentRepository.findAll().get(0).getAssets().size());
 
-        CmsAsset asset01 = createCmsAsset("asset01", "asset01", "/assets/asset01.png");
+        CmsAsset asset01 = createCmsAsset(site.getId(), "asset01", "asset01", "/assets/asset01.png");
 
         content01.getAssets().add(asset01);
         contentRepository.save(content01);
@@ -196,7 +196,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(asset01.getTitle(), contentRepository.findAll().get(0).getAssets().get(0).getTitle());
         assertEquals(asset01.getUri(), contentRepository.findAll().get(0).getAssets().get(0).getUri());
 
-        CmsAsset asset02 = createCmsAsset("asset02", "asset02", "/assets/asset02.png");
+        CmsAsset asset02 = createCmsAsset(site.getId(), "asset02", "asset02", "/assets/asset02.png");
 
         content01.getAssets().add(asset02);
         contentRepository.save(content01);
@@ -223,7 +223,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
         assertEquals(0, contentRepository.findBySiteIdAndUri(site.getId(), "/post_01").get(0).getAssets().size());
 
-        CmsAsset asset03 = createCmsAsset("asset03", "asset03", "/assets/asset03.png");
+        CmsAsset asset03 = createCmsAsset(site.getId(), "asset03", "asset03", "/assets/asset03.png");
 
         post01.getAssets().add(asset03);
         contentRepository.save(post01);
@@ -338,12 +338,8 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         return cmsContent;
     }
 
-    private CmsAsset createCmsAsset(String name, String title, String uri) {
-        CmsAsset cmsAsset = new CmsAsset();
-        cmsAsset.setName(name);
-        cmsAsset.setModificationDate(new Date());
-        cmsAsset.setTitle(title);
-        cmsAsset.setUri(uri);
+    private CmsAsset createCmsAsset(String siteId, String name, String title, String uri) {
+        CmsAsset cmsAsset = new CmsAsset(siteId, name, new Date(), title, uri);
         assetRepository.save(cmsAsset);
 
         return cmsAsset;
