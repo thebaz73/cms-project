@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head th:replace="head"></head>
+
+<body>
+
+<div id="wrapper">
+    <nav th:replace="navigation"></nav>
+    <!-- Navigation -->
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Assets management</h1>
+            </div>
+        </div>
+        <div class="row">
+            <!--@thymesVar id="allAssets" type="org.springframework.data.domain.Page"-->
+            <!--@thymesVar id="allAssets" type="java.util.List"-->
+            <section class="col-lg-12" th:if="${#lists.isEmpty(allAssets.content)}">
+                <div class="panel panel-default">
+                    <!-- Default panel assets -->
+                    <div class="panel-heading">
+                        <h3 class="panel-title" th:text="#{title.asset.list}">List of</h3>
+                    </div>
+                    <div class="panel-body" th:text="#{asset.none}">No assets found</div>
+                </div>
+            </section>
+            <section class="col-lg-12" th:unless="${#lists.isEmpty(allAssets.content)}">
+                <div class="panel panel-default">
+                    <!-- Default panel assets -->
+                    <div class="panel-heading">
+                        <h3 class="panel-title" th:text="#{title.asset.list}">List of</h3>
+                    </div>
+
+                    <div class="table-responsive">
+                        <!--@thymesVar id="aAsset" type="ms.cms.domain.CmsAsset"-->
+                        <div class="col-lg-3" th:each="aAsset : ${allAssets}">
+                            <img th:if="${aAsset.type.name == 'IMAGE'}" src="#" th:src="${aAsset.uri}"
+                                 class="img-responsive img-thumbnail" th:alt-title="${aAsset.title}"
+                                 th:alt="${aAsset.title}"/>
+                            <i th:if="${aAsset.type.name == 'DOCUMENT'}" class="fa fa-file-word-o fa-5x"></i>
+                            <i th:if="${aAsset.type.name == 'SPREADSHEET'}" class="fa fa-file-excel-0 fa-5x"></i>
+                            <i th:if="${aAsset.type.name == 'PRESENTATION'}" class="fa fa-file-powerpoint-o fa-5x"></i>
+                            <i th:if="${aAsset.type.name == 'PDF'}" class="fa fa-file-pdf-o fa-5x"></i>
+                            <i th:if="${aAsset.type.name == 'TEXT'}" class="fa fa-file-text-o fa-5x"></i>
+                            <i th:if="${aAsset.type.name == 'VIDEO'}" class="fa fa-file-video-o fa-5x"></i>
+                            <i th:if="${aAsset.type.name == 'AUDIO'}" class="fa fa-file-sound-o fa-5x"></i>
+                            <i th:if="${aAsset.type.name == 'ZIP'}" class="fa fa-file-archive-o fa-5x"></i>
+                            <i th:if="${aAsset.type.name == 'BINARY'}" class="fa fa-file-o fa-5x"></i>
+
+                            <div th:text="${aAsset.name}">Name</div>
+                            <div th:text="${aAsset.title}">Title</div>
+                            <div th:text="${aAsset.modificationDate}">Date</div>
+                        </div>
+
+
+                    </div>
+                    <div class="panel-footer text-right">
+                        <ul class="pagination" style="margin:0 10px">
+                            <li th:class="${allAssets.number eq 0} ? 'disabled' : ''">
+                                <a th:href="@{${(not allAssets.first)?'assets':'#'}(page=${allAssets.number-1},pageSize=${allAssets.size})}">&laquo;</a>
+                            </li>
+
+                            <li th:each="pageNo : ${#numbers.sequence(0, allAssets.totalPages - 1)}"
+                                th:class="${allAssets.number eq pageNo}? 'active' : ''">
+                                <a th:if="${allAssets.number  eq pageNo}" href="javascript:void(0);"
+                                   th:text="${pageNo + 1}">
+                                    1
+                                </a>
+                                <a th:if="${not (allAssets.number  eq pageNo)}"
+                                   th:href="@{${'assets'}(page=${pageNo},pageSize=${allAssets.size})}"
+                                   th:text="${pageNo + 1}">
+                                    1
+                                </a>
+
+                            </li>
+                            <li th:class="${allAssets.number + 1 ge allAssets.totalPages} ? 'disabled' : ''">
+                                <a th:href="@{${(not allAssets.last)?'assets':'#'}(page=${allAssets.number+1},pageSize=${allAssets.size})}">&raquo;</a>
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+            </section>
+            <section class="col-lg-12">
+            </section>
+        </div>
+        <footer th:replace="footer"></footer>
+    </div>
+
+</div>
+
+<!-- jQuery -->
+<script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}"
+        src="../public/bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}"
+        src="../public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
+
+</body>
+
+</html>
