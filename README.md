@@ -1,3 +1,2 @@
-# Micro Service Content Management System
-
-## The CMS designed for containers
+# Sparkle Content Management System
+The CMS designed for containers
