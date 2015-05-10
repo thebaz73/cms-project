@@ -32,9 +32,22 @@
             <name>Spring Releases</name>
             <url>http://repo.spring.io/libs-release</url>
         </repository>
+        <repository>
+            <id>central</id>
+            <url>http://central.maven.org/maven2</url>
+            <!--<releases>-->
+            <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+        </repository>
     </repositories>
-
     <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <url>http://central.maven.org/maven2</url>
+            <!--<releases>-->
+            <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+        </pluginRepository>
         <pluginRepository>
             <id>spring-releases</id>
             <name>Spring Releases</name>
@@ -119,6 +132,16 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.fcrepo</groupId>
+                <artifactId>fcrepo-client</artifactId>
+                <version>4.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.fcrepo</groupId>
+                <artifactId>fcrepo-client-impl</artifactId>
+                <version>4.1.1</version>
             </dependency>
             <dependency>
                 <groupId>log4j</groupId>

@@ -41,7 +41,7 @@ public class SiteManager {
         return new PageImpl<>(Arrays.asList(cmsSite), pageable, 1);
     }
 
-    public void createSite(CmsUser cmsUser, String name, String address, WorkflowType workflowType) throws RegistrationException {
+    public String createSite(CmsUser cmsUser, String name, String address, WorkflowType workflowType) throws RegistrationException {
         if (!cmsSiteRepository.findByAddress(address).isEmpty()) {
             throw new RegistrationException("Site already registered");
         }
@@ -49,6 +49,8 @@ public class SiteManager {
         CmsSite cmsSite = new CmsSite(name, new Date(), address, workflowType, cmsUser);
 
         cmsSiteRepository.save(cmsSite);
+
+        return cmsSite.getId();
     }
 
     public List<CmsSite> findSites(CmsUser cmsUser) {

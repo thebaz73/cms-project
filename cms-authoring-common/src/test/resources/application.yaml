@@ -1,0 +1,22 @@
+spring:
+    data:
+      mongodb.host: 192.168.108.129
+      mongodb.port: 27017
+      mongodb.name: cms-test
+
+logging:
+    level.org.springframework: INFO
+    level.ms.cms: DEBUG
+
+server:
+    port: 9000
+
+management:
+    port: 9001
+
+asset:
+    repo:
+      dns: 192.168.108.129
+      ip: 192.168.108.129
+      port: 8080
+    timeout: 5000

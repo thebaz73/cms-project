@@ -1,5 +1,6 @@
 package ms.cms.authoring.ui.web;
 
+import ms.cms.authoring.common.business.AssetManager;
 import ms.cms.authoring.common.business.CommentManager;
 import ms.cms.authoring.common.business.ContentManager;
 import ms.cms.domain.CmsSite;
@@ -44,6 +45,8 @@ public class SiteController {
     private SiteManager siteManager;
     @Autowired
     private ContentManager contentManager;
+    @Autowired
+    private AssetManager assetManager;
     @Autowired
     private CommentManager commentManager;
 
@@ -91,7 +94,8 @@ public class SiteController {
             //TODO WHOIS_URL="http://www.whoisxmlapi.com/whoisserver/WhoisService";
 
             CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
-            siteManager.createSite(cmsUser, cmsSite.getName(), cmsSite.getAddress(), cmsSite.getWorkflowType());
+            String siteId = siteManager.createSite(cmsUser, cmsSite.getName(), cmsSite.getAddress(), cmsSite.getWorkflowType());
+            assetManager.createSiteRepository(siteId);
             model.clear();
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create site. Reason: %s", e.getMessage());
