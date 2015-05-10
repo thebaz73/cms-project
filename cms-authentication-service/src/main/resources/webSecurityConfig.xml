@@ -20,5 +20,5 @@
 
     <global-method-security pre-post-annotations="enabled"/>
 
-    <!--<beans:bean id="userService" class="ms.cms.security.ReadOnlyUserManager"/>-->
+    <!--<beans:bean id="userService" class="sparkle.cms.security.ReadOnlyUserManager"/>-->
 </beans:beans>

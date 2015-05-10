@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>ms.cms</groupId>
+        <groupId>sparkle.cms</groupId>
         <artifactId>cms-server</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -14,12 +14,12 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <start-class>ms.cms.comment.service.Application</start-class>
+        <start-class>sparkle.cms.comment.service.Application</start-class>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>ms.cms</groupId>
+            <groupId>sparkle.cms</groupId>
             <artifactId>cms-model</artifactId>
         </dependency>
         <dependency>
