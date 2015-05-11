@@ -31,12 +31,8 @@
             <artifactId>httpclient</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.fcrepo</groupId>
-            <artifactId>fcrepo-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.fcrepo</groupId>
-            <artifactId>fcrepo-client-impl</artifactId>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-service</artifactId>
         </dependency>
     </dependencies>
 

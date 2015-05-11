@@ -13,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import sparkle.cms.authoring.common.business.AssetManager;
+import sparkle.cms.authoring.common.business.AuthoringException;
 import sparkle.cms.authoring.common.business.CommentManager;
 import sparkle.cms.authoring.common.business.ContentManager;
 import sparkle.cms.domain.CmsSite;
@@ -101,6 +102,10 @@ public class SiteController {
             String msg = String.format("Cannot create site. Reason: %s", e.getMessage());
             logger.info(msg, e);
             response.sendError(400, msg);
+        } catch (AuthoringException e) {
+            String msg = String.format("Cannot create site. Reason: %s", e.getMessage());
+            logger.info(msg, e);
+            response.sendError(500, msg);
         }
         return "redirect:/site";
     }
