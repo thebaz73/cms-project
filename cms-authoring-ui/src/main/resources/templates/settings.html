@@ -48,9 +48,9 @@
                                     <td th:text="${aSetting.key}">Key</td>
                                     <td th:text="${aSetting.value}">Value</td>
                                     <td>
-                                        <form class="form-inline" role="form" th:action="@{${'/setting/'+aSetting.id}}"
+                                        <form class="form-inline" role="form" th:action="@{${'/settings/'+aSetting.id}}"
                                               action="#" method="GET">
-                                            <button type="submit" class="btn btn-primary btn-xs" value="put"
+                                            <button type="submit" class="btn btn-primary btn-xs"
                                                     data-toggle="tooltip" data-placement="top" title="Edit"><span
                                                     class="glyphicon glyphicon-edit"></span></button>
                                         </form>
@@ -88,7 +88,7 @@
                 </section>
                 <section class="col-lg-12">
                     <!--@thymesVar id="cmsSetting" type="ms.cms.domain.CmsSetting"-->
-                    <form class="form-horizontal" role="form" th:action="@{/setting}" th:object="${cmsSetting}"
+                    <form class="form-horizontal" role="form" th:action="@{/settings}" th:object="${cmsSetting}"
                           action="#"
                           method="POST">
                         <input type="hidden" name="_method" value="PUT"/>

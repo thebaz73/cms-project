@@ -52,7 +52,7 @@ public class SettingsController {
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
-    @RequestMapping({"/settings"})
+    @RequestMapping(value = {"/settings"}, method = RequestMethod.GET)
     public String show(ModelMap model) {
         model.put("cmsSetting", new CmsSetting());
         return "settings";
@@ -63,7 +63,7 @@ public class SettingsController {
     public String editMode(ModelMap model, @PathVariable("settingId") String settingId) throws IOException {
         CmsSetting cmsSetting = settingManager.findSetting(settingId);
         model.put("cmsSetting", cmsSetting);
-        return "contents";
+        return "settings";
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
