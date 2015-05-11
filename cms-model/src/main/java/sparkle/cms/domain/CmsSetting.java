@@ -2,7 +2,8 @@ package sparkle.cms.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -10,11 +11,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * Created by bazzoni on 06/05/2015.
  */
 @Document
+@CompoundIndexes({
+        @CompoundIndex(name = "filter_key_idx", def = "{'filter' : 1, 'key' : 1}", unique = true)
+})
 public class CmsSetting {
     @Id
     private String id;
 
-    @Indexed(unique = true)
+    private String filter;
     private String key;
     private Object value;
 
@@ -33,6 +37,14 @@ public class CmsSetting {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getFilter() {
+        return filter;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
     }
 
     public String getKey() {

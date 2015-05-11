@@ -36,9 +36,18 @@ public class AssetManager {
     private PluginService pluginService;
 
     private AssetManagementPlugin assetManagementPlugin;
+
     @PostConstruct
     public void initialize() {
         assetManagementPlugin = pluginService.getAssetManagementPlugin();
+    }
+
+    public boolean checkPluginAvailable() {
+        if (assetManagementPlugin == null) {
+            assetManagementPlugin = pluginService.getAssetManagementPlugin();
+        }
+
+        return assetManagementPlugin != null;
     }
 
     public Page<CmsAsset> findAllAssets(CmsUser cmsUser, Pageable pageable) {

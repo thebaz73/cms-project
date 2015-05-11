@@ -104,6 +104,11 @@
                                 <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
                             </ul>
                         </div>
+                        <div th:if="${plugin_available == false}" class="alert alert-danger text-center"
+                             role="alert">
+                            <a class="btn btn-danger" th:href="@{'/settings'}">No Asset Management plugin active. Go to
+                                settings page and fix configuration</a>
+                        </div>
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label" th:text="#{site.name}">Name</label>
 
@@ -148,10 +153,10 @@
     </div>
 
     <!-- jQuery -->
-    <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="../public/bower_components/jquery/dist/jquery.min.js"></script>
+    <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="../public/dist/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}" src="../public/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}" src="../public/dist/js/bootstrap.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>

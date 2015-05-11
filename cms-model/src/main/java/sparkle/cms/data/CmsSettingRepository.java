@@ -1,5 +1,7 @@
 package sparkle.cms.data;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import sparkle.cms.domain.CmsSetting;
 
@@ -17,4 +19,38 @@ public interface CmsSettingRepository extends MongoRepository<CmsSetting, String
      * @return list of @CmsSetting
      */
     List<CmsSetting> findByKey(String key);
+
+    /**
+     * Finds @CmsSetting given its address
+     *
+     * @param key    key key
+     * @param filter filter
+     * @return list of @CmsSetting
+     */
+    List<CmsSetting> findByKeyAndFilter(String key, String filter);
+
+    /**
+     * Finds @CmsSetting given its address
+     *
+     * @param key key key
+     * @return page of @CmsSetting
+     */
+    Page<CmsSetting> findByKey(String key, Pageable pageable);
+
+    /**
+     * Finds @CmsSetting given its address
+     *
+     * @param filter filter
+     * @return page of @CmsSetting
+     */
+    Page<CmsSetting> findByFilter(String filter, Pageable pageable);
+
+    /**
+     * Finds @CmsSetting given its address
+     *
+     * @param key    key key
+     * @param filter filter
+     * @return list of @CmsSetting
+     */
+    Page<CmsSetting> findByKeyAndFilter(String key, String filter, Pageable pageable);
 }

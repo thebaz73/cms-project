@@ -93,11 +93,15 @@ public class SiteController {
         try {
             //TODO check whois for domain access
             //TODO WHOIS_URL="http://www.whoisxmlapi.com/whoisserver/WhoisService";
-
-            CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
-            String siteId = siteManager.createSite(cmsUser, cmsSite.getName(), cmsSite.getAddress(), cmsSite.getWorkflowType());
-            assetManager.createSiteRepository(siteId);
-            model.clear();
+            if (assetManager.checkPluginAvailable()) {
+                CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
+                String siteId = siteManager.createSite(cmsUser, cmsSite.getName(), cmsSite.getAddress(), cmsSite.getWorkflowType());
+                assetManager.createSiteRepository(siteId);
+                model.clear();
+            } else {
+                model.addAttribute("plugin_available", false);
+                return "site";
+            }
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create site. Reason: %s", e.getMessage());
             logger.info(msg, e);
