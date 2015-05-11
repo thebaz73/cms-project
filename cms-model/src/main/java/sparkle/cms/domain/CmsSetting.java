@@ -20,6 +20,7 @@ public class CmsSetting {
 
     private String filter;
     private String key;
+    private String javaType;
     private Object value;
 
     public CmsSetting() {
@@ -53,6 +54,14 @@ public class CmsSetting {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getJavaType() {
+        return javaType;
+    }
+
+    public void setJavaType(String javaType) {
+        this.javaType = javaType;
     }
 
     public Object getValue() {
