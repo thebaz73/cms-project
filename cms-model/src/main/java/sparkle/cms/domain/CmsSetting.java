@@ -27,9 +27,10 @@ public class CmsSetting {
     }
 
     @PersistenceConstructor
-    public CmsSetting(String key, Object value) {
+    public CmsSetting(String key, Object value, SettingType type) {
         this.key = key;
         this.value = value;
+        this.type = type;
     }
 
     public String getId() {
