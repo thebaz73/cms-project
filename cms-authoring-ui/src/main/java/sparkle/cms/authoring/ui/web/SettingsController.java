@@ -1,5 +1,6 @@
 package sparkle.cms.authoring.ui.web;
 
+import org.apache.catalina.core.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,13 @@ public class SettingsController {
             response.sendError(400, msg);
         }
         return null;
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @RequestMapping(value = {"/settings/reload"}, method = RequestMethod.GET)
+    public String reload() {
+        settingManager.reloadSettings();
+        return "redirect:/settings";
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
