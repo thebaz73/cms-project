@@ -12,10 +12,11 @@ public enum SettingType {
     TEXT("TEXT"),
     EMAIL("EMAIL"),
     INET("INET"),
-    NUMBER("NUMBER"),
-    ENUM("ENUM");
+    INTEGER("INTEGER"),
+    DOUBLE("DOUBLE")/*,
+    ENUM("ENUM")*/;
 
-    public static final SettingType[] ALL = {BOOL, TEXT, EMAIL, INET, NUMBER, ENUM};
+    public static final SettingType[] ALL = {BOOL, TEXT, EMAIL, INET, INTEGER, DOUBLE/*, ENUM*/};
 
     private final String name;
 
@@ -36,10 +37,12 @@ public enum SettingType {
             return EMAIL;
         } else if (name.toUpperCase().equals("INET")) {
             return INET;
-        } else if (name.toUpperCase().equals("NUMBER")) {
-            return NUMBER;
-        } else if (name.toUpperCase().equals("ENUM")) {
-            return ENUM;
+        } else if (name.toUpperCase().equals("INTEGER")) {
+            return INTEGER;
+        } else if (name.toUpperCase().equals("DOUBLE")) {
+            return DOUBLE;
+        /*} else if (name.toUpperCase().equals("ENUM")) {
+            return ENUM;*/
         }
         throw new IllegalArgumentException("Name \"" + name + "\" does not correspond to any Feature");
     }

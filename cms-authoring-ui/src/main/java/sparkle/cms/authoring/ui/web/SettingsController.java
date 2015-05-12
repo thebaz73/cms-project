@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import sparkle.cms.authoring.common.business.SettingManager;
 import sparkle.cms.domain.CmsSetting;
 import sparkle.cms.domain.CmsUser;
+import sparkle.cms.domain.SettingType;
 import sparkle.cms.registration.common.business.RegistrationException;
 import sparkle.cms.registration.common.business.RegistrationManager;
 
@@ -73,8 +74,23 @@ public class SettingsController {
         if (bindingResult.hasErrors()) {
             return "settings";
         }
-        settingManager.editSetting(cmsSetting);
+        CmsSetting editableSetting = settingManager.findSetting(cmsSetting.getId());
+        editableSetting.setValue(getTypedValue((String) cmsSetting.getValue(), cmsSetting.getType()));
+        settingManager.editSetting(editableSetting);
         model.clear();
         return "redirect:/settings";
+    }
+
+    private Object getTypedValue(String value, SettingType type) {
+        switch (type) {
+            case BOOL:
+                return Boolean.parseBoolean(value);
+            case INTEGER:
+                return Integer.parseInt(value);
+            case DOUBLE:
+                return Double.parseDouble(value);
+            default:
+                return value;
+        }
     }
 }
