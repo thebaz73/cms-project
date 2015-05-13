@@ -109,12 +109,14 @@
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="col-lg-10">
-                                            <div class="form-group has-feedback"  th:classappend="${plugin.status=='ACTIVE'}?'has-success':'has-warning'">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon">Plugin status: </span>
-                                                    <input type="text" class="form-control" th:value="${plugin.status}"/>
+                                            <form class="form-inline col-lg-3">
+                                                <div class="form-group has-feedback"  th:classappend="${plugin.status=='ACTIVE'}?'has-success':'has-warning'">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" value="Plugin status: "/>
+                                                        <span class="input-group-addon" th:text="${plugin.status}">Status</span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </form>
                                         </div>
                                         <div class="col-lg-1"><a class="btn btn-success" th:href="@{'/settings/reload'}"><i class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a></div>
                                     </div>
