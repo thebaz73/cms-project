@@ -8,14 +8,14 @@
     <title>Sparkle CMS - Authoring</title>
 
     <!-- Bootstrap Core CSS -->
-    <link th:href="@{/webjars/bootstrap/3.1.0/css/bootstrap.min.css}" href="../public/dist/css/bootstrap.min.css"
+    <link th:href="@{/webjars/bootstrap/3.1.0/css/bootstrap-theme.min.css}" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.css"
           rel="stylesheet"/>
-    <link th:href="@{/dist/css/font-awesome-animation.min.css}" href="../public/dist/css/font-awesome-animation.css"
+    <link th:href="@{/webjars/bootstrap/3.1.0/css/bootstrap.min.css}" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.css"
           rel="stylesheet"/>
 
     <!-- DataTables CSS -->
     <link th:if="${#httpServletRequest.requestURI == '/'}" th:href="@{/dist/css/dataTables.bootstrap.css}"
-          href="../public/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css"
+          href="../public/dist/css/dataTables.bootstrap.css"
           rel="stylesheet"/>
 
     <!-- DataTables Responsive CSS -->
@@ -30,7 +30,9 @@
     <link th:if="${#httpServletRequest.requestURI.startsWith('/content')}" th:href="@{/dist/css/tagmanager.css}" href="../public/dist/css/tagmanager.css" rel="stylesheet"/>
 
     <!-- Custom Fonts -->
-    <link th:href="@{/webjars/font-awesome/4.2.0/css/font-awesome.min.css}" href="../public/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/webjars/font-awesome/4.2.0/css/font-awesome.min.css}" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link th:href="@{/dist/css/font-awesome-animation.min.css}" href="../public/dist/css/font-awesome-animation.css"
+          rel="stylesheet"/>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

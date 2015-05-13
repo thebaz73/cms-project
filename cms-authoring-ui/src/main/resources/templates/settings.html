@@ -30,8 +30,8 @@
                     </div>
                 </section>
                 <section class="col-lg-12" th:unless="${#lists.isEmpty(allSettings)}">
-                    <div class="panel panel-default">
-                        <!-- Default panel contents -->
+                    <!--<div class="panel panel-default">
+                        &lt;!&ndash; Default panel contents &ndash;&gt;
                         <div class="panel-heading">
                             <div class="row">
                                 <h3 class="panel-title col-lg-8" th:text="#{title.setting.list}">List of</h3>
@@ -49,7 +49,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!--@thymesVar id="aSetting" type="ms.cms.domain.CmsSetting"-->
+                                &lt;!&ndash;@thymesVar id="aSetting" type="ms.cms.domain.CmsSetting"&ndash;&gt;
                                 <tr th:each="aSetting : ${allSettings}" valign="middle">
                                     <td th:text="${aSetting.key}">Key</td>
                                     <td th:text="${aSetting.value}">Value</td>
@@ -90,6 +90,62 @@
                             </ul>
 
                         </div>
+                    </div>-->
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <!--@thymesVar id="plugins" type="java.util.List"-->
+                        <!--@thymesVar id="plugin" type="sparkle.cms.authoring.ui.domain.PluginData"-->
+                        <div class="panel panel-default" th:each="plugin : ${plugins}">
+                            <div class="panel-heading" role="tab" th:id="${'heading' + plugin.id}">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse"
+                                       data-parent="#accordion"
+                                       th:href="${'#collapse' + plugin.id}"
+                                       aria-expanded="false"
+                                       th:attr="aria-controls=${'collapse' + plugin.id}"
+                                       th:text="${plugin.name}">Plugin name</a>
+                                </h4>
+                            </div>
+                            <div th:id="${'collapse' + plugin.id}" class="panel-collapse collapse" role="tabpanel" th:attr="aria-labelledby=${'heading' + plugin.id}">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-lg-10">
+                                            <div class="form-group has-feedback"  th:classappend="${plugin.status=='ACTIVE'}?'has-success':'has-warning'">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">Plugin status: </span>
+                                                    <input type="text" class="form-control" th:value="${plugin.status}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1"><a class="btn btn-success" th:href="@{'/settings/reload'}"><i class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a></div>
+                                    </div>
+                                    <table class="table table-condensed table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th th:text="#{setting.key}">Key</th>
+                                            <th th:text="#{setting.value}">Value</th>
+                                            <th><i class="fa fa-cogs"></i></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <!--@thymesVar id="aSetting" type="ms.cms.domain.CmsSetting"-->
+                                        <tr th:each="aSetting : ${plugin.cmsSettings}" valign="middle">
+                                            <td th:text="${aSetting.key}">Key</td>
+                                            <td th:text="${aSetting.value}">Value</td>
+                                            <td>
+                                                <form class="form-inline" role="form" th:action="@{${'/settings/'+aSetting.id}}"
+                                                      action="#" method="GET">
+                                                    <button type="submit" class="btn btn-primary btn-xs"
+                                                            data-toggle="tooltip" data-placement="top" title="Edit"><span
+                                                            class="glyphicon glyphicon-edit"></span></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </section>
                 <section class="col-lg-12">
@@ -169,10 +225,10 @@
     </div>
 
     <!-- jQuery -->
-    <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="../public/dist/jquery.min.js"></script>
+    <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="https://code.jquery.com/jquery-2.1.1.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}" src="../public/dist/js/bootstrap.min.js"></script>
+    <script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 
     <!-- Custom Theme JavaScript -->
     <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>

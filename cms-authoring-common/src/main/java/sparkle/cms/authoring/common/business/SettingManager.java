@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 import sparkle.cms.data.CmsSettingRepository;
 import sparkle.cms.domain.CmsSetting;
 import sparkle.cms.domain.CmsUser;
+import sparkle.cms.plugin.mgmt.Plugin;
 import sparkle.cms.service.CmsSettingAware;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,6 +41,14 @@ public class SettingManager {
             final CmsSettingAware cmsSettingAwareService = entry.getValue();
             cmsSettingAwareService.doSettingAwareReload(true);
         }
+    }
+
+    public List<CmsSetting> findSettings(CmsUser cmsUser) {
+        return cmsSettingRepository.findByFilter(cmsUser.getId());
+    }
+
+    public Map<String, Plugin> findPlugins() {
+        return applicationContext.getBeansOfType(Plugin.class);
     }
 
     public Page<CmsSetting> findSettings(CmsUser cmsUser, Pageable pageable) {

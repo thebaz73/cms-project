@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface CmsSettingRepository extends MongoRepository<CmsSetting, String> {
     /**
-     * Finds @CmsSetting given its address
+     * Finds @CmsSetting given its key
      *
      * @param key key key
      * @return list of @CmsSetting
@@ -21,16 +21,7 @@ public interface CmsSettingRepository extends MongoRepository<CmsSetting, String
     List<CmsSetting> findByKey(String key);
 
     /**
-     * Finds @CmsSetting given its address
-     *
-     * @param key    key key
-     * @param filter filter
-     * @return list of @CmsSetting
-     */
-    List<CmsSetting> findByKeyAndFilter(String key, String filter);
-
-    /**
-     * Finds @CmsSetting given its address
+     * Finds @CmsSetting given its key
      *
      * @param key key key
      * @return page of @CmsSetting
@@ -38,12 +29,29 @@ public interface CmsSettingRepository extends MongoRepository<CmsSetting, String
     Page<CmsSetting> findByKey(String key, Pageable pageable);
 
     /**
-     * Finds @CmsSetting given its address
+     * Finds @CmsSetting given its filter
+     *
+     * @param filter filter
+     * @return list of @CmsSetting
+     */
+    List<CmsSetting> findByFilter(String filter);
+
+    /**
+     * Finds @CmsSetting given its filter
      *
      * @param filter filter
      * @return page of @CmsSetting
      */
     Page<CmsSetting> findByFilter(String filter, Pageable pageable);
+
+    /**
+     * Finds @CmsSetting given its key and filter
+     *
+     * @param key    key key
+     * @param filter filter
+     * @return list of @CmsSetting
+     */
+    List<CmsSetting> findByKeyAndFilter(String key, String filter);
 
     /**
      * Finds @CmsSetting given its address

@@ -14,15 +14,20 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import sparkle.cms.authoring.common.business.SettingManager;
+import sparkle.cms.authoring.ui.domain.PluginData;
 import sparkle.cms.domain.CmsSetting;
 import sparkle.cms.domain.CmsUser;
 import sparkle.cms.domain.SettingType;
+import sparkle.cms.plugin.mgmt.Plugin;
 import sparkle.cms.registration.common.business.RegistrationException;
 import sparkle.cms.registration.common.business.RegistrationManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * SettingsController
@@ -36,6 +41,18 @@ public class SettingsController {
     private RegistrationManager registrationManager;
     @Autowired
     private SettingManager settingManager;
+
+    @ModelAttribute("plugins")
+    public List<PluginData> allPlugins() {
+        List<PluginData> pluginDataList = new ArrayList<>();
+        final Map<String, Plugin> pluginMap = settingManager.findPlugins();
+        for (Map.Entry<String, Plugin> entry : pluginMap.entrySet()) {
+            logger.debug("Processing bean {}", entry.getKey());
+            Plugin plugin = entry.getValue();
+            pluginDataList.add(new PluginData(plugin.getId(), plugin.getName(), plugin.getStatus().toString(), plugin.getSettings()));
+        }
+        return pluginDataList;
+    }
 
     @ModelAttribute("allSettings")
     public Page<CmsSetting> allSites(HttpServletRequest request, HttpServletResponse response,
