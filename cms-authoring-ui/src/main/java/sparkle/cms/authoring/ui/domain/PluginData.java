@@ -2,6 +2,7 @@ package sparkle.cms.authoring.ui.domain;
 
 import sparkle.cms.domain.CmsSetting;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,16 +13,15 @@ public class PluginData {
     private String id;
     private String name;
     private String status;
-    private List<CmsSetting> cmsSettings;
+    private List<CmsSetting> cmsSettings = new ArrayList<>();
 
     public PluginData() {
     }
 
-    public PluginData(String id, String name, String status, List<CmsSetting> cmsSettings) {
+    public PluginData(String id, String name, String status) {
         this.id = id;
         this.name = name;
         this.status = status;
-        this.cmsSettings = cmsSettings;
     }
 
     public String getId() {

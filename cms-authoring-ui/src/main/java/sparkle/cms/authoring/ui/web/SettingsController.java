@@ -22,12 +22,11 @@ import sparkle.cms.plugin.mgmt.Plugin;
 import sparkle.cms.registration.common.business.RegistrationException;
 import sparkle.cms.registration.common.business.RegistrationManager;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * SettingsController
@@ -42,32 +41,47 @@ public class SettingsController {
     @Autowired
     private SettingManager settingManager;
 
+    private final List<CmsSetting> settings = new ArrayList<>();
+    private final List<PluginData> pluginDataList = new ArrayList<>();
+
     @ModelAttribute("plugins")
-    public List<PluginData> allPlugins() {
-        List<PluginData> pluginDataList = new ArrayList<>();
-        final Map<String, Plugin> pluginMap = settingManager.findPlugins();
-        for (Map.Entry<String, Plugin> entry : pluginMap.entrySet()) {
-            logger.debug("Processing bean {}", entry.getKey());
-            Plugin plugin = entry.getValue();
-            pluginDataList.add(new PluginData(plugin.getId(), plugin.getName(), plugin.getStatus().toString(), plugin.getSettings()));
-        }
+    public List<PluginData> allPlugins(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        loadSettings(request, response);
         return pluginDataList;
     }
 
     @ModelAttribute("allSettings")
-    public Page<CmsSetting> allSites(HttpServletRequest request, HttpServletResponse response,
-                                     @RequestParam(value = "page", defaultValue = "0") int page,
-                                     @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) throws IOException {
-        try {
-            CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
-            Pageable pageable = new PageRequest(page, pageSize, Sort.Direction.ASC, "key");
-            return settingManager.findSettings(cmsUser, pageable);
-        } catch (RegistrationException e) {
-            String msg = String.format("Cannot manage settings. Reason: %s", e.getMessage());
-            logger.info(msg, e);
-            response.sendError(400, msg);
+    public List<CmsSetting> allSites(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        loadSettings(request, response);
+        return settings;
+    }
+
+    private void loadSettings(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        if(pluginDataList.isEmpty() && settings.isEmpty()) {
+            try {
+                CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
+                Map<String, CmsSetting> cmsSettingMap = new HashMap<>();
+                for (CmsSetting cmsSetting : settingManager.findSettings(cmsUser)) {
+                    cmsSettingMap.put(cmsSetting.getKey(), cmsSetting);
+                }
+
+                final Map<String, Plugin> pluginMap = settingManager.findPlugins();
+                for (Map.Entry<String, Plugin> entry : pluginMap.entrySet()) {
+                    logger.debug("Processing bean {}", entry.getKey());
+                    Plugin plugin = entry.getValue();
+                    PluginData pluginData = new PluginData(plugin.getId(), plugin.getName(), plugin.getStatus().toString());
+                    for (CmsSetting cmsSetting : plugin.getSettings()) {
+                        pluginData.getCmsSettings().add(cmsSettingMap.remove(cmsSetting.getKey()));
+                    }
+                    pluginDataList.add(pluginData);
+                }
+                settings.addAll(cmsSettingMap.values());
+            } catch (RegistrationException e) {
+                String msg = String.format("Cannot manage settings. Reason: %s", e.getMessage());
+                logger.info(msg, e);
+                response.sendError(400, msg);
+            }
         }
-        return null;
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})

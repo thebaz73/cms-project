@@ -17,7 +17,7 @@
             </div>
             <div class="row">
                 <!--@thymesVar id="allSettings" type="org.springframework.data.domain.Page"-->
-                <section class="col-lg-12" th:if="${#lists.isEmpty(allSettings)}">
+                <section class="col-lg-12" th:if="${#lists.isEmpty(allSettings) and #lists.isEmpty(plugins)}">
                     <div class="panel panel-default">
                         <!-- Default panel settings -->
                         <div class="panel-heading">
@@ -29,69 +29,50 @@
                         <div class="panel-body" th:text="#{setting.none}">No settings found</div>
                     </div>
                 </section>
-                <section class="col-lg-12" th:unless="${#lists.isEmpty(allSettings)}">
-                    <!--<div class="panel panel-default">
-                        &lt;!&ndash; Default panel contents &ndash;&gt;
-                        <div class="panel-heading">
-                            <div class="row">
-                                <h3 class="panel-title col-lg-8" th:text="#{title.setting.list}">List of</h3>
-                                <a class="btn btn-success btn-xs col-lg-offset-3" th:href="@{'/settings/reload'}"><i class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a>
+                <section class="col-lg-12" th:unless="${#lists.isEmpty(allSettings) and #lists.isEmpty(plugins)}">
+                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                        <div class="panel panel-default" th:unless="${#lists.isEmpty(allSettings)}">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        General Settings
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="col-lg-offset-10 col-lg-1">
+                                            <a class="btn btn-success" th:href="@{'/settings/reload'}"><i class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-condensed table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th th:text="#{setting.key}">Key</th>
+                                        <th th:text="#{setting.value}">Value</th>
+                                        <th><i class="fa fa-cogs"></i></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!--@thymesVar id="aSetting" type="ms.cms.domain.CmsSetting"-->
+                                    <tr th:each="aSetting : ${allSettings}" valign="middle">
+                                        <td th:text="${aSetting.key}">Key</td>
+                                        <td th:text="${aSetting.value}">Value</td>
+                                        <td>
+                                            <form class="form-inline" role="form" th:action="@{${'/settings/'+aSetting.id}}"
+                                                  action="#" method="GET">
+                                                <button type="submit" class="btn btn-primary btn-xs"
+                                                        data-toggle="tooltip" data-placement="top" title="Edit"><span
+                                                        class="glyphicon glyphicon-edit"></span></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-
-                        <div class="table-responsive">
-                            <table class="table table-condensed table-hover">
-                                <thead>
-                                <tr>
-                                    <th th:text="#{setting.key}">Key</th>
-                                    <th th:text="#{setting.value}">Value</th>
-                                    <th><i class="fa fa-cogs"></i></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                &lt;!&ndash;@thymesVar id="aSetting" type="ms.cms.domain.CmsSetting"&ndash;&gt;
-                                <tr th:each="aSetting : ${allSettings}" valign="middle">
-                                    <td th:text="${aSetting.key}">Key</td>
-                                    <td th:text="${aSetting.value}">Value</td>
-                                    <td>
-                                        <form class="form-inline" role="form" th:action="@{${'/settings/'+aSetting.id}}"
-                                              action="#" method="GET">
-                                            <button type="submit" class="btn btn-primary btn-xs"
-                                                    data-toggle="tooltip" data-placement="top" title="Edit"><span
-                                                    class="glyphicon glyphicon-edit"></span></button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="panel-footer text-right">
-                            <ul class="pagination" style="margin:0 10px">
-                                <li th:class="${allSettings.number eq 0} ? 'disabled' : ''">
-                                    <a th:href="@{${(not allSettings.first)?'setting':'#'}(page=${allSettings.number-1},pageSize=${allSettings.size})}">&laquo;</a>
-                                </li>
-
-                                <li th:each="pageNo : ${#numbers.sequence(0, allSettings.totalPages - 1)}"
-                                    th:class="${allSettings.number eq pageNo}? 'active' : ''">
-                                    <a th:if="${allSettings.number  eq pageNo}" href="javascript:void(0);"
-                                       th:text="${pageNo + 1}">
-                                        1
-                                    </a>
-                                    <a th:if="${not (allSettings.number  eq pageNo)}"
-                                       th:href="@{${'setting'}(page=${pageNo},pageSize=${allSettings.size})}"
-                                       th:text="${pageNo + 1}">
-                                        1
-                                    </a>
-
-                                </li>
-                                <li th:class="${allSettings.number + 1 ge allSettings.totalPages} ? 'disabled' : ''">
-                                    <a th:href="@{${(not allSettings.last)?'setting':'#'}(page=${allSettings.number+1},pageSize=${allSettings.size})}">&raquo;</a>
-                                </li>
-                            </ul>
-
-                        </div>
-                    </div>-->
-                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                         <!--@thymesVar id="plugins" type="java.util.List"-->
                         <!--@thymesVar id="plugin" type="sparkle.cms.authoring.ui.domain.PluginData"-->
                         <div class="panel panel-default" th:each="plugin : ${plugins}">
@@ -147,7 +128,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </section>
                 <section class="col-lg-12">
