@@ -1,13 +1,8 @@
 package sparkle.cms.authoring.ui.web;
 
-import org.apache.catalina.core.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,7 +17,6 @@ import sparkle.cms.plugin.mgmt.Plugin;
 import sparkle.cms.registration.common.business.RegistrationException;
 import sparkle.cms.registration.common.business.RegistrationManager;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -42,12 +36,12 @@ public class SettingsController {
     private SettingManager settingManager;
 
     private final List<CmsSetting> settings = new ArrayList<>();
-    private final List<PluginData> pluginDataList = new ArrayList<>();
+    private final List<PluginData> plugins = new ArrayList<>();
 
     @ModelAttribute("plugins")
     public List<PluginData> allPlugins(HttpServletRequest request, HttpServletResponse response) throws IOException {
         loadSettings(request, response);
-        return pluginDataList;
+        return plugins;
     }
 
     @ModelAttribute("allSettings")
@@ -57,7 +51,7 @@ public class SettingsController {
     }
 
     private void loadSettings(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if(pluginDataList.isEmpty() && settings.isEmpty()) {
+        if(plugins.isEmpty() && settings.isEmpty()) {
             try {
                 CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
                 Map<String, CmsSetting> cmsSettingMap = new HashMap<>();
@@ -73,7 +67,7 @@ public class SettingsController {
                     for (CmsSetting cmsSetting : plugin.getSettings()) {
                         pluginData.getCmsSettings().add(cmsSettingMap.remove(cmsSetting.getKey()));
                     }
-                    pluginDataList.add(pluginData);
+                    plugins.add(pluginData);
                 }
                 settings.addAll(cmsSettingMap.values());
             } catch (RegistrationException e) {
@@ -86,8 +80,11 @@ public class SettingsController {
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = {"/settings/reload"}, method = RequestMethod.GET)
-    public String reload() {
+    public String reload(HttpServletRequest request, HttpServletResponse response) throws IOException {
         settingManager.reloadSettings();
+        settings.clear();
+        plugins.clear();
+        loadSettings(request, response);
         return "redirect:/settings";
     }
 
@@ -108,7 +105,7 @@ public class SettingsController {
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
     @RequestMapping(value = {"/settings"}, method = RequestMethod.PUT)
-    public String editSetting(@ModelAttribute("cmsSetting") CmsSetting cmsSetting,
+    public String editSetting(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("cmsSetting") CmsSetting cmsSetting,
                               final BindingResult bindingResult, final ModelMap model) throws IOException {
         if (bindingResult.hasErrors()) {
             return "settings";
@@ -117,7 +114,7 @@ public class SettingsController {
         editableSetting.setValue(getTypedValue((String) cmsSetting.getValue(), cmsSetting.getType()));
         settingManager.editSetting(editableSetting);
         model.clear();
-        return "redirect:/settings";
+        return reload(request, response);
     }
 
     private Object getTypedValue(String value, SettingType type) {
