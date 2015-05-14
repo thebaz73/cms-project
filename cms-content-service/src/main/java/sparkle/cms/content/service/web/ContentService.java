@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+
 import sparkle.cms.data.CmsContentRepository;
 import sparkle.cms.data.CmsTagRepository;
 import sparkle.cms.domain.CmsContent;
@@ -32,7 +33,8 @@ public class ContentService {
     @Autowired
     private CmsTagRepository tagRepository;
 
-    @Secured({"ROLE_MANAGER"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@Secured({"ROLE_MANAGER"})
     @RequestMapping(value = "/contents/{siteId}", method = RequestMethod.GET)
     HttpEntity<PagedResources<CmsContent>> contents(PagedResourcesAssembler assembler,
                                                     @PathVariable("siteId") String siteId,
@@ -56,7 +58,8 @@ public class ContentService {
         return contents;
     }
 
-    @Secured({"ROLE_MANAGER"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+   @Secured({"ROLE_MANAGER"})
     @RequestMapping(value = "/contents/{siteId}/{uri}", method = RequestMethod.GET)
     HttpEntity<PagedResources<CmsContent>> content(Pageable pageable,
                                                    PagedResourcesAssembler assembler,

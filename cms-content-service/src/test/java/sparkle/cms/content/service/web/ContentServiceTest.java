@@ -11,6 +11,7 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
+
 import sparkle.cms.content.service.Application;
 import sparkle.cms.domain.CmsContent;
 import sparkle.cms.domain.CmsTag;
@@ -57,7 +58,8 @@ public class ContentServiceTest extends AbstractServiceTest {
 
         HttpEntity<CmsContent> requestEntity = new HttpEntity<>(headers);
         // Pass the new person and header
-        ResponseEntity<HttpEntity> entity = template.exchange("http://localhost:9000/api/contents/" + siteId, HttpMethod.GET, requestEntity, HttpEntity.class);
+        @SuppressWarnings("rawtypes")
+		ResponseEntity<HttpEntity> entity = template.exchange("http://localhost:9000/api/contents/" + siteId, HttpMethod.GET, requestEntity, HttpEntity.class);
         assertEquals(HttpStatus.OK, entity.getStatusCode());
 
         for (CmsContent cmsContent : cmsContentRepository.findAll()) {
@@ -92,6 +94,7 @@ public class ContentServiceTest extends AbstractServiceTest {
         assertEquals(1, entityIterable.getBody().size());
     }
 
-    private class ContentList extends ArrayList<CmsContent> {
+    @SuppressWarnings("serial")
+	private class ContentList extends ArrayList<CmsContent> {
     }
 }

@@ -26,7 +26,6 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("deprecation")
 @Configuration
 @RunWith(SpringJUnit4ClassRunner.class)
 @EnableMongoRepositories(basePackages = "sparkle.cms")

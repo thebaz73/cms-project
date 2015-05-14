@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import sparkle.cms.data.CmsContentRepository;
 import sparkle.cms.domain.CmsContent;
 
@@ -27,7 +28,8 @@ public class AuthorService {
     @Autowired
     private CmsContentRepository contentRepository;
 
-    @Secured({"ROLE_MANAGER"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	@Secured({"ROLE_MANAGER"})
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     HttpEntity<PagedResources<CmsContent>> contents(PagedResourcesAssembler assembler,
                                                     @RequestParam("q") String query,

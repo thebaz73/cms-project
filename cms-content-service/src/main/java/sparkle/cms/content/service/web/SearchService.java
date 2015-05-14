@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+
 import sparkle.cms.data.CmsContentRepository;
 import sparkle.cms.domain.CmsContent;
 
@@ -24,6 +25,7 @@ public class SearchService {
     @Autowired
     private CmsContentRepository contentRepository;
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Secured({"ROLE_MANAGER"})
     @RequestMapping(value = "/authors/{siteId}/{authorId}", method = RequestMethod.GET)
     HttpEntity<PagedResources<CmsContent>> contents(PagedResourcesAssembler assembler,

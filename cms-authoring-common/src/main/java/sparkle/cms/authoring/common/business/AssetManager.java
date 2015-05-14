@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
 import sparkle.cms.data.CmsAssetRepository;
 import sparkle.cms.data.CmsSiteRepository;
 import sparkle.cms.domain.CmsAsset;
@@ -14,9 +15,12 @@ import sparkle.cms.domain.CmsSite;
 import sparkle.cms.domain.CmsUser;
 import sparkle.cms.plugin.mgmt.PluginOperationException;
 import sparkle.cms.plugin.mgmt.PluginService;
+import sparkle.cms.plugin.mgmt.asset.Asset;
 import sparkle.cms.plugin.mgmt.asset.AssetManagementPlugin;
+import sparkle.cms.plugin.mgmt.asset.Container;
 
 import javax.annotation.PostConstruct;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +39,7 @@ public class AssetManager {
     @Autowired
     private PluginService pluginService;
 
-    private AssetManagementPlugin assetManagementPlugin;
+    private AssetManagementPlugin<? extends Container, ? extends Asset> assetManagementPlugin;
 
     @PostConstruct
     public void initialize() {
