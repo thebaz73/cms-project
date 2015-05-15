@@ -2,7 +2,3 @@
 *.iml
 target/*
 */target/*
-/.settings/*
-/.project
-*/.settings/*
-*/.project
