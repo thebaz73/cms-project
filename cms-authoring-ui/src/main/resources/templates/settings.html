@@ -5,210 +5,229 @@
 
 <body>
 
-    <div id="wrapper">
-        <nav th:replace="navigation"></nav>
-        <!-- Navigation -->
+<div id="wrapper">
+    <nav th:replace="navigation"></nav>
+    <!-- Navigation -->
 
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Settings</h1>
-                </div>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Settings</h1>
             </div>
-            <div class="row">
-                <!--@thymesVar id="allSettings" type="org.springframework.data.domain.Page"-->
-                <section class="col-lg-12" th:if="${#lists.isEmpty(allSettings) and #lists.isEmpty(plugins)}">
-                    <div class="panel panel-default">
-                        <!-- Default panel settings -->
-                        <div class="panel-heading">
-                            <div class="row">
-                                <h3 class="panel-title col-lg-8" th:text="#{title.setting.list}">List of</h3>
-                                <a class="btn btn-success btn-xs col-lg-offset-3" th:href="@{'/settings/reload'}"><i class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a>
-                            </div>
-                        </div>
-                        <div class="panel-body" th:text="#{setting.none}">No settings found</div>
-                    </div>
-                </section>
-                <section class="col-lg-12" th:unless="${#lists.isEmpty(allSettings) and #lists.isEmpty(plugins)}">
-                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel panel-default" th:unless="${#lists.isEmpty(allSettings)}">
-                            <div class="panel-heading" role="tab" id="headingOne">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        <h4 class="panel-title">General Settings</h4>
-                                    </a>
-                            </div>
-                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                                <table class="table table-condensed table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th th:text="#{setting.key}">Key</th>
-                                        <th th:text="#{setting.value}">Value</th>
-                                        <th><i class="fa fa-cogs"></i></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <!--@thymesVar id="aSetting" type="ms.cms.domain.CmsSetting"-->
-                                    <tr th:each="aSetting : ${allSettings}" valign="middle">
-                                        <td th:text="${aSetting.key}">Key</td>
-                                        <td th:text="${aSetting.value}">Value</td>
-                                        <td>
-                                            <form class="form-inline" role="form" th:action="@{${'/settings/'+aSetting.id}}"
-                                                  action="#" method="GET">
-                                                <button type="submit" class="btn btn-primary btn-xs"
-                                                        data-toggle="tooltip" data-placement="top" title="Edit"><span
-                                                        class="glyphicon glyphicon-edit"></span></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="panel-footer">
-                                    <div class="row">
-                                        <div class="col-lg-offset-10 col-lg-1">
-                                            <a class="btn btn-default" th:href="@{'/settings/reload'}"><i class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--@thymesVar id="plugins" type="java.util.List"-->
-                        <!--@thymesVar id="plugin" type="sparkle.cms.authoring.ui.domain.PluginData"-->
-                        <div class="panel panel-default" th:each="plugin : ${plugins}">
-                            <div class="panel-heading" role="tab" th:id="${'heading' + plugin.id}">
-                                    <a data-toggle="collapse"
-                                       data-parent="#accordion"
-                                       th:href="${'#collapse' + plugin.id}"
-                                       aria-expanded="false"
-                                       th:attr="aria-controls=${'collapse' + plugin.id}"><h4 class="panel-title" th:text="${plugin.name}">Plugin name</h4></a>
-                            </div>
-                            <div th:id="${'collapse' + plugin.id}" class="panel-collapse collapse" role="tabpanel" th:attr="aria-labelledby=${'heading' + plugin.id}">
-                                <table class="table table-condensed table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th th:text="#{setting.key}">Key</th>
-                                        <th th:text="#{setting.value}">Value</th>
-                                        <th><i class="fa fa-cogs"></i></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <!--@thymesVar id="aSetting" type="ms.cms.domain.CmsSetting"-->
-                                    <tr th:each="aSetting : ${plugin.cmsSettings}" valign="middle">
-                                        <td th:text="${aSetting.key}">Key</td>
-                                        <td th:text="${aSetting.value}">Value</td>
-                                        <td>
-                                            <form class="form-inline" role="form" th:action="@{${'/settings/'+aSetting.id}}"
-                                                  action="#" method="GET">
-                                                <button type="submit" class="btn btn-primary btn-xs"
-                                                        data-toggle="tooltip" data-placement="top" title="Edit"><span
-                                                        class="glyphicon glyphicon-edit"></span></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="panel-footer">
-                                    <div class="row">
-                                        <div class="col-lg-offset-8 col-lg-2">
-                                            <form class="form-inline">
-                                                <div class="form-group has-feedback"  th:classappend="${plugin.status=='ACTIVE'}?'has-success':'has-warning'">
-                                                    <div class="input-group">
-                                                        <input type="text" class="form-control" value="Plugin status: " readonly="readonly"/>
-                                                        <span class="input-group-addon" th:text="${plugin.status}">Status</span>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="col-lg-1"><a class="btn btn-default" th:href="@{'/settings/reload'}"><i class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-                <section class="col-lg-12">
-                    <!--@thymesVar id="cmsSetting" type="ms.cms.domain.CmsSetting"-->
-                    <form class="form-horizontal" role="form" th:action="@{/settings}" th:object="${cmsSetting}"
-                          action="#"
-                          method="POST">
-                        <input type="hidden" name="_method" value="PUT"/>
-                        <input type="hidden" id="id" th:field="*{id}"/>
-                        <input type="hidden" id="filter" th:field="*{filter}"/>
-                        <input type="hidden" id="type" th:field="*{type}"/>
-
-                        <div class="lead" th:text="#{setting.data}">Setting Data</div>
-
-                        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger alert-dismissible"
-                             role="alert">
-                            <button type="button" class="close" data-dismiss="alert"><span
-                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            <ul>
-                                <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
-                            </ul>
-                        </div>
-                        <div class="form-group">
-                            <label for="key" class="col-sm-2 control-label" th:text="#{setting.key}">Key</label>
-
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="key" th:field="*{key}"
-                                       th:errorclass="has-error" required="required" readonly="readonly"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="value" class="col-sm-2 control-label"
-                                   th:text="#{setting.value}">Value</label>
-
-                            <div class="col-sm-10">
-                                <input th:if="${cmsSetting.type == null }" type="text" class="form-control" id="value"
-                                       th:field="*{value}"
-                                       th:errorclass="has-error" required="required" readonly="readonly"/>
-                                <select th:if="${#strings.toString(cmsSetting.type) == 'BOOL' }" type="text" class="form-control" id="value"
-                                       th:field="*{value}"
-                                       th:errorclass="has-error" required="required">
-                                    <option value="true" th:selected="${cmsSetting.value == true}">TRUE</option>
-                                    <option value="false" th:selected="${cmsSetting.value == false}">FALSE</option>
-                                </select>
-                                <input th:if="${#strings.toString(cmsSetting.type) == 'TEXT' }" type="text" class="form-control" id="value"
-                                       th:field="*{value}"
-                                       th:errorclass="has-error" required="required"/>
-
-                                <input th:if="${#strings.toString(cmsSetting.type) == 'EMAIL' }" type="email" class="form-control" id="value"
-                                       th:field="*{value}"
-                                       th:errorclass="has-error" required="required"/>
-                                <input th:if="${#strings.toString(cmsSetting.type) == 'INET' }" type="url" class="form-control" id="value"
-                                       th:field="*{value}"
-                                       th:errorclass="has-error" required="required"/>
-
-                                <input th:if="${#strings.toString(cmsSetting.type) == 'INTEGER' }" type="number" class="form-control" id="value"
-                                       th:field="*{value}"
-                                       th:errorclass="has-error" required="required"/>
-                                <input th:if="${#strings.toString(cmsSetting.type) == 'DOUBLE' }" type="number" class="form-control" id="value"
-                                       th:field="*{value}"
-                                       th:errorclass="has-error" required="required"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12 text-right">
-                                <button type="submit" class="btn btn-default" th:text="#{setting.edit}">Edit Setting
-                                </button>
-                                <button type="reset" class="btn btn-default">Cancel</button>
-                            </div>
-                        </div>
-                    </form>
-                </section>
-            </div>
-            <footer th:replace="footer"></footer>
         </div>
+        <div class="row">
+            <!--@thymesVar id="allSettings" type="org.springframework.data.domain.Page"-->
+            <section class="col-lg-12" th:if="${#lists.isEmpty(allSettings) and #lists.isEmpty(plugins)}">
+                <div class="panel panel-default">
+                    <!-- Default panel settings -->
+                    <div class="panel-heading">
+                        <div class="row">
+                            <h3 class="panel-title col-lg-8" th:text="#{title.setting.list}">List of</h3>
+                            <a class="btn btn-success btn-xs col-lg-offset-3" th:href="@{'/settings/reload'}"><i
+                                    class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a>
+                        </div>
+                    </div>
+                    <div class="panel-body" th:text="#{setting.none}">No settings found</div>
+                </div>
+            </section>
+            <section class="col-lg-12" th:unless="${#lists.isEmpty(allSettings) and #lists.isEmpty(plugins)}">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                    <div class="panel panel-default" th:unless="${#lists.isEmpty(allSettings)}">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"
+                               aria-controls="collapseOne">
+                                <h4 class="panel-title">General Settings</h4>
+                            </a>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel"
+                             aria-labelledby="headingOne">
+                            <table class="table table-condensed table-hover">
+                                <thead>
+                                <tr>
+                                    <th th:text="#{setting.key}">Key</th>
+                                    <th th:text="#{setting.value}">Value</th>
+                                    <th><i class="fa fa-cogs"></i></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!--@thymesVar id="aSetting" type="sparkle.cms.domain.CmsSetting"-->
+                                <tr th:each="aSetting : ${allSettings}" valign="middle">
+                                    <td th:text="${aSetting.key}">Key</td>
+                                    <td th:text="${aSetting.value}">Value</td>
+                                    <td>
+                                        <form class="form-inline" role="form" th:action="@{${'/settings/'+aSetting.id}}"
+                                              action="#" method="GET">
+                                            <button type="submit" class="btn btn-primary btn-xs"
+                                                    data-toggle="tooltip" data-placement="top" title="Edit"><span
+                                                    class="glyphicon glyphicon-edit"></span></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-lg-offset-10 col-lg-1">
+                                        <a class="btn btn-default" th:href="@{'/settings/reload'}"><i
+                                                class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--@thymesVar id="plugins" type="java.util.List"-->
+                    <!--@thymesVar id="plugin" type="sparkle.cms.authoring.ui.domain.PluginData"-->
+                    <div class="panel panel-default" th:each="plugin : ${plugins}">
+                        <div class="panel-heading" role="tab" th:id="${'heading' + plugin.id}">
+                            <a data-toggle="collapse"
+                               data-parent="#accordion"
+                               th:href="${'#collapse' + plugin.id}"
+                               aria-expanded="false"
+                               th:attr="aria-controls=${'collapse' + plugin.id}"><h4 class="panel-title"
+                                                                                     th:text="${plugin.name}">Plugin
+                                name</h4></a>
+                        </div>
+                        <div th:id="${'collapse' + plugin.id}" class="panel-collapse collapse" role="tabpanel"
+                             th:attr="aria-labelledby=${'heading' + plugin.id}">
+                            <table class="table table-condensed table-hover">
+                                <thead>
+                                <tr>
+                                    <th th:text="#{setting.key}">Key</th>
+                                    <th th:text="#{setting.value}">Value</th>
+                                    <th><i class="fa fa-cogs"></i></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!--@thymesVar id="aSetting" type="sparkle.cms.domain.CmsSetting"-->
+                                <tr th:each="aSetting : ${plugin.cmsSettings}" valign="middle">
+                                    <td th:text="${aSetting.key}">Key</td>
+                                    <td th:text="${aSetting.value}">Value</td>
+                                    <td>
+                                        <form class="form-inline" role="form" th:action="@{${'/settings/'+aSetting.id}}"
+                                              action="#" method="GET">
+                                            <button type="submit" class="btn btn-primary btn-xs"
+                                                    data-toggle="tooltip" data-placement="top" title="Edit"><span
+                                                    class="glyphicon glyphicon-edit"></span></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-lg-offset-8 col-lg-2">
+                                        <form class="form-inline">
+                                            <div class="form-group has-feedback"
+                                                 th:classappend="${plugin.status=='ACTIVE'}?'has-success':'has-warning'">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" value="Plugin status: "
+                                                           readonly="readonly"/>
+                                                    <span class="input-group-addon"
+                                                          th:text="${plugin.status}">Status</span>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-lg-1"><a class="btn btn-default" th:href="@{'/settings/reload'}"><i
+                                            class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="col-lg-12">
+                <!--@thymesVar id="cmsSetting" type="sparkle.cms.domain.CmsSetting"-->
+                <form class="form-horizontal" role="form" th:action="@{/settings}" th:object="${cmsSetting}"
+                      action="#"
+                      method="POST">
+                    <input type="hidden" name="_method" value="PUT"/>
+                    <input type="hidden" id="id" th:field="*{id}"/>
+                    <input type="hidden" id="filter" th:field="*{filter}"/>
+                    <input type="hidden" id="type" th:field="*{type}"/>
 
+                    <div class="lead" th:text="#{setting.data}">Setting Data</div>
+
+                    <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger alert-dismissible"
+                         role="alert">
+                        <button type="button" class="close" data-dismiss="alert"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                        </ul>
+                    </div>
+                    <div class="form-group">
+                        <label for="key" class="col-sm-2 control-label" th:text="#{setting.key}">Key</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="key" th:field="*{key}"
+                                   th:errorclass="has-error" required="required" readonly="readonly"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="value" class="col-sm-2 control-label"
+                               th:text="#{setting.value}">Value</label>
+
+                        <div class="col-sm-10">
+                            <input th:if="${cmsSetting.type == null }" type="text" class="form-control" id="value"
+                                   th:field="*{value}"
+                                   th:errorclass="has-error" required="required" readonly="readonly"/>
+                            <select th:if="${#strings.toString(cmsSetting.type) == 'BOOL' }" type="text"
+                                    class="form-control" id="value"
+                                    th:field="*{value}"
+                                    th:errorclass="has-error" required="required">
+                                <option value="true" th:selected="${cmsSetting.value == true}">TRUE</option>
+                                <option value="false" th:selected="${cmsSetting.value == false}">FALSE</option>
+                            </select>
+                            <input th:if="${#strings.toString(cmsSetting.type) == 'TEXT' }" type="text"
+                                   class="form-control" id="value"
+                                   th:field="*{value}"
+                                   th:errorclass="has-error" required="required"/>
+
+                            <input th:if="${#strings.toString(cmsSetting.type) == 'EMAIL' }" type="email"
+                                   class="form-control" id="value"
+                                   th:field="*{value}"
+                                   th:errorclass="has-error" required="required"/>
+                            <input th:if="${#strings.toString(cmsSetting.type) == 'INET' }" type="url"
+                                   class="form-control" id="value"
+                                   th:field="*{value}"
+                                   th:errorclass="has-error" required="required"/>
+
+                            <input th:if="${#strings.toString(cmsSetting.type) == 'INTEGER' }" type="number"
+                                   class="form-control" id="value"
+                                   th:field="*{value}"
+                                   th:errorclass="has-error" required="required"/>
+                            <input th:if="${#strings.toString(cmsSetting.type) == 'DOUBLE' }" type="number"
+                                   class="form-control" id="value"
+                                   th:field="*{value}"
+                                   th:errorclass="has-error" required="required"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 text-right">
+                            <button type="submit" class="btn btn-default" th:text="#{setting.edit}">Edit Setting
+                            </button>
+                            <button type="reset" class="btn btn-default">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <footer th:replace="footer"></footer>
     </div>
 
-    <!-- jQuery -->
-    <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+</div>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<!-- jQuery -->
+<script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="https://code.jquery.com/jquery-2.1.1.js"></script>
 
-    <!-- Custom Theme JavaScript -->
-    <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
 
 </body>
 

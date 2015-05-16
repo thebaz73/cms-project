@@ -46,7 +46,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <!--@thymesVar id="aComment" type="ms.cms.domain.CmsComment"-->
+                            <!--@thymesVar id="aComment" type="sparkle.cms.domain.CmsComment"-->
                             <tr th:each="aComment : ${allComments}" valign="middle">
                                 <td th:text="${aComment.title}">Name</td>
                                 <td th:text="${aComment.timestamp}">Date</td>

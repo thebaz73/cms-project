@@ -35,15 +35,14 @@
                     </div>
 
                     <div class="panel-body table-responsive">
-                        <!--@thymesVar id="aAsset" type="ms.cms.domain.CmsAsset"-->
+                        <!--@thymesVar id="aAsset" type="sparkle.cms.domain.CmsAsset"-->
                         <div class="col-lg-3 cols-sm-6 " th:each="aAsset : ${allAssets}">
                             <div class="thumbnail">
                                 <!--<img th:if="${aAsset.type.name == 'IMAGE'}" src="#" th:src="${aAsset.uri}"
                                  class="img-responsive img-thumbnail" th:alt-title="${aAsset.title}"
                                  th:alt="${aAsset.title}"/>-->
-                                <img th:if="${aAsset.type.name == 'IMAGE'}" src="/dist/images/home-bg.jpg"
-                                     class="img-thumbnail" th:alt-title="${aAsset.title}"
-                                     th:alt="${aAsset.title}"/>
+                                <i th:if="${aAsset.type.name == 'IMAGE'}" class="fa fa-file-image-o fa-5x"
+                                   style="color: navy;"></i>
                                 <i th:if="${aAsset.type.name == 'DOCUMENT'}" class="fa fa-file-word-o fa-5x"
                                    style="color: navy;"></i>
                                 <i th:if="${aAsset.type.name == 'SPREADSHEET'}" class="fa fa-file-excel-o fa-5x"
@@ -68,13 +67,44 @@
 
                                     <p th:text="${aAsset.name}">Name</p>
 
-                                    <p th:text="${aAsset.modificationDate}">Date</p>
-                                    <a class="btn btn-primary btn-xs" value="put"
-                                       data-toggle="tooltip" data-placement="top" title="Edit"><span
-                                            class="glyphicon glyphicon-edit"></span></a>
-                                    <a class="btn btn-danger btn-xs" value="delete"
-                                       data-toggle="tooltip" data-placement="top" title="Delete"><span
-                                            class="glyphicon glyphicon-trash"></span></a>
+                                    <p th:text="${#dates.format(aAsset.modificationDate, 'yyyy-MM-dd')+'T'+ #dates.format(aAsset.modificationDate, 'HH:mm:ssZ')}">
+                                        Date</p>
+
+                                    <form class="form-inline" role="form" th:action="@{${'/assets/'+aAsset.id}}"
+                                          action="#" method="POST">
+                                        <input type="hidden" name="_method" value="DELETE"/>
+                                        <button type="submit" class="btn btn-danger btn-xs" value="delete"
+                                                data-toggle="tooltip" data-placement="top" title="Delete"><span
+                                                class="glyphicon glyphicon-trash"></span></button>
+                                        <a th:href="@{${'/assets/download?uri='+aAsset.uri}}"
+                                           class="btn btn-warning btn-xs"
+                                           data-toggle="tooltip" data-placement="top" title="Download"><span
+                                                class="glyphicon glyphicon-download"></span></a>
+                                        <a th:attr="data-uri=@{${'/assets/preview?uri='+aAsset.uri}}"
+                                           class="btn btn-success btn-xs" data-target="#imageModal"
+                                           data-toggle="modal" data-placement="top" title="Preview"
+                                           th:if="${(aAsset.type.name == 'IMAGE')}"><span
+                                                class="glyphicon glyphicon-search"></span></a>
+                                        <a th:attr="data-uri=@{${'/assets/preview?uri='+aAsset.uri}}"
+                                           class="btn btn-success btn-xs" data-target="#videoModal"
+                                           data-toggle="modal" data-placement="top" title="Preview"
+                                           th:if="${(aAsset.type.name == 'VIDEO')}"><span
+                                                class="glyphicon glyphicon-search"></span></a>
+                                        <a th:attr="data-uri=@{${'/assets/preview?uri='+aAsset.uri}}"
+                                           class="btn btn-success btn-xs" data-target="#audioModal"
+                                           data-toggle="modal" data-placement="top" title="Preview"
+                                           th:if="${(aAsset.type.name == 'AUDIO')}"><span
+                                                class="glyphicon glyphicon-search"></span></a>
+                                        <a th:attr="data-uri=@{${'/assets/preview?uri='+aAsset.uri}}"
+                                           class="btn btn-success btn-xs" data-target="#pdfModal"
+                                           data-toggle="modal" data-placement="top" title="Preview"
+                                           th:if="${(aAsset.type.name == 'PDF')}"><span
+                                                class="glyphicon glyphicon-search"></span></a>
+                                        <!--<a th:href="@{${'/ViewerJS/index.html#../assets/preview?uri='+aAsset.uri}}" class="btn btn-success btn-xs" target="_blank"
+                                           data-toggle="tooltip" data-placement="top" title="Preview (Opens in a new Window)" th:if="${(aAsset.type.name == 'DOCUMENT') || (aAsset.type.name == 'PRESENTATION') || (aAsset.type.name == 'SPREADSHEET') || (aAsset.type.name == 'PDF')}"><span
+                                                class="glyphicon glyphicon-search"></span></a>-->
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
@@ -109,11 +139,12 @@
                 </div>
             </section>
             <section class="col-lg-12">
-                <form class="form-horizontal" role="form" th:action="@{/assets}" th:object="${assetData}"
+                <form class="form-horizontal" enctype="multipart/form-data" role="form" th:action="@{/assets}"
+                      th:object="${assetData}"
                       action="#"
                       method="POST">
-                        <input type="hidden" name="siteId" th:value="${allSites[0].id}"
-                               th:if="${allSites.size() == 1}"/>
+                    <input type="hidden" name="siteId" th:value="${allSites[0].id}"
+                           th:if="${allSites.size() == 1}"/>
 
 
                     <div class="lead" th:text="#{asset.data}">Asset Data</div>
@@ -127,38 +158,38 @@
                         </ul>
                     </div>
                     <div class="form-group" th:if="${allSites.size() > 1}">
-                            <label for="siteId" class="col-sm-2 control-label" th:text="#{asset.site}">Site</label>
+                        <label for="siteId" class="col-sm-2 control-label" th:text="#{asset.site}">Site</label>
 
-                            <div class="col-sm-10">
-                                <select type="text" class="form-control" id="siteId" name="siteId"
-                                        th:errorclass="has-error" required="required">
-                                    <!--@thymesVar id="aSite" type="ms.cms.domain.CmsSite"-->
-                                    <option th:each="aSite : ${allSites}"
-                                            th:value="${aSite.id}"
-                                            th:text="${aSite.name + ' [' + aSite.address + ']'}"
-                                            th:selected="${(assetData.siteId != null) and (assetData.siteId == aSite.id)}">
-                                        Site
-                                    </option>
-                                </select>
-                            </div>
+                        <div class="col-sm-10">
+                            <select type="text" class="form-control" id="siteId" name="siteId"
+                                    th:errorclass="has-error" required="required">
+                                <!--@thymesVar id="aSite" type="sparkle.cms.domain.CmsSite"-->
+                                <option th:each="aSite : ${allSites}"
+                                        th:value="${aSite.id}"
+                                        th:text="${aSite.name + ' [' + aSite.address + ']'}"
+                                        th:selected="${(assetData.siteId != null) and (assetData.siteId == aSite.id)}">
+                                    Site
+                                </option>
+                            </select>
                         </div>
-                    <div class="form-group">
+                    </div>
+                    <!--<div class="form-group">
                         <label for="assetType" class="col-sm-2 control-label" th:text="#{asset.type}">Asset Type</label>
 
                         <div class="col-sm-10">
-                        	<select id="workflowType" class="form-control" th:field="*{type}">
+                        	<select id="assetType" class="form-control" th:field="*{type}">
                                 <option th:each="var : ${allAssetTypes}" th:value="${var}"
                                         th:text="#{${'asset.type.'+var}}">Asset Type
                                 </option>
                             </select>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group">
-                        <label for="name" class="col-sm-2 control-label" th:text="#{asset.title}">Title</label>
+                        <label for="title" class="col-sm-2 control-label" th:text="#{asset.title}">Title</label>
 
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" th:field="*{title}"
-                                   th:errorclass="has-error" required="required"/>
+                            <input type="text" class="form-control" id="title" th:field="*{title}"
+                                   th:errorclass="has-error"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -167,7 +198,7 @@
 
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="name" th:field="*{name}"
-                                   th:errorclass="has-error" required="required"/>
+                                   th:errorclass="has-error"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -175,17 +206,19 @@
                                th:text="#{asset.file}">File</label>
 
                         <div class="col-sm-10">
-                            <input type="file" class="form-control" id="upload_file" accept="*" 
-                                   th:errorclass="has-error" required="required"/>
+                            <input type="file" name="uploadFile" class="form-control file" data-preview-file-type="any"
+                                   data-show-upload="false" id="upload_file" accept="*"
+                                   required="required"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-12 text-right">
-                            <button th:if="${mode == 'add'}" type="submit" class="btn btn-default" th:text="#{asset.create}" disabled="disabled">Add Asset
+                            <button th:if="${mode == 'add'}" type="submit" class="btn btn-default"
+                                    th:text="#{asset.create}">Add Asset
                             </button>
                             <button type="reset" class="btn btn-default">Cancel</button>
                         </div>
-                    </div>-->
+                    </div>
                 </form>
             </section>
         </div>
@@ -204,34 +237,17 @@
 
 <!-- Custom Theme JavaScript -->
 <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
+<script th:src="@{/dist/js/fileinput.min.js}" src="../public/dist/js/fileinput.js" type="text/javascript"></script>
 
 <script>
-//bind the on-change event
-$(document).ready(function() {
-  $("#upload_file").on("change", uploadFile);
-});
-
-/**
- * Upload the file sending it via Ajax at the Spring Boot server.
- */
-function uploadFile() {
-  $.ajax({
-    url: "/assets/upload",
-    type: "POST",
-    data: new FormData($("#upload_file")[0]),
-    enctype: 'multipart/form-data',
-    processData: false,
-    contentType: false,
-    cache: false,
-    success: function (data) {
-      alert(data)
-    },
-    error: function () {
-      console.log("Error");
-    }
-  });
-} // function uploadFile
+    //bind the on-change event
+    $(document).ready(function () {
+        $("#upload_file").fileinput();
+    });
 </script>
+
+<div th:replace="modals"></div>
+
 </body>
 
 </html>

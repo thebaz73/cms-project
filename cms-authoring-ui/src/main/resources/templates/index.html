@@ -5,240 +5,241 @@
 
 <body>
 
-    <div id="wrapper">
-        <nav th:replace="navigation"></nav>
-        <!-- Navigation -->
+<div id="wrapper">
+    <nav th:replace="navigation"></nav>
+    <!-- Navigation -->
 
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
-                </div>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Dashboard</h1>
             </div>
-            <div th:replace="badges"></div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-green">
-                        <div class="panel-heading">Contents</div>
-                        <div class="panel-body">
-                            <div class="dataTable_wrapper">
-                                <table class="table table-striped table-bordered table-hover" id="contents">
-                                    <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Title</th>
-                                        <th>Uri</th>
-                                        <th>Summary</th>
-                                        <th><i class="fa fa-cogs"></i></th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">Comments</div>
-                        <div class="panel-body">
-                            <div class="dataTable_wrapper">
-                                <table class="table table-striped table-bordered table-hover" id="comments">
-                                    <thead>
-                                    <tr>
-                                        <th>Date</th>
-                                        <th>Content</th>
-                                        <th>User</th>
-                                        <th>Comment</th>
-                                        <th><i class="fa fa-cogs"></i></th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="panel panel-red">
-                        <div class="panel-heading">Sites</div>
-                        <div class="panel-body">
-                            <div class="dataTable_wrapper">
-                                <table class="table table-striped table-bordered table-hover" id="sites">
-                                    <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Address</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-yellow">
-                        <div class="panel-heading">Authors</div>
-                        <div class="panel-body">
-                            <div class="dataTable_wrapper">
-                                <table class="table table-striped table-bordered table-hover" id="authors">
-                                    <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Role</th>
-                                    </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <footer th:replace="footer"></footer>
         </div>
-
+        <div th:replace="badges"></div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-green">
+                    <div class="panel-heading">Contents</div>
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <table class="table table-striped table-bordered table-hover" id="contents">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Title</th>
+                                    <th>Uri</th>
+                                    <th>Summary</th>
+                                    <th><i class="fa fa-cogs"></i></th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">Comments</div>
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <table class="table table-striped table-bordered table-hover" id="comments">
+                                <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Content</th>
+                                    <th>User</th>
+                                    <th>Comment</th>
+                                    <th><i class="fa fa-cogs"></i></th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-red">
+                    <div class="panel-heading">Sites</div>
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <table class="table table-striped table-bordered table-hover" id="sites">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-yellow">
+                    <div class="panel-heading">Authors</div>
+                    <div class="panel-body">
+                        <div class="dataTable_wrapper">
+                            <table class="table table-striped table-bordered table-hover" id="authors">
+                                <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer th:replace="footer"></footer>
     </div>
 
-    <!-- jQuery -->
-    <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+</div>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<!-- jQuery -->
+<script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="https://code.jquery.com/jquery-2.1.1.js"></script>
 
-    <!-- Custom Theme JavaScript -->
-    <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 
-    <script th:src="@{/dist/js/jquery.dataTables.min.js}"
-            src="../public/bower_components/datatables/media/js/jquery.dataTables.js"></script>
-    <script th:src="@{/dist/js/dataTables.bootstrap.min.js}"
-            src="../public/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.js"></script>
+<!-- Custom Theme JavaScript -->
+<script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
 
-    <script type="application/javascript">
-        /* <![CDATA[ */
-        //var authors, sites, comments, contents;
-        function update() {
-            $.get("/home/status", function (data) {
-                $("#commentsCount").html(data.commentsCount);
-                $("#contentsCount").html(data.contentsCount);
-                $("#authorsCount").html(data.authorsCount);
-                $("#sitesCount").html(data.sitesCount);
-            });
-        }
+<script th:src="@{/dist/js/jquery.dataTables.min.js}"
+        src="../public/dist/js/jquery.dataTables.js"></script>
+<script th:src="@{/dist/js/dataTables.bootstrap.min.js}"
+        src="../public/dist/js/dataTables.bootstrap.js"></script>
 
-        $(document).ready(function () {
-            var authors = $('#authors').dataTable({
-                columnDefs: [
-                    {
-                        "sortable": false,
-                        "targets": [1]
-                    }
-                ],
-                searching: false,
-                info: false,
-                processing: true,
-                serverSide: true,
-                ajax: "/home/authors"
-            });
-            var sites = $('#sites').dataTable({
-                columnDefs: [
-                    {
-                        "sortable": false,
-                        "targets": [1]
-                    }
-                ],
-                searching: false,
-                info: false,
-                processing: true,
-                serverSide: true,
-                ajax: "/home/sites"
-            });
-            var comments = $('#comments').dataTable({
-                columnDefs: [
-                    {
-                        "render": function (data, type, row) {
-                            return dateFormat(Date(data), "dd-mm-yyyy", true);
-                        },
-                        "targets": [0]
-                    },
-                    {
-                        "sortable": false,
-                        "targets": [1]
-                    },
-                    {
-                        "sortable": false,
-                        "targets": [2]
-                    },
-                    {
-                        "render": function (data, type, row) {
-                            if (data.length > 15) {
-                                return data.substr(0, 15) + '...';
-                            }
-                            return data;
-                        },
-                        "sortable": false,
-                        "targets": [3]
-                    },
-                    {
-                        "render": function (data, type, row) {
-                            return "<a class='btn btn-default btn-xs' href='/comments/" + data + "'><i class='glyphicon glyphicon-info-sign'></i></a>";
-                        },
-                        "sortable": false,
-                        "targets": [4]
-                    }
-                ],
-                searching: false,
-                info: false,
-                processing: true,
-                serverSide: true,
-                ajax: "/home/comments"
-            });
-            var contents = $('#contents').dataTable({
-                columnDefs: [
-                    {
-                        "render": function (data, type, row) {
-                            return dateFormat(Date(data), "dd-mm-yyyy", true);
-                        },
-                        "targets": [0]
-                    },
-                    {
-                        "sortable": false,
-                        "targets": [1]
-                    },
-                    {
-                        "sortable": false,
-                        "targets": [2]
-                    },
-                    {
-                        "render": function (data, type, row) {
-                            if (data.length > 15) {
-                                return data.substr(0, 15) + '...';
-                            }
-                            return data;
-                        },
-                        "sortable": false,
-                        "targets": [3]
-                    },
-                    {
-                        "render": function (data, type, row) {
-                            return "<a class='btn btn-default btn-xs' href='/contents/" + data + "'><i class='glyphicon glyphicon-edit'></i></a>";
-                        },
-                        "sortable": false,
-                        "targets": [4]
-                    }
-                ],
-                searching: false,
-                info: false,
-                processing: true,
-                serverSide: true,
-                ajax: "/home/contents"
-            });
-
-            setInterval(function () {
-                update();
-            }, 10000);
-
-            update();
+<script type="application/javascript">
+    /* <![CDATA[ */
+    //var authors, sites, comments, contents;
+    function update() {
+        $.get("/home/status", function (data) {
+            $("#commentsCount").html(data.commentsCount);
+            $("#contentsCount").html(data.contentsCount);
+            $("#authorsCount").html(data.authorsCount);
+            $("#sitesCount").html(data.sitesCount);
         });
-        /* ]]> */
-    </script>
+    }
+
+    $(document).ready(function () {
+        var authors = $('#authors').dataTable({
+            columnDefs: [
+                {
+                    "sortable": false,
+                    "targets": [1]
+                }
+            ],
+            searching: false,
+            info: false,
+            processing: true,
+            serverSide: true,
+            ajax: "/home/authors"
+        });
+        var sites = $('#sites').dataTable({
+            columnDefs: [
+                {
+                    "sortable": false,
+                    "targets": [1]
+                }
+            ],
+            searching: false,
+            info: false,
+            processing: true,
+            serverSide: true,
+            ajax: "/home/sites"
+        });
+        var comments = $('#comments').dataTable({
+            columnDefs: [
+                {
+                    "render": function (data, type, row) {
+                        return dateFormat(Date(data), "dd-mm-yyyy", true);
+                    },
+                    "targets": [0]
+                },
+                {
+                    "sortable": false,
+                    "targets": [1]
+                },
+                {
+                    "sortable": false,
+                    "targets": [2]
+                },
+                {
+                    "render": function (data, type, row) {
+                        if (data.length > 15) {
+                            return data.substr(0, 15) + '...';
+                        }
+                        return data;
+                    },
+                    "sortable": false,
+                    "targets": [3]
+                },
+                {
+                    "render": function (data, type, row) {
+                        return "<a class='btn btn-default btn-xs' href='/comments/" + data + "'><i class='glyphicon glyphicon-info-sign'></i></a>";
+                    },
+                    "sortable": false,
+                    "targets": [4]
+                }
+            ],
+            searching: false,
+            info: false,
+            processing: true,
+            serverSide: true,
+            ajax: "/home/comments"
+        });
+        var contents = $('#contents').dataTable({
+            columnDefs: [
+                {
+                    "render": function (data, type, row) {
+                        return dateFormat(Date(data), "dd-mm-yyyy", true);
+                    },
+                    "targets": [0]
+                },
+                {
+                    "sortable": false,
+                    "targets": [1]
+                },
+                {
+                    "sortable": false,
+                    "targets": [2]
+                },
+                {
+                    "render": function (data, type, row) {
+                        if (data.length > 15) {
+                            return data.substr(0, 15) + '...';
+                        }
+                        return data;
+                    },
+                    "sortable": false,
+                    "targets": [3]
+                },
+                {
+                    "render": function (data, type, row) {
+                        return "<a class='btn btn-default btn-xs' href='/contents/" + data + "'><i class='glyphicon glyphicon-edit'></i></a>";
+                    },
+                    "sortable": false,
+                    "targets": [4]
+                }
+            ],
+            searching: false,
+            info: false,
+            processing: true,
+            serverSide: true,
+            ajax: "/home/contents"
+        });
+
+        setInterval(function () {
+            update();
+        }, 10000);
+
+        update();
+    });
+    /* ]]> */
+</script>
 </body>
 
 </html>

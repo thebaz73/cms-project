@@ -7,7 +7,8 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" th:href="@{/home}" href="/"><i class="fa fa-play-circle"></i> <span class="light">Sparkle</span> CMS</a>
+        <a class="navbar-brand" th:href="@{/home}" href="/"><i class="fa fa-play-circle"></i> <span class="light">Sparkle</span>
+            CMS</a>
     </div>
     <!-- /.navbar-header -->
 
@@ -15,7 +16,7 @@
         <!-- /.dropdown -->
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-question-circle fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                <i class="fa fa-question-circle fa-fw"></i> <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-mktg">
                 <li><a th:href="@{/mktg/about}" href="/"><i class="fa fa-about fa-fw"></i> About</a>
@@ -28,7 +29,7 @@
         <!-- /.dropdown -->
         <li sec:authorize="isAuthenticated()" class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
             </a>
             <ul class="dropdown-menu dropdown-user">
                 <li><a th:href="@{/profile}" href="/"><i class="fa fa-user fa-fw"></i> User Profile</a>
@@ -51,7 +52,8 @@
             <ul class="nav" id="side-menu">
                 <li class="sidebar-search">
                     <div class="input-group custom-search-form">
-                        <input type="text" id="searchText" class="form-control" placeholder="Search..." th:value="${query}"/>
+                        <input type="text" id="searchText" class="form-control" placeholder="Search..."
+                               th:value="${query}"/>
                                 <span class="input-group-btn">
                                 <button class="btn btn-default" id="searchButton" type="button">
                                     <i class="fa fa-search"></i>
@@ -80,7 +82,7 @@
         <!-- /.sidebar-collapse -->
     </div>
     <!-- /.navbar-static-side -->
-    <form id="hidden" role="form" class="hidden"  th:action="@{/search}" action="#" >
+    <form id="hidden" role="form" class="hidden" th:action="@{/search}" action="#">
         <input type="hidden" id="query" name="query"/>
     </form>
 </nav>

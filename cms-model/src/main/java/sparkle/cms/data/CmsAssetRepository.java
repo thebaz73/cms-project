@@ -27,4 +27,13 @@ public interface CmsAssetRepository extends MongoRepository<CmsAsset, String> {
      * @return page of asset
      */
     Page<CmsAsset> findBySiteId(String siteId, Pageable pageable);
+
+    /**
+     * Load a site assets by uri
+     *
+     * @param siteId site id
+     * @param uri asset uri
+     * @return list of asset
+     */
+    List<CmsAsset> findBySiteIdAndUri(String siteId, String uri);
 }

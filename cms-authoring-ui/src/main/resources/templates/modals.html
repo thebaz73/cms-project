@@ -1,0 +1,52 @@
+<div>
+    <div class="modal fade" id="imageModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Image Preview</h4>
+                </div>
+                <div class="modal-body">
+                    <img src=""/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="pdfModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">PDF Preview</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe class="col-lg-12" style="height: 500px" src=""></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $('#imageModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var uri = button.data('uri');
+
+            var modal = $(this);
+            modal.find('.modal-body img').attr("src", uri);
+        });
+        $('#pdfModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var uri = button.data('uri');
+
+            var modal = $(this);
+            modal.find('.modal-body iframe').attr("src", uri);
+        });
+    </script>
+</div>

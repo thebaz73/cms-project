@@ -17,31 +17,31 @@
         </div>
         <div class="row">
 
-<section th:if="${#httpServletRequest.requestURI == '/mktg/about'}" class="col-xs-12">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">About</h3>
-        </div>
-        <div class="panel-body">
-            <h4><span class="light">Sparkle</span> CMS</h4>
+            <section th:if="${#httpServletRequest.requestURI == '/mktg/about'}" class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">About</h3>
+                    </div>
+                    <div class="panel-body">
+                        <h4><span class="light">Sparkle</span> CMS</h4>
 
-            Content Management System
-            &copy; - thebaz.it - <span
-                th:text="${#calendars.format(#calendars.createToday(), 'yyyy')}"></span>        </div>
-    </div>
-</section>
-<section th:if="${#httpServletRequest.requestURI == '/mktg/contents'}" class="col-xs-12">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Help Contents</h3>
-        </div>
-        <div class="panel-body">
-            <h4><span class="light">Sparkle</span> CMS</h4>
+                        Content Management System
+                        &copy; - thebaz.it - <span
+                            th:text="${#calendars.format(#calendars.createToday(), 'yyyy')}"></span></div>
+                </div>
+            </section>
+            <section th:if="${#httpServletRequest.requestURI == '/mktg/contents'}" class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Help Contents</h3>
+                    </div>
+                    <div class="panel-body">
+                        <h4><span class="light">Sparkle</span> CMS</h4>
 
-            Authoring UI Help Contents
-        </div>
-    </div>
-</section>
+                        Authoring UI Help Contents
+                    </div>
+                </div>
+            </section>
 
         </div>
         <footer th:replace="footer"></footer>
@@ -53,7 +53,8 @@
 <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="https://code.jquery.com/jquery-2.1.1.js"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 
 <!-- Custom Theme JavaScript -->
 <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>

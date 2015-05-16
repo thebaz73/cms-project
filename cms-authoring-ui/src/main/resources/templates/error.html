@@ -17,12 +17,14 @@
         </div>
         <div class="row">
             <div id="created" th:text="${#dates.format(timestamp)}">July 11,
-                2012 2:17:16 PM CDT</div>
+                2012 2:17:16 PM CDT
+            </div>
             <div>
                 There was an unexpected error (type=<strong th:text="${error}">Bad</strong>, status=<strong
                     th:text="${status}">500</strong>).
             </div>
             <strong class="text-danger" th:text="${message}">Fake content</strong>
+
             <div>
                 Please contact the operator with the above information.
             </div>
@@ -36,7 +38,8 @@
 <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="https://code.jquery.com/jquery-2.1.1.js"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 
 <!-- Custom Theme JavaScript -->
 <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>

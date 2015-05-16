@@ -7,7 +7,10 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import sparkle.cms.authoring.common.business.SettingManager;
 import sparkle.cms.authoring.ui.domain.PluginData;
 import sparkle.cms.domain.CmsSetting;
@@ -20,7 +23,10 @@ import sparkle.cms.registration.common.business.RegistrationManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * SettingsController
@@ -29,14 +35,12 @@ import java.util.*;
 @Controller(value = "settingsController")
 public class SettingsController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
+    private final List<CmsSetting> settings = new ArrayList<>();
+    private final List<PluginData> plugins = new ArrayList<>();
     @Autowired
     private RegistrationManager registrationManager;
     @Autowired
     private SettingManager settingManager;
-
-    private final List<CmsSetting> settings = new ArrayList<>();
-    private final List<PluginData> plugins = new ArrayList<>();
 
     @ModelAttribute("plugins")
     public List<PluginData> allPlugins(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -51,7 +55,7 @@ public class SettingsController {
     }
 
     private void loadSettings(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        if(plugins.isEmpty() && settings.isEmpty()) {
+        if (plugins.isEmpty() && settings.isEmpty()) {
             try {
                 CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
                 Map<String, CmsSetting> cmsSettingMap = new HashMap<>();

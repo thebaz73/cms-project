@@ -121,7 +121,7 @@
 
                 <p th:if="${(confirm == null) and (message == null)}">You can register for free ... .</p>
 
-                <!--@thymesVar id="userRegistration" type="ms.cms.registration.ui.domain.UserRegistration"-->
+                <!--@thymesVar id="userRegistration" type="sparkle.cms.registration.ui.domain.UserRegistration"-->
                 <form class="form-horizontal" th:action="@{/}" th:object="${userRegistration}" action="#" method="POST">
                     <fieldset>
 

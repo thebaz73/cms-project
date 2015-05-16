@@ -5,102 +5,103 @@
 
 <body>
 
-    <div id="wrapper">
-        <nav th:replace="navigation"></nav>
-        <!-- Navigation -->
+<div id="wrapper">
+    <nav th:replace="navigation"></nav>
+    <!-- Navigation -->
 
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">User profile</h1>
-                </div>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">User profile</h1>
             </div>
-            <div class="row">
-                <!--@thymesVar id="cmsUser" type="ms.cms.domain.CmsUser"-->
-                <form class="col-xs-12" th:action="@{/profile}" th:object="${cmsUser}" action="#" method="POST">
-                    <fieldset>
-                        <input type="hidden" name="_method" value="PUT"/>
-                        <input type="hidden" id="id" th:field="*{id}"/>
-
-                        <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger alert-dismissible"
-                             role="alert">
-                            <button type="button" class="close" data-dismiss="alert"><span
-                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                            <ul>
-                                <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
-                            </ul>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="name">Full name:</label>
-
-                            <div class="controls">
-                                <div class="form-group input-group">
-                                    <span class="input-group-addon"><i class="fa fa-play-circle fa-fw"></i></span>
-                                    <input class="form-control" id="name" th:field="*{name}" th:errorclass="has-error"
-                                           placeholder="name" type="text" required="required"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label class="control-label" for="username">Username:</label>
-
-                            <div class="controls">
-                                <div class="form-group input-group">
-                                    <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-                                    <input class="form-control" id="username" th:field="*{username}"
-                                           th:errorclass="has-error" placeholder="username" type="text"
-                                           required="required"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label class="control-label" for="password">Password:</label>
-
-                            <div class="controls">
-                                <div class="form-group input-group">
-                                    <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
-                                    <input class="form-control" id="password" th:field="*{password}"
-                                           th:errorclass="has-error" placeholder="password" type="text"
-                                           required="required"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label class="control-label" for="email">Email:</label>
-
-                            <div class="controls">
-                                <div class="form-group input-group">
-                                    <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-                                    <input class="form-control" id="email" th:field="*{email}" th:errorclass="has-error"
-                                           placeholder="email" type="email" readonly="readonly"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12 text-right">
-                                <button type="submit" class="btn btn-default">Apply</button>
-                                <button type="reset" class="btn btn-default">Cancel</button>
-                            </div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-            <footer th:replace="footer"></footer>
         </div>
+        <div class="row">
+            <!--@thymesVar id="cmsUser" type="sparkle.cms.domain.CmsUser"-->
+            <form class="col-xs-12" th:action="@{/profile}" th:object="${cmsUser}" action="#" method="POST">
+                <fieldset>
+                    <input type="hidden" name="_method" value="PUT"/>
+                    <input type="hidden" id="id" th:field="*{id}"/>
 
+                    <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger alert-dismissible"
+                         role="alert">
+                        <button type="button" class="close" data-dismiss="alert"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <ul>
+                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+                        </ul>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="name">Full name:</label>
+
+                        <div class="controls">
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-play-circle fa-fw"></i></span>
+                                <input class="form-control" id="name" th:field="*{name}" th:errorclass="has-error"
+                                       placeholder="name" type="text" required="required"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="username">Username:</label>
+
+                        <div class="controls">
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+                                <input class="form-control" id="username" th:field="*{username}"
+                                       th:errorclass="has-error" placeholder="username" type="text"
+                                       required="required"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="password">Password:</label>
+
+                        <div class="controls">
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                                <input class="form-control" id="password" th:field="*{password}"
+                                       th:errorclass="has-error" placeholder="password" type="text"
+                                       required="required"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="email">Email:</label>
+
+                        <div class="controls">
+                            <div class="form-group input-group">
+                                <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+                                <input class="form-control" id="email" th:field="*{email}" th:errorclass="has-error"
+                                       placeholder="email" type="email" readonly="readonly"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 text-right">
+                            <button type="submit" class="btn btn-default">Apply</button>
+                            <button type="reset" class="btn btn-default">Cancel</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <footer th:replace="footer"></footer>
     </div>
 
-    <!-- jQuery -->
-    <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="https://code.jquery.com/jquery-2.1.1.js"></script>
+</div>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<!-- jQuery -->
+<script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}" src="https://code.jquery.com/jquery-2.1.1.js"></script>
 
-    <!-- Custom Theme JavaScript -->
-    <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script th:src="@{/webjars/bootstrap/3.1.0/js/bootstrap.min.js}"
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
 
 </body>
 
