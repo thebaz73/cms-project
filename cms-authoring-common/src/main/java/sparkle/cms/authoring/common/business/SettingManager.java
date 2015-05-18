@@ -44,7 +44,7 @@ public class SettingManager {
     }
 
     public List<CmsSetting> findSettings(CmsUser cmsUser) {
-        return cmsSettingRepository.findByFilter(cmsUser.getId());
+        return cmsSettingRepository.findByUserId(cmsUser.getId());
     }
 
     public Map<String, Plugin> findPlugins() {
@@ -52,7 +52,7 @@ public class SettingManager {
     }
 
     public Page<CmsSetting> findSettings(CmsUser cmsUser, Pageable pageable) {
-        return cmsSettingRepository.findByFilter(cmsUser.getId(), pageable);
+        return cmsSettingRepository.findByUserId(cmsUser.getId(), pageable);
     }
 
     public void editSetting(CmsSetting cmsSetting) {

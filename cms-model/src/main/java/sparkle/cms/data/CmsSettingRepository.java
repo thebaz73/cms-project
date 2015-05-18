@@ -34,7 +34,7 @@ public interface CmsSettingRepository extends MongoRepository<CmsSetting, String
      * @param filter filter
      * @return list of @CmsSetting
      */
-    List<CmsSetting> findByFilter(String filter);
+    List<CmsSetting> findByUserId(String filter);
 
     /**
      * Finds @CmsSetting given its filter
@@ -42,7 +42,7 @@ public interface CmsSettingRepository extends MongoRepository<CmsSetting, String
      * @param filter filter
      * @return page of @CmsSetting
      */
-    Page<CmsSetting> findByFilter(String filter, Pageable pageable);
+    Page<CmsSetting> findByUserId(String filter, Pageable pageable);
 
     /**
      * Finds @CmsSetting given its key and filter
@@ -51,7 +51,7 @@ public interface CmsSettingRepository extends MongoRepository<CmsSetting, String
      * @param filter filter
      * @return list of @CmsSetting
      */
-    List<CmsSetting> findByKeyAndFilter(String key, String filter);
+    List<CmsSetting> findByKeyAndUserId(String key, String filter);
 
     /**
      * Finds @CmsSetting given its address
@@ -60,5 +60,5 @@ public interface CmsSettingRepository extends MongoRepository<CmsSetting, String
      * @param filter filter
      * @return list of @CmsSetting
      */
-    Page<CmsSetting> findByKeyAndFilter(String key, String filter, Pageable pageable);
+    Page<CmsSetting> findByKeyAndUserId(String key, String filter, Pageable pageable);
 }

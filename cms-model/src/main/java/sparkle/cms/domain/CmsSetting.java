@@ -12,13 +12,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document
 @CompoundIndexes({
-        @CompoundIndex(name = "filter_key_idx", def = "{'filter' : 1, 'key' : 1}", unique = true)
+        @CompoundIndex(name = "userId_key_idx", def = "{'userId' : 1, 'key' : 1}", unique = true)
 })
 public class CmsSetting {
     @Id
     private String id;
 
-    private String filter;
+    private String userId;
     private String key;
     private SettingType type;
     private Object value;
@@ -41,12 +41,12 @@ public class CmsSetting {
         this.id = id;
     }
 
-    public String getFilter() {
-        return filter;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setFilter(String filter) {
-        this.filter = filter;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getKey() {
