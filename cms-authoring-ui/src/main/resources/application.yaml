@@ -20,12 +20,9 @@ server:
 management:
     port: 9001
 
-asset:
-    repo:
-      dns: 192.168.108.129
-      ip: 192.168.108.129
-      port: 8080
-    timeout: 5000
+multipart:
+    maxFileSize: 30MB
+    maxRequestSize: 30MB
 
 mscms:
     authentication:

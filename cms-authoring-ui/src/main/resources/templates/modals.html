@@ -8,7 +8,47 @@
                     <h4 class="modal-title">Image Preview</h4>
                 </div>
                 <div class="modal-body">
-                    <img src=""/>
+                    <img style="display: block; max-width:560px; max-height:560px; width: auto; height: auto;" src=""/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="videoModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Video Preview</h4>
+                </div>
+                <div class="modal-body">
+                    <video style="display: block; max-width:560px; max-height:560px; width: auto; height: auto;" controls="controls">
+                        <source src=""/>
+                        Your browser does not support the audio element.
+                    </video>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="audioModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Audio Preview</h4>
+                </div>
+                <div class="modal-body">
+                    <audio controls="controls">
+                        <source src=""/>
+                        Your browser does not support the audio element.
+                    </audio>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -24,8 +64,25 @@
                             aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title">PDF Preview</h4>
                 </div>
-                <div class="modal-body">
-                    <iframe class="col-lg-12" style="height: 500px" src=""></iframe>
+                <div class="modal-body" style="height: 560px">
+                    <iframe class="col-lg-12" style="height: 540px" src=""></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="textModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">PDF Preview</h4>
+                </div>
+                <div class="modal-body" style="height: 560px">
+                    <iframe class="col-lg-12" style="height: 540px" src=""></iframe>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -47,6 +104,27 @@
 
             var modal = $(this);
             modal.find('.modal-body iframe').attr("src", uri);
+        });
+        $('#textModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var uri = button.data('uri');
+
+            var modal = $(this);
+            modal.find('.modal-body iframe').attr("src", uri);
+        });
+        $('#videoModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var uri = button.data('uri');
+
+            var modal = $(this);
+            modal.find('.modal-body video source').attr("src", uri);
+        });
+        $('#audioModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var uri = button.data('uri');
+
+            var modal = $(this);
+            modal.find('.modal-body audio source').attr("src", uri);
         });
     </script>
 </div>

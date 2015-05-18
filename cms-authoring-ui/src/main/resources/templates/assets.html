@@ -100,9 +100,16 @@
                                            data-toggle="modal" data-placement="top" title="Preview"
                                            th:if="${(aAsset.type.name == 'PDF')}"><span
                                                 class="glyphicon glyphicon-search"></span></a>
-                                        <!--<a th:href="@{${'/ViewerJS/index.html#../assets/preview?uri='+aAsset.uri}}" class="btn btn-success btn-xs" target="_blank"
-                                           data-toggle="tooltip" data-placement="top" title="Preview (Opens in a new Window)" th:if="${(aAsset.type.name == 'DOCUMENT') || (aAsset.type.name == 'PRESENTATION') || (aAsset.type.name == 'SPREADSHEET') || (aAsset.type.name == 'PDF')}"><span
-                                                class="glyphicon glyphicon-search"></span></a>-->
+                                        <a th:attr="data-uri=@{${'/assets/preview?uri='+aAsset.uri}}"
+                                           class="btn btn-success btn-xs" data-target="#textModal"
+                                           data-toggle="modal" data-placement="top" title="Preview"
+                                           th:if="${(aAsset.type.name == 'TEXT')}"><span
+                                                class="glyphicon glyphicon-search"></span></a>
+                                        <a th:href="@{${'/ViewerJS/index.html#../assets/preview?uri='+aAsset.uri}}"
+                                           class="btn btn-success btn-xs" target="_blank"
+                                           data-toggle="tooltip" data-placement="top" title="Preview (Opens in a new Window)"
+                                           th:if="${(aAsset.type.name == 'DOCUMENT') || (aAsset.type.name == 'PRESENTATION') || (aAsset.type.name == 'SPREADSHEET')}"><span
+                                                class="glyphicon glyphicon-search"></span></a>
                                     </form>
 
                                 </div>
