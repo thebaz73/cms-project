@@ -252,7 +252,12 @@
         $("#upload_file").fileinput();
     });
 </script>
-
+<script th:src="@{/video-js/video.js}"  src="../public/video-js/video.dev.js"></script>
+<script>
+    /* <![CDATA[ */
+    videojs.options.flash.swf = "/video-js/video-js.swf";
+    /* ]]> */
+</script>
 <div th:replace="modals"></div>
 
 </body>

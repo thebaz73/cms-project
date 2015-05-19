@@ -112,14 +112,32 @@
 
             var modal = $(this);
             var aDiv = modal.find('.modal-body');
-            var videoTag = document.createElement("video");
+            /*var videoTag = document.createElement("video");
             videoTag.setAttribute("style", "display: block; max-width:560px; max-height:560px; width: auto; height: auto;");
             videoTag.setAttribute("controls", "controls");
             aDiv.append(videoTag);
             var source = document.createElement("source");
             source.type = "audio/mpeg";
             source.src = uri;
-            videoTag.appendChild(source);
+            videoTag.appendChild(source);*/
+            var obj, source;
+
+            obj = document.createElement('video');
+            $(obj).attr('id', 'example_video_test');
+            $(obj).attr('class', 'video-js vjs-default-skin');
+            $(obj).attr('width', '560');
+            $(obj).attr('data-height', '264');
+            $(obj).attr('controls', ' ');
+            //$(obj).attr('poster', 'http://video-js.zencoder.com/oceans-clip.jpg');
+            $(obj).attr('preload', 'auto');
+            $(obj).attr('data-setup', '{}');
+
+            source = document.createElement('source');
+            //$(source).attr('type', 'video/mp4');
+            $(source).attr('src', uri);
+
+            aDiv.append(obj);
+            $(obj).append(source);
         }).on('hide.bs.modal', function (event) {
             var modal = $(this);
             var elem = modal.find('.modal-body video');
