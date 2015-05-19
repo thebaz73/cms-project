@@ -169,40 +169,61 @@ public class AssetController {
         }
     }
 
-    @RequestMapping(value = {"/assets/download"}, method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String download(HttpServletRequest request, HttpServletResponse response, @RequestParam("uri") String uri) throws IOException {
+    @RequestMapping(value = {"/assets/download/**"}, method = {RequestMethod.GET, RequestMethod.HEAD})
+    public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
+            final String prefix = "/assets/download/";
+            final String requestURI = request.getRequestURI();
+            String uri = requestURI.substring(prefix.length());
             Asset asset = assetManager.findAssetByUri(uri);
-            request.getSession().setAttribute("asset", asset);
             if (asset.getContent() == null) {
-                return "redirect:/assets/redirect";
+                response.setHeader("Location", asset.getUri());
             }
-            return "redirect:/assets/file?mode=download";
+            else {
+                response.setContentType("application/force-download");
+                response.setContentLength(-1);
+                response.setHeader("Content-Transfer-Encoding", "binary");
+                response.setHeader("Content-Disposition", "attachment; filename=\"" + uri.substring(uri.lastIndexOf("/") + 1) + "\"");
+
+                ByteArrayInputStream is = new ByteArrayInputStream(asset.getContent());
+                IOUtils.copy(is, response.getOutputStream());
+                response.flushBuffer();
+            }
         } catch (AuthoringException e) {
             String msg = String.format("Cannot manage assets. Reason: %s",
                     e.getMessage());
             logger.info(msg, e);
             response.sendError(400, msg);
         }
-        return "redirect:/assets";
     }
 
-    @RequestMapping(value = {"/assets/preview"}, method = {RequestMethod.GET, RequestMethod.HEAD})
-    public String preview(HttpServletRequest request, HttpServletResponse response, @RequestParam("uri") String uri) throws IOException {
+    @RequestMapping(value = {"/assets/preview/**"}, method = {RequestMethod.GET, RequestMethod.HEAD})
+    public void preview(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
+            final String prefix = "/assets/preview/";
+            final String requestURI = request.getRequestURI();
+            String uri = requestURI.substring(prefix.length());
             Asset asset = assetManager.findAssetByUri(uri);
-            request.getSession().setAttribute("asset", asset);
             if (asset.getContent() == null) {
-                return "redirect:/assets/redirect";
+                response.setHeader("Location", asset.getUri());
             }
-            return "redirect:/assets/file?mode=preview";
+            else {
+                MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+                // only by file name
+                String mimeType = mimeTypesMap.getContentType(uri.substring(uri.lastIndexOf("/") + 1));
+                response.setContentType(mimeType);
+                response.setHeader("X-Frame-Options", "SAMEORIGIN");
+
+                ByteArrayInputStream is = new ByteArrayInputStream(asset.getContent());
+                IOUtils.copy(is, response.getOutputStream());
+                response.flushBuffer();
+            }
         } catch (AuthoringException e) {
             String msg = String.format("Cannot manage assets. Reason: %s",
                     e.getMessage());
             logger.info(msg, e);
             response.sendError(400, msg);
         }
-        return "redirect:/assets";
     }
 
     /**

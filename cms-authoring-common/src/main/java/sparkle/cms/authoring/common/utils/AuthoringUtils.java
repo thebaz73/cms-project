@@ -11,6 +11,17 @@ import java.util.List;
 public class AuthoringUtils {
 
     /**
+     * Converts a generic string to an url compliant filename
+     *
+     * @param string generic string
+     * @return pretty uri
+     */
+    public static String toPrettyFileURI(String string) {
+        return Normalizer.normalize(string.toLowerCase(), Normalizer.Form.NFD)
+                .replaceAll("\\p{InCombiningDiacriticalMarks}+", "")
+                .replaceAll("[^\\p{Alnum}|/|\\.]+", "_");
+    }
+    /**
      * Converts a generic string to an url compliant string
      *
      * @param string generic string

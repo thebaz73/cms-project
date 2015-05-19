@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static sparkle.cms.authoring.common.utils.AuthoringUtils.toPrettyFileURI;
+
 /**
  * AssetManager
  * Created by bazzoni on 04/05/2015.
@@ -90,7 +92,7 @@ public class AssetManager {
 
     public void createFolder(String siteId, String path) throws AuthoringException {
         try {
-            assetManagementPlugin.createFolder(siteId, path);
+            assetManagementPlugin.createFolder(siteId, toPrettyFileURI(path));
         } catch (PluginOperationException e) {
             logger.error("Cannot create folder", e);
             throw new AuthoringException("Cannot create folder ", e);
@@ -99,7 +101,7 @@ public class AssetManager {
 
     public void deleteFolder(String siteId, String path) throws AuthoringException {
         try {
-            assetManagementPlugin.deleteFolder(siteId, path);
+            assetManagementPlugin.deleteFolder(siteId, toPrettyFileURI(path));
         } catch (PluginOperationException e) {
             logger.error("Cannot delete folder", e);
             throw new AuthoringException("Cannot create folder", e);
@@ -108,7 +110,7 @@ public class AssetManager {
 
     public void createAsset(String siteId, String path, String name, byte[] data, String contentType) throws AuthoringException {
         try {
-            assetManagementPlugin.createAsset(siteId, path, name, data, contentType);
+            assetManagementPlugin.createAsset(siteId, toPrettyFileURI(path), toPrettyFileURI(name), data, contentType);
         } catch (PluginOperationException e) {
             logger.error("Cannot create folder", e);
             throw new AuthoringException("Cannot create folder ", e);
@@ -117,7 +119,7 @@ public class AssetManager {
 
     public void deleteAsset(String siteId, String path, String name) throws AuthoringException {
         try {
-            assetManagementPlugin.deleteAsset(siteId, path, name);
+            assetManagementPlugin.deleteAsset(siteId, toPrettyFileURI(path), toPrettyFileURI(name));
         } catch (PluginOperationException e) {
             logger.error("Cannot delete folder", e);
             throw new AuthoringException("Cannot create folder", e);
@@ -129,7 +131,7 @@ public class AssetManager {
         if(cmsAsset.getTitle().isEmpty()) cmsAsset.setTitle(originalFilename);
         cmsAsset.setType(findByContentType(contentType));
         cmsAsset.setModificationDate(new Date());
-        cmsAsset.setUri(String.format("%s/%s", cmsAsset.getSiteId(), originalFilename));
+        cmsAsset.setUri(String.format("%s/%s", cmsAsset.getSiteId(), toPrettyFileURI(originalFilename)));
 
         createAsset(cmsAsset.getSiteId(), "", cmsAsset.getName(), bytes, contentType);
         cmsAssetRepository.save(cmsAsset);

@@ -25,10 +25,7 @@
                     <h4 class="modal-title">Video Preview</h4>
                 </div>
                 <div class="modal-body">
-                    <video style="display: block; max-width:560px; max-height:560px; width: auto; height: auto;" controls="controls">
-                        <source src=""/>
-                        Your browser does not support the audio element.
-                    </video>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -45,10 +42,6 @@
                     <h4 class="modal-title">Audio Preview</h4>
                 </div>
                 <div class="modal-body">
-                    <audio controls="controls">
-                        <source src=""/>
-                        Your browser does not support the audio element.
-                    </audio>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -79,7 +72,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">PDF Preview</h4>
+                    <h4 class="modal-title">Text Preview</h4>
                 </div>
                 <div class="modal-body" style="height: 560px">
                     <iframe class="col-lg-12" style="height: 540px" src=""></iframe>
@@ -90,7 +83,8 @@
             </div>
         </div>
     </div>
-    <script>
+    <script type="application/javascript">
+        /* <![CDATA[ */
         $('#imageModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var uri = button.data('uri');
@@ -117,14 +111,40 @@
             var uri = button.data('uri');
 
             var modal = $(this);
-            modal.find('.modal-body video source').attr("src", uri);
+            var aDiv = modal.find('.modal-body');
+            var videoTag = document.createElement("video");
+            videoTag.setAttribute("style", "display: block; max-width:560px; max-height:560px; width: auto; height: auto;");
+            videoTag.setAttribute("controls", "controls");
+            aDiv.append(videoTag);
+            var source = document.createElement("source");
+            source.type = "audio/mpeg";
+            source.src = uri;
+            videoTag.appendChild(source);
+        }).on('hide.bs.modal', function (event) {
+            var modal = $(this);
+            var elem = modal.find('.modal-body video');
+            elem.remove()
         });
         $('#audioModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var uri = button.data('uri');
 
             var modal = $(this);
-            modal.find('.modal-body audio source').attr("src", uri);
+            var aDiv = modal.find('.modal-body');
+            var audioTag = document.createElement("audio");
+            audioTag.setAttribute("controls", "controls");
+            aDiv.append(audioTag);
+            var source = document.createElement("source");
+            if(audioTag.canPlayType("audio/mpeg") && uri.indexOf("mp3") > -1) {
+                source.type = "audio/mpeg";
+                source.src = uri;
+                audioTag.appendChild(source);
+            }
+        }).on('hide.bs.modal', function (event) {
+            var modal = $(this);
+            var elem = modal.find('.modal-body audio');
+            elem.remove()
         });
+        /* ]]> */
     </script>
 </div>
