@@ -253,12 +253,13 @@
     });
 </script>
 <script th:src="@{/video-js/video.js}"  src="../public/video-js/video.dev.js"></script>
+<script th:src="@{/video-js/wavesurfer.min.js}"  src="../public/video-js/wavesurfer.min.js"></script>
+<script th:src="@{/video-js/videojs.wavesurfer.js}"  src="../public/video-js/videojs.wavesurfer.js"></script>
 <script>
     /* <![CDATA[ */
     videojs.options.flash.swf = "/video-js/video-js.swf";
     /* ]]> */
 </script>
-<script th:src="@{/audio-js/audio.js}"  src="../public/audio-js/audio.js"></script>
 <div th:replace="modals"></div>
 
 </body>

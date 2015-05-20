@@ -25,7 +25,6 @@
                     <h4 class="modal-title">Video Preview</h4>
                 </div>
                 <div class="modal-body">
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -110,59 +109,67 @@
             var button = $(event.relatedTarget);
             var uri = button.data('uri');
 
+            var obj, source;
             var modal = $(this);
             var aDiv = modal.find('.modal-body');
-            
-            var obj, source;
 
             obj = document.createElement('video');
             $(obj).attr('id', 'video_id');
             $(obj).attr('class', 'video-js vjs-default-skin');
-            $(obj).attr('width', '560');
-            $(obj).attr('data-height', '264');
-            $(obj).attr('controls', ' ');
-            //$(obj).attr('poster', 'http://video-js.zencoder.com/oceans-clip.jpg');
             $(obj).attr('preload', 'auto');
-            $(obj).attr('data-setup', '{}');
 
             source = document.createElement('source');
-            //$(source).attr('type', 'video/mp4');
             $(source).attr('src', uri);
 
             aDiv.append(obj);
             $(obj).append(source);
+            var player = videojs("video_id", {
+                        controls: true,
+                        autoplay: true,
+                        width: 560,
+                        height: 264,
+                        loop: false
+                    });
+            // change player background color
+            player.el().style.backgroundColor = "#ffffff";
         }).on('hide.bs.modal', function (event) {
-            var modal = $(this);
-            var elem = modal.find('.modal-body video');
-            elem.remove()
+            _V_("video_id").dispose();
         });
         $('#audioModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var uri = button.data('uri');
 
+            var obj, source;
             var modal = $(this);
             var aDiv = modal.find('.modal-body');
-            var obj, source;
 
             obj = document.createElement('audio');
             $(obj).attr('id', 'audio_id');
-            $(obj).attr('class', 'audio-js');
-            $(obj).attr('width', '560');
-            $(obj).attr('controls', ' ');
-            //$(obj).attr('poster', 'http://video-js.zencoder.com/oceans-clip.jpg');
-            $(obj).attr('preload', 'auto');
-            $(obj).attr('data-setup', '{}');
-
-            source = document.createElement('source');
-            //$(source).attr('type', 'video/mp4');
-            $(source).attr('src', uri);
+            $(obj).attr('class', 'video-js vjs-default-skin');
 
             aDiv.append(obj);
-            $(obj).append(source);
+            var player = videojs("audio_id",
+                    {
+                        controls: true,
+                        autoplay: true,
+                        loop: false,
+                        width: 560,
+                        height: 264,
+                        plugins: {
+                            wavesurfer: {
+                                src: uri,
+                                msDisplayMax: 10,
+                                waveColor: "grey",
+                                progressColor: "black",
+                                cursorColor: "black",
+                                hideScrollbar: true
+                            }
+                        }
+                    });
+            // change player background color
+            player.el().style.backgroundColor = "#efefef";
         }).on('hide.bs.modal', function (event) {
-            var modal = $(this);
-            var elem = modal.find('.modal-body audio');
-            elem.remove()
+            _V_("audio_id").dispose();
         });
         /* ]]> */
     </script>
