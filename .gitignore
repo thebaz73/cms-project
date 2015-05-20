@@ -2,3 +2,8 @@
 *.iml
 target/*
 */target/*
+.settings/*
+*/.settings/*
+.project
+.classpath
+*/.gitignore
