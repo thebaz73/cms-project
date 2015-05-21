@@ -143,32 +143,6 @@ public class AssetController {
         response.setHeader("Location", asset.getUri());
     }
 
-    @RequestMapping(value = "/assets/file", method = {RequestMethod.GET, RequestMethod.HEAD})
-    public void getFile(HttpServletRequest request, HttpServletResponse response, @RequestParam("mode") String mode) {
-        Asset asset = (Asset) request.getSession().getAttribute("asset");
-        final String uri = asset.getUri().replaceAll("\\\\", "/");
-        try {
-            if (mode.equals("download")) {
-                response.setContentType("application/force-download");
-                response.setContentLength(-1);
-                response.setHeader("Content-Transfer-Encoding", "binary");
-                response.setHeader("Content-Disposition", "attachment; filename=\"" + uri.substring(uri.lastIndexOf("/") + 1) + "\"");
-            } else if (mode.equals("preview")) {
-                MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-                // only by file name
-                String mimeType = mimeTypesMap.getContentType(uri.substring(uri.lastIndexOf("/") + 1));
-                response.setContentType(mimeType);
-                response.setHeader("X-Frame-Options", "SAMEORIGIN");
-            }
-            ByteArrayInputStream is = new ByteArrayInputStream(asset.getContent());
-            IOUtils.copy(is, response.getOutputStream());
-            response.flushBuffer();
-        } catch (IOException ex) {
-            logger.info("Error writing file to output stream. Filename was '{}'", uri, ex);
-            throw new RuntimeException("IOError writing file to output stream");
-        }
-    }
-
     @RequestMapping(value = {"/assets/download/**"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
