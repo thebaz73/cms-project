@@ -157,7 +157,8 @@ public class AssetManager {
         else if(contentType.startsWith("video")) {
             assetType = AssetType.VIDEO;
         }
-        else if(contentType.equals("application/msword") || contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") || contentType.equals("application/vnd.oasis.opendocument.text")) {
+        else if(contentType.equals("application/msword") || contentType.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
+                contentType.equals("application/vnd.oasis.opendocument.text")) {
             assetType = AssetType.DOCUMENT;
         }
         else if(contentType.equals("application/vnd.ms-excel") || contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") ||

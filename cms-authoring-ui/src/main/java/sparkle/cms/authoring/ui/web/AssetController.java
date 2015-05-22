@@ -137,12 +137,6 @@ public class AssetController {
         return "redirect:/assets";
     }
 
-    @RequestMapping(value = "/assets/redirect", method = RequestMethod.GET)
-    public void method(HttpServletRequest request, HttpServletResponse response) {
-        Asset asset = (Asset) request.getSession().getAttribute("asset");
-        response.setHeader("Location", asset.getUri());
-    }
-
     @RequestMapping(value = {"/assets/download/**"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
