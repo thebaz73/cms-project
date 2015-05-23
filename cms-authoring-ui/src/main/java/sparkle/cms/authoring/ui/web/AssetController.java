@@ -22,7 +22,6 @@ import sparkle.cms.registration.common.business.RegistrationException;
 import sparkle.cms.registration.common.business.RegistrationManager;
 import sparkle.cms.registration.common.business.SiteManager;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -30,6 +29,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import static sparkle.cms.plugin.mgmt.asset.AssetUtils.findContentTypeByFileName;
 import static sparkle.cms.utils.UserUtils.isAuthor;
 import static sparkle.cms.utils.UserUtils.isWebmaster;
 
@@ -176,9 +176,7 @@ public class AssetController {
                 response.setHeader("Location", asset.getUri());
             }
             else {
-                MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-                // only by file name
-                String mimeType = mimeTypesMap.getContentType(uri.substring(uri.lastIndexOf("/") + 1));
+                String mimeType = findContentTypeByFileName(uri.substring(uri.lastIndexOf("/") + 1));
                 response.setContentType(mimeType);
                 response.setHeader("X-Frame-Options", "SAMEORIGIN");
 
