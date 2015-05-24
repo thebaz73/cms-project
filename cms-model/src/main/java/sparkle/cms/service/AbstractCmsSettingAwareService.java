@@ -17,13 +17,15 @@ public abstract class AbstractCmsSettingAwareService implements CmsSettingAware 
         if (!initialized || force) {
             setDefaultSettings();
         }
-        doActualReload();
+        doActualReload(force);
     }
 
     /**
-     * Actually executes reload activities
+     * Actually executes reload
+     *
+     * @param force true forces reload assets into repository
      */
-    protected abstract void doActualReload();
+    protected abstract void doActualReload(boolean force);
 
     /**
      * Set-up service default settings
