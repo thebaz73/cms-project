@@ -3,6 +3,23 @@ spring:
     profiles.active: test
 ---
 spring:
+    profiles: localcloud
+    data:
+      mongodb.host: 192.168.108.129
+      mongodb.port: 27017
+      mongodb.name: cms-db
+
+logging:
+    level.org.springframework: INFO
+    level.sparkle.cms: DEBUG
+
+server:
+    port: 9000
+
+management:
+    port: 9001
+---
+spring:
     profiles: development
     data:
       mongodb.host: localhost
