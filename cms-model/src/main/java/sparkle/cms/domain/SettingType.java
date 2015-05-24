@@ -27,7 +27,7 @@ public enum SettingType {
     @JsonCreator
     public static SettingType forName(final String name) {
         if (name == null) {
-            throw new IllegalArgumentException("Name cannot be null for role");
+            throw new IllegalArgumentException("Name cannot be null for type");
         }
         if (name.toUpperCase().equals("BOOL")) {
             return BOOL;

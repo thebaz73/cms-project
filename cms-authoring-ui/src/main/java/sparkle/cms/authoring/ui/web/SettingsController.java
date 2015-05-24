@@ -67,9 +67,14 @@ public class SettingsController {
                 for (Map.Entry<String, Plugin> entry : pluginMap.entrySet()) {
                     logger.debug("Processing bean {}", entry.getKey());
                     Plugin plugin = entry.getValue();
-                    PluginData pluginData = new PluginData(plugin.getId(), plugin.getName(), plugin.getStatus().toString());
+                    PluginData pluginData = new PluginData(plugin.getId(), plugin.getName(), plugin.getType().toString(), plugin.getStatus().toString());
                     for (CmsSetting cmsSetting : plugin.getSettings()) {
-                        pluginData.getCmsSettings().add(cmsSettingMap.remove(cmsSetting.getKey()));
+                        CmsSetting matched = cmsSettingMap.remove(cmsSetting.getKey());
+                        if (cmsSetting.getKey().endsWith("activate")) {
+                            pluginData.setActivate(matched);
+                        } else {
+                            pluginData.getCmsSettings().add(matched);
+                        }
                     }
                     plugins.add(pluginData);
                 }
@@ -80,6 +85,36 @@ public class SettingsController {
                 response.sendError(400, msg);
             }
         }
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @RequestMapping(value = {"/settings/plugin/activate/{pluginId}"}, method = RequestMethod.GET)
+    public String activatePlugin(HttpServletRequest request, HttpServletResponse response, @PathVariable("pluginId") String pluginId) throws IOException {
+        PluginData pluginData = plugins.stream().filter(p -> p.getId().equals(pluginId)).findFirst().get();
+        CmsSetting cmsSetting = pluginData.getActivate();
+        CmsSetting editableSetting = settingManager.findSetting(cmsSetting.getId());
+        editableSetting.setValue(Boolean.TRUE);
+        settingManager.editSetting(editableSetting);
+
+        plugins.stream().filter(p -> p.getType().equals(pluginData.getType()) && !p.getId().equals(pluginId)).forEach(p -> {
+            CmsSetting aSetting = settingManager.findSetting(p.getActivate().getId());
+            aSetting.setValue(Boolean.FALSE);
+            settingManager.editSetting(aSetting);
+        });
+
+        return reload(request, response);
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})
+    @RequestMapping(value = {"/settings/plugin/deactivate/{pluginId}"}, method = RequestMethod.GET)
+    public String deactivatePlugin(HttpServletRequest request, HttpServletResponse response, @PathVariable("pluginId") String pluginId) throws IOException {
+        PluginData pluginData = plugins.stream().filter(p -> p.getId().equals(pluginId)).findFirst().get();
+        CmsSetting cmsSetting = pluginData.getActivate();
+        CmsSetting editableSetting = settingManager.findSetting(cmsSetting.getId());
+        editableSetting.setValue(Boolean.FALSE);
+        settingManager.editSetting(editableSetting);
+
+        return reload(request, response);
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_MANAGER"})

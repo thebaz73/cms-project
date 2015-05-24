@@ -15,10 +15,7 @@ import sparkle.cms.domain.CmsUser;
 import sparkle.cms.plugin.mgmt.PluginOperationException;
 import sparkle.cms.plugin.mgmt.PluginService;
 import sparkle.cms.plugin.mgmt.asset.Asset;
-import sparkle.cms.plugin.mgmt.asset.AssetManagementPlugin;
-import sparkle.cms.plugin.mgmt.asset.Container;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,19 +38,8 @@ public class AssetManager {
     @Autowired
     private PluginService pluginService;
 
-    private AssetManagementPlugin<? extends Container, ? extends Asset> assetManagementPlugin;
-
-    @PostConstruct
-    public void initialize() {
-        assetManagementPlugin = pluginService.getAssetManagementPlugin();
-    }
-
     public boolean checkPluginAvailable() {
-        if (assetManagementPlugin == null) {
-            assetManagementPlugin = pluginService.getAssetManagementPlugin();
-        }
-
-        return assetManagementPlugin != null;
+        return pluginService.getAssetManagementPlugin() != null;
     }
 
     public Page<CmsAsset> findAllAssets(CmsUser cmsUser, Pageable pageable) {
@@ -72,7 +58,7 @@ public class AssetManager {
 
     public void createSiteRepository(String siteId) throws AuthoringException {
         try {
-            assetManagementPlugin.createSiteRepository(siteId);
+            pluginService.getAssetManagementPlugin().createSiteRepository(siteId);
         } catch (PluginOperationException e) {
             logger.error("Cannot create site repository", e);
             throw new AuthoringException("Cannot create site repository", e);
@@ -81,7 +67,7 @@ public class AssetManager {
 
     public void deleteSiteRepository(String siteId) throws AuthoringException {
         try {
-            assetManagementPlugin.deleteSiteRepository(siteId);
+            pluginService.getAssetManagementPlugin().deleteSiteRepository(siteId);
         } catch (PluginOperationException e) {
             logger.error("Cannot delete site repository", e);
             throw new AuthoringException("Cannot create site repository", e);
@@ -90,7 +76,7 @@ public class AssetManager {
 
     public void createFolder(String siteId, String path) throws AuthoringException {
         try {
-            assetManagementPlugin.createFolder(siteId, toPrettyFileURI(path));
+            pluginService.getAssetManagementPlugin().createFolder(siteId, toPrettyFileURI(path));
         } catch (PluginOperationException e) {
             logger.error("Cannot create folder", e);
             throw new AuthoringException("Cannot create folder ", e);
@@ -99,7 +85,7 @@ public class AssetManager {
 
     public void deleteFolder(String siteId, String path) throws AuthoringException {
         try {
-            assetManagementPlugin.deleteFolder(siteId, toPrettyFileURI(path));
+            pluginService.getAssetManagementPlugin().deleteFolder(siteId, toPrettyFileURI(path));
         } catch (PluginOperationException e) {
             logger.error("Cannot delete folder", e);
             throw new AuthoringException("Cannot create folder", e);
@@ -108,16 +94,16 @@ public class AssetManager {
 
     public void createAsset(String siteId, String path, String name, byte[] data, String contentType) throws AuthoringException {
         try {
-            assetManagementPlugin.createAsset(siteId, toPrettyFileURI(path), toPrettyFileURI(name), data, contentType);
+            pluginService.getAssetManagementPlugin().createAsset(siteId, toPrettyFileURI(path), toPrettyFileURI(name), data, contentType);
         } catch (PluginOperationException e) {
             logger.error("Cannot create folder", e);
-            throw new AuthoringException("Cannot create folder ", e);
+            throw new AuthoringException("Cannot create asset ", e);
         }
     }
 
     public void deleteAsset(String siteId, String path, String name) throws AuthoringException {
         try {
-            assetManagementPlugin.deleteAsset(siteId, toPrettyFileURI(path), toPrettyFileURI(name));
+            pluginService.getAssetManagementPlugin().deleteAsset(siteId, toPrettyFileURI(path), toPrettyFileURI(name));
         } catch (PluginOperationException e) {
             logger.error("Cannot delete folder", e);
             throw new AuthoringException("Cannot create folder", e);
@@ -146,7 +132,7 @@ public class AssetManager {
             final List<CmsAsset> bySiteIdAndUri = cmsAssetRepository.findBySiteIdAndUri(uri.substring(0, uri.indexOf("/")), uri);
             if(!bySiteIdAndUri.isEmpty()) {
                 CmsAsset cmsAsset = bySiteIdAndUri.get(0);
-                return assetManagementPlugin.findAsset(cmsAsset.getSiteId(), "", uri.substring(uri.lastIndexOf("/") + 1));
+                return pluginService.getAssetManagementPlugin().findAsset(cmsAsset.getSiteId(), "", uri.substring(uri.lastIndexOf("/") + 1));
             }
         } catch (PluginOperationException e) {
             logger.error("Cannot find asset", e);

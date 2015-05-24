@@ -35,7 +35,7 @@
                     <div class="panel panel-default" th:unless="${#lists.isEmpty(allSettings)}">
                         <div class="panel-heading" role="tab" id="headingOne">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"
-                               aria-controls="collapseOne">
+                               aria-controls="collapseOne" style="text-decoration:none;">
                                 <h4 class="panel-title">General Settings</h4>
                             </a>
                         </div>
@@ -83,7 +83,8 @@
                                data-parent="#accordion"
                                th:href="${'#collapse' + plugin.id}"
                                aria-expanded="false"
-                               th:attr="aria-controls=${'collapse' + plugin.id}"><h4 class="panel-title"
+                               th:attr="aria-controls=${'collapse' + plugin.id}" style="text-decoration:none;"><h4
+                                    class="panel-title"
                                                                                      th:text="${plugin.name}">Plugin
                                 name</h4></a>
                         </div>
@@ -128,8 +129,16 @@
                                             </div>
                                         </form>
                                     </div>
-                                    <div class="col-lg-1"><a class="btn btn-default" th:href="@{'/settings/reload'}"><i
-                                            class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a>
+                                    <div class="col-lg-1"><!--<a class="btn btn-default" th:href="@{'/settings/reload'}"><i
+                                            class="fa fa-refresh fa-fw faa-spin animated-hover"></i> Reload settings</a>-->
+                                        <a class="btn btn-success" th:unless="${plugin.activate.value}"
+                                           th:href="@{${'/settings/plugin/activate/' + plugin.id}}"
+                                           data-toggle="tooltip" data-placement="top" title="Activate"><i
+                                                class="glyphicon glyphicon-ok-circle"></i> Activate</a>
+                                        <a class="btn btn-warning" th:if="${plugin.activate.value}"
+                                           th:href="@{${'/settings/plugin/deactivate/' + plugin.id}}"
+                                           data-toggle="tooltip" data-placement="top" title="Deactivate"><i
+                                                class="glyphicon glyphicon-remove-circle"></i> Deactivate</a>
                                     </div>
                                 </div>
                             </div>
