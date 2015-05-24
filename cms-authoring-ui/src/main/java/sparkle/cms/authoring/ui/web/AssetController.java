@@ -146,6 +146,7 @@ public class AssetController {
             Asset asset = assetManager.findAssetByUri(uri);
             if (asset.getContent() == null) {
                 response.setHeader("Location", asset.getUri());
+                response.sendRedirect(asset.getUri());
             }
             else {
                 response.setContentType("application/force-download");
@@ -174,6 +175,7 @@ public class AssetController {
             Asset asset = assetManager.findAssetByUri(uri);
             if (asset.getContent() == null) {
                 response.setHeader("Location", asset.getUri());
+                response.sendRedirect(asset.getUri());
             }
             else {
                 String mimeType = findContentTypeByFileName(uri.substring(uri.lastIndexOf("/") + 1));
