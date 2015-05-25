@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import sparkle.cms.data.CmsAssetRepository;
 import sparkle.cms.data.CmsSiteRepository;
+import sparkle.cms.domain.AssetType;
 import sparkle.cms.domain.CmsAsset;
 import sparkle.cms.domain.CmsSite;
 import sparkle.cms.domain.CmsUser;
@@ -49,6 +50,20 @@ public class AssetManager {
             cmsAssets.addAll(cmsAssetRepository.findBySiteId(cmsSite.getId()));
         }
         return new PageImpl<>(cmsAssets, pageable, cmsAssets.size());
+    }
+
+    public Page<CmsAsset> findAssetsByType(CmsUser cmsUser, AssetType type, Pageable pageable) {
+        List<CmsSite> cmsSites = cmsSiteRepository.findByWebMaster(cmsUser);
+        List<CmsAsset> cmsAssets = new ArrayList<>();
+        for (CmsSite cmsSite : cmsSites) {
+            cmsAssets.addAll(cmsAssetRepository.findBySiteIdAndType(cmsSite.getId(), type));
+        }
+        return new PageImpl<>(cmsAssets, pageable, cmsAssets.size());
+    }
+
+    public Page<CmsAsset> findAuthoredAssetsByType(CmsUser cmsUser, AssetType type, Pageable pageable) {
+        CmsSite cmsSite = cmsSiteRepository.findOne(cmsUser.getAuthoredSiteId());
+        return cmsAssetRepository.findBySiteIdAndType(cmsSite.getId(), type, pageable);
     }
 
     public Page<CmsAsset> findAuthoredAssets(CmsUser cmsUser, Pageable pageable) {

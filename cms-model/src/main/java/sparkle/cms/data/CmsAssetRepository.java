@@ -3,6 +3,7 @@ package sparkle.cms.data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import sparkle.cms.domain.AssetType;
 import sparkle.cms.domain.CmsAsset;
 
 import java.util.List;
@@ -36,4 +37,22 @@ public interface CmsAssetRepository extends MongoRepository<CmsAsset, String> {
      * @return list of asset
      */
     List<CmsAsset> findBySiteIdAndUri(String siteId, String uri);
+
+    /**
+     * Load a site asset by type
+     *
+     * @param siteId site  id
+     * @param type   assert type
+     * @return list of asset
+     */
+    List<CmsAsset> findBySiteIdAndType(String siteId, AssetType type);
+
+    /**
+     * Load a site asset by type
+     *
+     * @param siteId site  id
+     * @param type   assert type
+     * @return page of asset
+     */
+    Page<CmsAsset> findBySiteIdAndType(String siteId, AssetType type, Pageable pageable);
 }

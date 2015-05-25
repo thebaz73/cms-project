@@ -261,9 +261,12 @@
 
                                     <div class="input-group" data-wysihtml5-dialog="insertImage"
                                          style="display: none;">
-                                        <input class="form-control input-sm" data-wysihtml5-dialog-field="src"
+                                        <input id="imageSrc" class="form-control input-sm"
+                                               data-wysihtml5-dialog-field="src"
                                                placeholder="http://"/>
                                             <span class="input-group-btn">
+                                                <a class="btn btn-default btn-sm" data-target="#assetModal"
+                                                   data-toggle="modal"><i class="fa fa-upload fa-fw"></i></a>
                                                 <a class="btn btn-default btn-sm" data-wysihtml5-dialog-action="save"><i
                                                         class="fa fa-check fa-fw"></i></a> <a
                                                     class="btn btn-default btn-sm"
@@ -340,6 +343,7 @@
     }, 'json');
 </script>
 
+<div th:replace="browseasset"></div>
 </body>
 
 </html>

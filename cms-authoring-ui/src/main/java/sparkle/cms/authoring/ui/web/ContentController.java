@@ -13,10 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import sparkle.cms.authoring.common.business.*;
 import sparkle.cms.authoring.ui.domain.ContentData;
-import sparkle.cms.domain.CmsContent;
-import sparkle.cms.domain.CmsSite;
-import sparkle.cms.domain.CmsTag;
-import sparkle.cms.domain.CmsUser;
+import sparkle.cms.domain.*;
 import sparkle.cms.registration.common.business.RegistrationException;
 import sparkle.cms.registration.common.business.RegistrationManager;
 import sparkle.cms.registration.common.business.SiteManager;
@@ -49,6 +46,8 @@ public class ContentController {
     private ContentManager contentManager;
     @Autowired
     private CommentManager commentManager;
+    @Autowired
+    private AssetManager assetManager;
     @Autowired
     private TagManager tagManager;
 
@@ -86,6 +85,32 @@ public class ContentController {
             logger.info(msg, e);
             response.sendError(400, msg);
         }
+        return null;
+    }
+
+    @ModelAttribute("allImages")
+    public Page<CmsAsset> allAssets(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    @RequestParam(value = "page", defaultValue = "0") int page,
+                                    @RequestParam(value = "pageSize", defaultValue = "12") int pageSize)
+            throws IOException {
+        try {
+            CmsUser cmsUser = registrationManager.findUser(request
+                    .getRemoteUser());
+            Pageable pageable = new PageRequest(page, pageSize,
+                    Sort.Direction.ASC, "name");
+            if (isWebmaster(cmsUser)) {
+                return assetManager.findAssetsByType(cmsUser, AssetType.IMAGE, pageable);
+            } else if (isAuthor(cmsUser)) {
+                return assetManager.findAuthoredAssetsByType(cmsUser, AssetType.IMAGE, pageable);
+            }
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot manage assets. Reason: %s",
+                    e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
+
         return null;
     }
 

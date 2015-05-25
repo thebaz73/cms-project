@@ -1,0 +1,91 @@
+<div xmlns:th="http://www.thymeleaf.org" lang="en"
+     xmlns="http://www.w3.org/1999/xhtml">
+    <div class="modal fade" id="assetModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Browse asset</h4>
+                </div>
+                <div class="modal-body row">
+                    <section class="col-lg-12" th:if="${#lists.isEmpty(allImages.content)}">
+                        <div class="panel panel-default">
+                            <!-- Default panel assets -->
+                            <div class="panel-heading">
+                                <h3 class="panel-title" th:text="#{title.asset.list}">List of</h3>
+                            </div>
+                            <div class="panel-body" th:text="#{asset.none}">No assets found</div>
+                        </div>
+                    </section>
+                    <section class="col-lg-12" th:unless="${#lists.isEmpty(allImages.content)}">
+                        <div class="panel panel-default">
+                            <!-- Default panel assets -->
+                            <div class="panel-heading">
+                                <h3 class="panel-title" th:text="#{title.asset.list}">List of</h3>
+                            </div>
+
+                            <div class="panel-body table-responsive">
+                                <!--@thymesVar id="aAsset" type="sparkle.cms.domain.CmsAsset"-->
+                                <div class="col-lg-6 cols-sm-6 " th:each="aAsset : ${allImages}">
+                                    <div class="thumbnail">
+                                        <img src="#" th:src="@{${'/assets/preview/'+aAsset.uri}}"
+                                             class="img-responsive img-thumbnail" th:alt-title="${aAsset.title}"
+                                             th:alt="${aAsset.title}"/>
+
+                                        <div class="caption">
+                                            <p th:text="${aAsset.name}">Name</p>
+                                            <button data-action="select"
+                                                    th:attr="data-uri=@{${'/assets/preview/'+aAsset.uri}}"
+                                                    class="btn btn-default btn-xs"><i
+                                                    class="glyphicon glyphicon-ok-circle"></i> Select
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="panel-footer text-right">
+                                <ul class="pagination" style="margin:0 10px">
+                                    <li th:class="${allImages.number eq 0} ? 'disabled' : ''">
+                                        <a th:href="@{${(not allImages.first)?'assets':'#'}(page=${allImages.number-1},pageSize=${allImages.size})}">&laquo;</a>
+                                    </li>
+
+                                    <li th:each="pageNo : ${#numbers.sequence(0, allImages.totalPages - 1)}"
+                                        th:class="${allImages.number eq pageNo}? 'active' : ''">
+                                        <a th:if="${allImages.number  eq pageNo}" href="javascript:void(0);"
+                                           th:text="${pageNo + 1}">
+                                            1
+                                        </a>
+                                        <a th:if="${not (allImages.number  eq pageNo)}"
+                                           th:href="@{${'assets'}(page=${pageNo},pageSize=${allImages.size})}"
+                                           th:text="${pageNo + 1}">
+                                            1
+                                        </a>
+
+                                    </li>
+                                    <li th:class="${allImages.number + 1 ge allImages.totalPages} ? 'disabled' : ''">
+                                        <a th:href="@{${(not allImages.last)?'assets':'#'}(page=${allImages.number+1},pageSize=${allImages.size})}">&raquo;</a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="application/javascript">
+        $("button[data-action='select']").on('click', function (event) {
+            var button = $(this);
+            var uri = button.data('uri');
+            $('#imageSrc').val(uri);
+            $('#assetModal').modal('hide');
+        })
+    </script>
+</div>
