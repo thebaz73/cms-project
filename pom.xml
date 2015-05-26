@@ -124,6 +124,11 @@
                 <artifactId>cms-plugin-asset-filesystem</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
+            <!--<dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-solr</artifactId>
+                <version>1.4.0.RELEASE</version>
+            </dependency>-->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>

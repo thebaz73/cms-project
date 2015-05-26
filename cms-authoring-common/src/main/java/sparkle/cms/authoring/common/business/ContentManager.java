@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import sparkle.cms.data.CmsContentRepository;
 import sparkle.cms.data.CmsSiteRepository;
-import sparkle.cms.data.CmsTagRepository;
 import sparkle.cms.domain.CmsContent;
 import sparkle.cms.domain.CmsSite;
 import sparkle.cms.domain.CmsUser;
@@ -25,8 +24,6 @@ public class ContentManager {
     private CmsSiteRepository cmsSiteRepository;
     @Autowired
     private CmsContentRepository cmsContentRepository;
-    @Autowired
-    private CmsTagRepository cmsTagRepository;
 
     public Page<CmsContent> findAllContents(CmsUser cmsUser, Pageable pageable) {
         List<CmsSite> cmsSites = cmsSiteRepository.findByWebMaster(cmsUser);

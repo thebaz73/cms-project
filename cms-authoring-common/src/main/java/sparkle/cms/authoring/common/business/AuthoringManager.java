@@ -1,11 +1,15 @@
 package sparkle.cms.authoring.common.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import sparkle.cms.authoring.common.utils.AuthoringUtils;
 import sparkle.cms.data.CmsContentRepository;
 import sparkle.cms.data.CmsSiteRepository;
 import sparkle.cms.data.CmsTagRepository;
+import sparkle.cms.data.SolrContentRepository;
 import sparkle.cms.domain.CmsContent;
 import sparkle.cms.domain.CmsSite;
 import sparkle.cms.domain.CmsTag;
@@ -30,12 +34,15 @@ public class AuthoringManager {
     private CmsContentRepository cmsContentRepository;
     @Autowired
     private CmsTagRepository cmsTagRepository;
+    @Autowired
+    private SolrContentRepository solrContentRepository;
     private int maxWidth;
 
     public void initialize(int maxWidth) {
         this.maxWidth = maxWidth;
     }
 
+    @Transactional
     public void createContent(String siteId, String name, String title, String uri, String summary, String content) throws AuthoringException {
         CmsSite cmsSite = cmsSiteRepository.findOne(siteId);
         if (cmsSite == null) {
@@ -52,7 +59,8 @@ public class AuthoringManager {
         }
 
         CmsContent cmsContent = new CmsContent(cmsSite.getId(), name, title, uri, new Date(), summary, content);
-        cmsContentRepository.save(cmsContent);
+        CmsContent savedCmsContent = cmsContentRepository.save(cmsContent);
+        solrContentRepository.save(savedCmsContent);
     }
 
     public CmsContent findContent(String id) throws AuthoringException {
@@ -73,6 +81,7 @@ public class AuthoringManager {
         throw new AuthoringException("Wrong search parameter");
     }
 
+    @Transactional
     public void editContent(String id, String name, String title, String uri, String summary, String content) throws AuthoringException {
         CmsContent cmsContent = cmsContentRepository.findOne(id);
         if (cmsContent == null) {
@@ -95,7 +104,8 @@ public class AuthoringManager {
         cmsContent.setSummary(summary);
         cmsContent.setContent(content);
 
-        cmsContentRepository.save(cmsContent);
+        CmsContent savedCmsContent = cmsContentRepository.save(cmsContent);
+        //solrContentRepository.save(savedCmsContent);
     }
 
     public void deleteContent(String id) throws AuthoringException {
@@ -109,6 +119,7 @@ public class AuthoringManager {
             cmsTagRepository.save(cmsTag);
         }
         cmsContentRepository.delete(cmsContent);
+        //solrContentRepository.delete(cmsContent);
     }
 
     public void addContentTags(String id, String tags) throws AuthoringException {
@@ -162,5 +173,9 @@ public class AuthoringManager {
 
     public int countContents(CmsSite cmsSite) {
         return cmsContentRepository.countBySiteId(cmsSite.getId());
+    }
+
+    public Page<CmsContent> searchContent(String query, Pageable pageable) {
+        return solrContentRepository.findByTitleOrSummaryContainingOrContentContaining(query, query, query, pageable);
     }
 }
