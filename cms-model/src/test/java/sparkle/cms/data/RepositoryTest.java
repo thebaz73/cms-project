@@ -3,27 +3,22 @@ package sparkle.cms.data;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.WriteConcern;
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import sparkle.cms.domain.*;
 
-import javax.annotation.Resource;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +32,6 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @EnableMongoRepositories(basePackages = "sparkle.cms")
-@EnableSolrRepositories(basePackages = {"sparkle.cms.data", "sparkle.cms.domain"}, multicoreSupport = true)
 @ComponentScan
 @ContextConfiguration(classes = {RepositoryTest.class})
 public class RepositoryTest extends AbstractMongoConfiguration {
@@ -55,21 +49,9 @@ public class RepositoryTest extends AbstractMongoConfiguration {
     private CmsCommentRepository commentRepository;
     @Autowired
     private CmsTagRepository tagRepository;
-    @Resource
-    private Environment environment;
 
     public String getDatabaseName() {
         return "cms-test";
-    }
-
-    public String getSolrHost() {
-        return "http://192.168.108.129:8983/solr";
-    }
-
-    @Bean
-    public SolrServer solrServer() {
-        String solrHost = environment.getRequiredProperty(getSolrHost());
-        return new HttpSolrServer(solrHost);
     }
 
     @Bean

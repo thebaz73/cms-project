@@ -16,15 +16,9 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
 public class SolrConfig {
     @Value("${solr.host}")
     private String solrHostName;
-/*
-
-    @Resource
-    private Environment environment;
-*/
 
     @Bean
     public SolrServer solrServer() {
-        //String solrHost = environment.getRequiredProperty(solrHostName);
         return new HttpSolrServer(solrHostName);
     }
 }

@@ -1,18 +1,17 @@
 package sparkle.cms.authoring.common.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import sparkle.cms.authoring.common.utils.AuthoringUtils;
 import sparkle.cms.data.CmsContentRepository;
 import sparkle.cms.data.CmsSiteRepository;
 import sparkle.cms.data.CmsTagRepository;
-import sparkle.cms.data.SolrContentRepository;
 import sparkle.cms.domain.CmsContent;
 import sparkle.cms.domain.CmsSite;
 import sparkle.cms.domain.CmsTag;
+import sparkle.cms.solr.domain.SparkleDocument;
+import sparkle.cms.solr.service.SparkleIndexService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,7 +34,7 @@ public class AuthoringManager {
     @Autowired
     private CmsTagRepository cmsTagRepository;
     @Autowired
-    private SolrContentRepository solrContentRepository;
+    private SparkleIndexService sparkleIndexService;
     private int maxWidth;
 
     public void initialize(int maxWidth) {
@@ -60,7 +59,7 @@ public class AuthoringManager {
 
         CmsContent cmsContent = new CmsContent(cmsSite.getId(), name, title, uri, new Date(), summary, content);
         CmsContent savedCmsContent = cmsContentRepository.save(cmsContent);
-        solrContentRepository.save(savedCmsContent);
+        sparkleIndexService.addToIndex(savedCmsContent);
     }
 
     public CmsContent findContent(String id) throws AuthoringException {
@@ -175,7 +174,7 @@ public class AuthoringManager {
         return cmsContentRepository.countBySiteId(cmsSite.getId());
     }
 
-    public Page<CmsContent> searchContent(String query, Pageable pageable) {
-        return solrContentRepository.findByTitleOrSummaryContainingOrContentContaining(query, query, query, pageable);
+    public List<SparkleDocument> searchContent(String query) {
+        return sparkleIndexService.search(query);
     }
 }
