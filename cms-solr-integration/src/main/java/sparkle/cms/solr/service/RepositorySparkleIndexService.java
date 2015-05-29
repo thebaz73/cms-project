@@ -1,12 +1,12 @@
 package sparkle.cms.solr.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sparkle.cms.domain.CmsContent;
 import sparkle.cms.solr.data.SolrContentRepository;
 import sparkle.cms.solr.domain.SparkleDocument;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Service
 public class RepositorySparkleIndexService implements SparkleIndexService {
-    @Resource
+    @Autowired
     private SolrContentRepository repository;
 
     /**

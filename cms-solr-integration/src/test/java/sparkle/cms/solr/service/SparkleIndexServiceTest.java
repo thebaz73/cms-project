@@ -1,21 +1,11 @@
 package sparkle.cms.solr.service;
 
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import com.mongodb.WriteConcern;
-import org.apache.solr.client.solrj.SolrServer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
-import org.springframework.data.solr.core.SolrTemplate;
-import org.springframework.data.solr.repository.config.EnableSolrRepositories;
-import org.springframework.data.solr.server.support.EmbeddedSolrServerFactoryBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import sparkle.cms.data.CmsContentRepository;
@@ -25,7 +15,6 @@ import sparkle.cms.data.CmsUserRepository;
 import sparkle.cms.domain.*;
 import sparkle.cms.solr.domain.SparkleDocument;
 
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -39,11 +28,10 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
  * Created by bazzoni on 28/05/2015.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@EnableMongoRepositories(basePackages = "sparkle.cms")
-@EnableSolrRepositories(basePackages = {"sparkle.cms.solr.data", "sparkle.cms.domain"}, multicoreSupport = true)
+@ContextConfiguration(classes = {SparkleIndexServiceTest.class, MongoConfig.class, CmsSolrIntegrationConfig.class})
 @ComponentScan
-@ContextConfiguration(classes = {SparkleIndexServiceTest.class})
-public class SparkleIndexServiceTest extends AbstractMongoConfiguration {
+@SpringBootApplication
+public class SparkleIndexServiceTest {
     @Autowired
     private CmsSiteRepository cmsSiteRepository;
     @Autowired
@@ -56,43 +44,6 @@ public class SparkleIndexServiceTest extends AbstractMongoConfiguration {
     private SparkleIndexService sparkleIndexService;
 
     private CmsSite cmsSite;
-
-    @Bean
-    public static SolrServer solrServer() throws Exception {
-        return solrServerFactoryBean().getObject();
-    }
-
-    @Bean
-    public static EmbeddedSolrServerFactoryBean solrServerFactoryBean() {
-        System.setProperty("solr.solr.home", System.getProperty("java.io.tmpdir") + "solr");
-//        CoreContainer.Initializer initializer = new CoreContainer.Initializer();
-//        CoreContainer coreContainer = initializer.initialize();
-//        EmbeddedSolrServer server = new EmbeddedSolrServer(coreContainer, "");
-        EmbeddedSolrServerFactoryBean factory = new EmbeddedSolrServerFactoryBean();
-        factory.setSolrHome(System.getProperty("java.io.tmpdir") + "solr");
-        return factory;
-    }
-
-    @Bean
-    public static SolrTemplate solrTemplate() throws Exception {
-        return new SolrTemplate(solrServerFactoryBean().getObject());
-    }
-
-    public String getDatabaseName() {
-        return "cms-test";
-    }
-
-    @Bean
-    public Mongo mongo() throws UnknownHostException {
-        MongoClient client = new MongoClient("192.168.108.129");
-        client.setWriteConcern(WriteConcern.SAFE);
-        return client;
-    }
-
-    @Bean
-    public MongoTemplate mongoTemplate() throws UnknownHostException {
-        return new MongoTemplate(mongo(), getDatabaseName());
-    }
 
     @Before
     public void setUp() throws Exception {

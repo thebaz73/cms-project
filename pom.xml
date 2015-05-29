@@ -231,6 +231,18 @@
                 <artifactId>font-awesome</artifactId>
                 <version>4.2.0</version>
             </dependency>
+            <!-- Required by embedded solr server -->
+            <dependency>
+                <groupId>org.apache.solr</groupId>
+                <artifactId>solr-core</artifactId>
+                <version>${solr.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-jdk14</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -259,19 +271,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <!-- Required by embedded solr server -->
-        <dependency>
-            <groupId>org.apache.solr</groupId>
-            <artifactId>solr-core</artifactId>
-            <version>4.7.2</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-jdk14</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 </project>

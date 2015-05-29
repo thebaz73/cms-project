@@ -2,11 +2,13 @@ package sparkle.cms.solr.domain;
 
 import org.apache.solr.client.solrj.beans.Field;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.solr.core.mapping.SolrDocument;
 
 /**
  * SparkleDocument
  * Created by bazzoni on 28/05/2015.
  */
+@SolrDocument(solrCoreName = "sparkleDocs")
 public class SparkleDocument {
     public static final String FIELD_CONTENT = "content";
     public static final String FIELD_SUMMARY = "summary";
