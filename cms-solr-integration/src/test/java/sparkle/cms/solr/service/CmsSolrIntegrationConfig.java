@@ -1,5 +1,7 @@
 package sparkle.cms.solr.service;
 
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -20,13 +22,19 @@ import javax.annotation.Resource;
 @PropertySource("application.properties")
 public class CmsSolrIntegrationConfig {
     private static final String PROPERTY_NAME_SOLR_SOLR_HOME = "solr.solr.home";
+    private static final String PROPERTY_NAME_SOLR_SERVER_URL = "solr.server.url";
 
     @Resource
     private Environment environment;
 
     @Bean
     public SolrTemplate solrTemplate() {
-        return new SolrTemplate(solrServerFactory());
+        return new SolrTemplate(solrServer());
+    }
+
+    @Bean
+    public SolrServer solrServer() {
+        return new HttpSolrServer(environment.getRequiredProperty(PROPERTY_NAME_SOLR_SERVER_URL));
     }
 
     private SolrServerFactory solrServerFactory() {

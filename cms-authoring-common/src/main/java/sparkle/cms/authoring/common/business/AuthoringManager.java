@@ -104,7 +104,7 @@ public class AuthoringManager {
         cmsContent.setContent(content);
 
         CmsContent savedCmsContent = cmsContentRepository.save(cmsContent);
-        //solrContentRepository.save(savedCmsContent);
+        sparkleIndexService.addToIndex(savedCmsContent);
     }
 
     public void deleteContent(String id) throws AuthoringException {
@@ -118,7 +118,7 @@ public class AuthoringManager {
             cmsTagRepository.save(cmsTag);
         }
         cmsContentRepository.delete(cmsContent);
-        //solrContentRepository.delete(cmsContent);
+        sparkleIndexService.deleteFromIndex(cmsContent.getId());
     }
 
     public void addContentTags(String id, String tags) throws AuthoringException {
