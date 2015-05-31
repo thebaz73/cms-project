@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sparkle.cms.authoring.common.business.AuthoringManager;
 import sparkle.cms.plugin.mgmt.search.SparkleDocument;
-import sparkle.cms.registration.common.business.RegistrationManager;
 
 import java.util.Date;
 import java.util.List;
@@ -18,8 +17,6 @@ import java.util.List;
  */
 @Controller(value = "searchController")
 public class SearchController {
-    @Autowired
-    private RegistrationManager registrationManager;
     @Autowired
     private AuthoringManager authoringManager;
 
