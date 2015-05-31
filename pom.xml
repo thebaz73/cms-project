@@ -56,7 +56,6 @@
 
     <modules>
         <module>cms-model</module>
-        <module>cms-solr-integration</module>
         <module>cms-registration-ui</module>
         <module>cms-registration-common</module>
         <module>cms-registration-service</module>
@@ -98,11 +97,6 @@
             <dependency>
                 <groupId>sparkle.cms</groupId>
                 <artifactId>cms-model</artifactId>
-                <version>1.0-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>sparkle.cms</groupId>
-                <artifactId>cms-solr-integration</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
@@ -230,18 +224,6 @@
                 <groupId>org.webjars</groupId>
                 <artifactId>font-awesome</artifactId>
                 <version>4.2.0</version>
-            </dependency>
-            <!-- Required by embedded solr server -->
-            <dependency>
-                <groupId>org.apache.solr</groupId>
-                <artifactId>solr-core</artifactId>
-                <version>${solr.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <artifactId>slf4j-jdk14</artifactId>
-                        <groupId>org.slf4j</groupId>
-                    </exclusion>
-                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

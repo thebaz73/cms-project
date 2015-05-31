@@ -10,13 +10,10 @@ import sparkle.cms.data.CmsTagRepository;
 import sparkle.cms.domain.CmsContent;
 import sparkle.cms.domain.CmsSite;
 import sparkle.cms.domain.CmsTag;
-import sparkle.cms.solr.domain.SparkleDocument;
-import sparkle.cms.solr.service.SparkleIndexService;
+import sparkle.cms.plugin.mgmt.PluginService;
+import sparkle.cms.plugin.mgmt.search.SparkleDocument;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static sparkle.cms.authoring.common.utils.AuthoringUtils.abbreviateHtml;
 import static sparkle.cms.authoring.common.utils.AuthoringUtils.toPrettyURL;
@@ -34,7 +31,7 @@ public class AuthoringManager {
     @Autowired
     private CmsTagRepository cmsTagRepository;
     @Autowired
-    private SparkleIndexService sparkleIndexService;
+    private PluginService pluginService;
     private int maxWidth;
 
     public void initialize(int maxWidth) {
@@ -59,7 +56,9 @@ public class AuthoringManager {
 
         CmsContent cmsContent = new CmsContent(cmsSite.getId(), name, title, uri, new Date(), summary, content);
         CmsContent savedCmsContent = cmsContentRepository.save(cmsContent);
-        sparkleIndexService.addToIndex(savedCmsContent);
+        if (pluginService.getSearchPlugin() != null) {
+            pluginService.getSearchPlugin().addToIndex(savedCmsContent.getId(), savedCmsContent.getTitle(), savedCmsContent.getContent());
+        }
     }
 
     public CmsContent findContent(String id) throws AuthoringException {
@@ -104,7 +103,9 @@ public class AuthoringManager {
         cmsContent.setContent(content);
 
         CmsContent savedCmsContent = cmsContentRepository.save(cmsContent);
-//        sparkleIndexService.addToIndex(savedCmsContent);
+        if (pluginService.getSearchPlugin() != null) {
+            pluginService.getSearchPlugin().update(savedCmsContent.getId(), savedCmsContent.getTitle(), savedCmsContent.getContent());
+        }
     }
 
     public void deleteContent(String id) throws AuthoringException {
@@ -118,7 +119,9 @@ public class AuthoringManager {
             cmsTagRepository.save(cmsTag);
         }
         cmsContentRepository.delete(cmsContent);
-//        sparkleIndexService.deleteFromIndex(cmsContent.getId());
+        if (pluginService.getSearchPlugin() != null) {
+            pluginService.getSearchPlugin().deleteFromIndex(cmsContent.getId());
+        }
     }
 
     public void addContentTags(String id, String tags) throws AuthoringException {
@@ -174,7 +177,11 @@ public class AuthoringManager {
         return cmsContentRepository.countBySiteId(cmsSite.getId());
     }
 
-    public List<SparkleDocument> searchContent(String query) {
-        return sparkleIndexService.search(query);
+    public List<? extends SparkleDocument> searchContent(String query) {
+        if (pluginService.getSearchPlugin() != null) {
+            return pluginService.getSearchPlugin().search(query);
+        }
+
+        return Collections.emptyList();
     }
 }
