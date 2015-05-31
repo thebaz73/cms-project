@@ -6,8 +6,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sparkle.cms.authoring.common.business.AuthoringManager;
+import sparkle.cms.plugin.mgmt.search.SparkleDocument;
 import sparkle.cms.registration.common.business.RegistrationManager;
-import sparkle.cms.solr.domain.SparkleDocument;
 
 import java.util.Date;
 import java.util.List;
@@ -18,8 +18,6 @@ import java.util.List;
  */
 @Controller(value = "searchController")
 public class SearchController {
-    //private final Logger logger = LoggerFactory.getLogger(getClass());
-
     @Autowired
     private RegistrationManager registrationManager;
     @Autowired
@@ -30,7 +28,7 @@ public class SearchController {
         model.put("date", new Date());
         model.put("query", query);
 
-        List<SparkleDocument> docs = authoringManager.searchContent(query);
+        List<? extends SparkleDocument> docs = authoringManager.searchContent(query);
         model.put("docs", docs);
         return "search";
     }
