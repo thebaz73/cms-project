@@ -20,6 +20,11 @@
                 Found <!--@thymesVar id="docs" type="java.util.List"-->
                 <span th:text="${docs.size()}"></span> documents, searching for: '<span th:text="${query}"></span>'
             </div>
+            <!--@thymesVar id="doc" type="sparkle.cms.data.CmsContent"-->
+            <div class="col-lg-12"  th:each="doc : ${docs}">
+                <h4><a href="#" th:href="@{${'contents/'+doc.id}}" th:text="${doc.name}">Title</a></h4>
+                <p><span th:text="${'/'+doc.uri}">Uri</span> - <span th:text="${#calendars.format(doc.date, 'dd/MM/yyyy HH:mm:ss')}">Date</span> - <span  th:text="${doc.summary}">Summary</span></p>
+            </div>
         </div>
         <footer th:replace="footer"></footer>
     </div>
