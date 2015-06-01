@@ -244,6 +244,8 @@
                                     <!-- Some wysihtml5 commands like 'insertImage' require extra paramaters specified by the user (eg. href) -->
                                     <a class="btn btn-default btn-sm" data-wysihtml5-command="insertImage"><i
                                             class="fa fa-file-image-o fa-fw"></i></a>
+                                    <a class="btn btn-default btn-sm"  data-wysihtml5-action="change_view"><i
+                                            class="fa fa-file-code-o fa-fw"></i></a>
                                 </div>
                                 <div class="col-lg-5 text-right">
                                     <div class="input-group" data-wysihtml5-dialog="createLink"
@@ -280,7 +282,7 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                        <textarea class="form-control" th:field="*{content}" id="wysihtml5-textarea"
+                                        <textarea class="editable form-control" th:field="*{content}" id="wysihtml5-textarea"
                                                   placeholder="Enter your text ..."
                                                   autofocus="autofocus" rows="18"></textarea>
                                 </div>
@@ -314,10 +316,10 @@
 <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
 
 <!-- Custom JavaScript -->
-<script th:src="@{/dist/wysihtml/parser_rules/advanced_and_extended.js}" src="../public/dist/wysihtml/parser_rules/advanced_and_extended.js"></script>
+<script th:src="@{/dist/js/parser-rules-advanced.js}" src="../public/dist/js/parser-rules-advanced.js"></script>
 
 <!-- Custom JavaScript -->
-<script th:src="@{/dist/wysihtml/wysihtml.js}" src="../public/dist/wysihtml/wysihtml.js"></script>
+<script th:src="@{/dist/js/wysihtml5-0.3.0.js}" src="../public/dist/js/wysihtml5-0.3.0.js"></script>
 
 <!-- Custom JavaScript -->
 <script th:src="@{/dist/js/tagmanager.js}" src="../public/dist/js/tagmanager.js"></script>
