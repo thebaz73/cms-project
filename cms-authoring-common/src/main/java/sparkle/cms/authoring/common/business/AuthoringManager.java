@@ -57,7 +57,8 @@ public class AuthoringManager {
         CmsContent cmsContent = new CmsContent(cmsSite.getId(), name, title, uri, new Date(), summary, content);
         CmsContent savedCmsContent = cmsContentRepository.save(cmsContent);
         if (pluginService.getSearchPlugin() != null) {
-            pluginService.getSearchPlugin().addToIndex(savedCmsContent.getId(), savedCmsContent.getTitle(), savedCmsContent.getContent());
+            pluginService.getSearchPlugin().addToIndex(savedCmsContent.getId(), savedCmsContent.getSiteId(), savedCmsContent.getTitle(), savedCmsContent.getUri(),
+                    savedCmsContent.getModificationDate().getTime(), savedCmsContent.getSummary(), savedCmsContent.getContent());
         }
     }
 
@@ -104,7 +105,8 @@ public class AuthoringManager {
 
         CmsContent savedCmsContent = cmsContentRepository.save(cmsContent);
         if (pluginService.getSearchPlugin() != null) {
-            pluginService.getSearchPlugin().update(savedCmsContent.getId(), savedCmsContent.getTitle(), savedCmsContent.getContent());
+            pluginService.getSearchPlugin().update(savedCmsContent.getId(), savedCmsContent.getSiteId(), savedCmsContent.getTitle(), savedCmsContent.getUri(),
+                    savedCmsContent.getModificationDate().getTime(), savedCmsContent.getSummary(), savedCmsContent.getContent());
         }
     }
 
@@ -177,9 +179,9 @@ public class AuthoringManager {
         return cmsContentRepository.countBySiteId(cmsSite.getId());
     }
 
-    public List<? extends SparkleDocument> searchContent(String query) {
+    public List<? extends SparkleDocument> searchContent(String siteId, String query) {
         if (pluginService.getSearchPlugin() != null) {
-            return pluginService.getSearchPlugin().search(query);
+            return pluginService.getSearchPlugin().search(siteId, query);
         }
 
         return Collections.emptyList();

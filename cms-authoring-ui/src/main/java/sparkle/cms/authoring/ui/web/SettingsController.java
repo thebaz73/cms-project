@@ -65,7 +65,7 @@ public class SettingsController {
 
                 final Map<String, Plugin> pluginMap = settingManager.findPlugins();
                 for (Map.Entry<String, Plugin> entry : pluginMap.entrySet()) {
-                    logger.debug("Processing bean {}", entry.getKey());
+                    logger.debug("Load setting bean {}", entry.getKey());
                     Plugin plugin = entry.getValue();
                     PluginData pluginData = new PluginData(plugin.getId(), plugin.getName(), plugin.getType().toString(), plugin.getStatus().toString());
                     for (CmsSetting cmsSetting : plugin.getSettings()) {

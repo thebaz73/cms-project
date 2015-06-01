@@ -37,6 +37,22 @@
             <groupId>sparkle.cms</groupId>
             <artifactId>cms-plugin-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-asset-fedora</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-asset-filesystem</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-search-solr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-search-mongo</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
