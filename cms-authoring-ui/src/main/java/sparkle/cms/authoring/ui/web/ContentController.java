@@ -89,10 +89,10 @@ public class ContentController {
     }
 
     @ModelAttribute("allImages")
-    public Page<CmsAsset> allAssets(HttpServletRequest request,
+    public Page<CmsAsset> allImages(HttpServletRequest request,
                                     HttpServletResponse response,
                                     @RequestParam(value = "page", defaultValue = "0") int page,
-                                    @RequestParam(value = "pageSize", defaultValue = "12") int pageSize)
+                                    @RequestParam(value = "pageSize", defaultValue = "4") int pageSize)
             throws IOException {
         try {
             CmsUser cmsUser = registrationManager.findUser(request
@@ -103,6 +103,84 @@ public class ContentController {
                 return assetManager.findAssetsByType(cmsUser, AssetType.IMAGE, pageable);
             } else if (isAuthor(cmsUser)) {
                 return assetManager.findAuthoredAssetsByType(cmsUser, AssetType.IMAGE, pageable);
+            }
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot manage assets. Reason: %s",
+                    e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
+
+        return null;
+    }
+
+    @ModelAttribute("allVideos")
+    public Page<CmsAsset> allVideos(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    @RequestParam(value = "page", defaultValue = "0") int page,
+                                    @RequestParam(value = "pageSize", defaultValue = "4") int pageSize)
+            throws IOException {
+        try {
+            CmsUser cmsUser = registrationManager.findUser(request
+                    .getRemoteUser());
+            Pageable pageable = new PageRequest(page, pageSize,
+                    Sort.Direction.ASC, "name");
+            if (isWebmaster(cmsUser)) {
+                return assetManager.findAssetsByType(cmsUser, AssetType.VIDEO, pageable);
+            } else if (isAuthor(cmsUser)) {
+                return assetManager.findAuthoredAssetsByType(cmsUser, AssetType.VIDEO, pageable);
+            }
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot manage assets. Reason: %s",
+                    e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
+
+        return null;
+    }
+
+    @ModelAttribute("allAudios")
+    public Page<CmsAsset> allAudios(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    @RequestParam(value = "page", defaultValue = "0") int page,
+                                    @RequestParam(value = "pageSize", defaultValue = "4") int pageSize)
+            throws IOException {
+        try {
+            CmsUser cmsUser = registrationManager.findUser(request
+                    .getRemoteUser());
+            Pageable pageable = new PageRequest(page, pageSize,
+                    Sort.Direction.ASC, "name");
+            if (isWebmaster(cmsUser)) {
+                return assetManager.findAssetsByType(cmsUser, AssetType.AUDIO, pageable);
+            } else if (isAuthor(cmsUser)) {
+                return assetManager.findAuthoredAssetsByType(cmsUser, AssetType.AUDIO, pageable);
+            }
+        } catch (RegistrationException e) {
+            String msg = String.format("Cannot manage assets. Reason: %s",
+                    e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
+
+        return null;
+    }
+
+    @ModelAttribute("allFiles")
+    public Page<CmsAsset> allFiles(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    @RequestParam(value = "page", defaultValue = "0") int page,
+                                    @RequestParam(value = "pageSize", defaultValue = "4") int pageSize)
+            throws IOException {
+        try {
+            CmsUser cmsUser = registrationManager.findUser(request
+                    .getRemoteUser());
+            Pageable pageable = new PageRequest(page, pageSize,
+                    Sort.Direction.ASC, "name");
+            if (isWebmaster(cmsUser)) {
+                return assetManager.findAllAssets(cmsUser, pageable);
+            } else if (isAuthor(cmsUser)) {
+                return assetManager.findAuthoredAssets(cmsUser, pageable);
             }
         } catch (RegistrationException e) {
             String msg = String.format("Cannot manage assets. Reason: %s",

@@ -180,7 +180,7 @@ var wysihtml5ParserRules = {
         },
         "a": {
             "check_attributes": {
-                "href": "url" // if you compiled master manually then change this from 'url' to 'href'
+                "href": "href" // if you compiled master manually then change this from 'url' to 'href'
             },
             "set_attributes": {
                 "rel": "nofollow",
@@ -191,11 +191,27 @@ var wysihtml5ParserRules = {
             "check_attributes": {
                 "width": "numbers",
                 "alt": "alt",
-                "src": "url", // if you compiled master manually then change this from 'url' to 'src'
+                "src": "src", // if you compiled master manually then change this from 'url' to 'src'
                 "height": "numbers"
             },
             "add_class": {
                 "align": "align_img"
+            }
+        },
+        "video": {
+            "check_attributes": {
+                "width": "numbers",
+                "controls": "alt",
+                "height": "numbers"
+            },
+            "add_class": {
+                "align": "align_img"
+            }
+        },
+        "source": {
+            "check_attributes": {
+                "src": "src", // if you compiled master manually then change this from 'url' to 'src'
+                "type": "alt"
             }
         },
         "rb": {
@@ -329,9 +345,6 @@ var wysihtml5ParserRules = {
         "base": {
             "remove": 1
         },
-        "video": {
-            "remove": 1
-        },
         "strong": {},
         "canvas": {
             "remove": 1
@@ -356,9 +369,6 @@ var wysihtml5ParserRules = {
             "rename_tag": "span"
         },
         "spacer": {
-            "remove": 1
-        },
-        "source": {
             "remove": 1
         },
         "aside": {

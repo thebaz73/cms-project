@@ -4794,8 +4794,9 @@ wysihtml5.dom.parse = (function() {
     
     // Insert new DOM tree
     element.appendChild(fragment);
-    
-    return elementOrHtml //turn off parser// isString ? wysihtml5.quirks.getCorrectInnerHTML(element) : element;
+
+    return elementOrHtml;
+    //return isString ? wysihtml5.quirks.getCorrectInnerHTML(element) : element;
   }
   
   function _convert(oldNode, cleanUp) {
@@ -6941,7 +6942,7 @@ wysihtml5.Commands = Base.extend(
     }
     composer.selection.setAfter(elementToSetCaretAfter);
   }
-  
+
   wysihtml5.commands.createLink = {
     /**
      * TODO: Use HTMLApplier or formatInline here
@@ -6949,7 +6950,7 @@ wysihtml5.Commands = Base.extend(
      * Turns selection into a link
      * If selection is already a link, it removes the link and wraps it with a <code> element
      * The <code> element is needed to avoid auto linking
-     * 
+     *
      * @example
      *    // either ...
      *    wysihtml5.commands.createLink.exec(composer, "createLink", "http://www.google.de");
@@ -7364,13 +7365,225 @@ wysihtml5.Commands = Base.extend(
     }
   };
 })(wysihtml5);(function(wysihtml5) {
+  var NODE_NAME = "VIDEO";
+  var SOURCE_NAME = "SOURCE";
+
+  wysihtml5.commands.insertVideo = {
+    /**
+     * Inserts a <video>
+     * If selection is already a video link, it removes it
+     * 
+     * @example
+     *    // either ...
+     *    wysihtml5.commands.insertVideo.exec(composer, "insertVideo", "http://www.google.de/logo.mpg");
+     *    // ... or ...
+     *    wysihtml5.commands.insertVideo.exec(composer, "insertVideo", { src: "http://www.google.de/logo.mpg", title: "foo" });
+     */
+    exec: function(composer, command, value) {
+      value = typeof(value) === "object" ? value : { src: value };
+
+      var doc           = composer.doc,
+          video         = this.state(composer),
+          videoSource   = this.state(composer),
+          textNode,
+          i,
+          parent;
+
+      if (video) {
+        // Video already selected, set the caret before it and delete it
+        composer.selection.setBefore(video);
+        parent = video.parentNode;
+        parent.removeChild(video);
+
+        // and it's parent <a> too if it hasn't got any other relevant child nodes
+        wysihtml5.dom.removeEmptyTextNodes(parent);
+        if (!parent.firstChild) {
+          composer.selection.setAfter(parent);
+          parent.parentNode.removeChild(parent);
+        }
+
+        // firefox and ie sometimes don't remove the video handles, even though the video got removed
+        wysihtml5.quirks.redraw(composer.element);
+        return;
+      }
+
+      video = doc.createElement(NODE_NAME);
+      video.setAttribute("controls","controls");
+      video.setAttribute("style","float:left;margin:5px;");
+      videoSource = doc.createElement(SOURCE_NAME);
+      video.appendChild(videoSource);
+      videoSource.setAttribute("src",value.src);
+
+      composer.selection.insertNode(video);
+      if (wysihtml5.browser.hasProblemsSettingCaretAfterImg()) {
+        textNode = doc.createTextNode(wysihtml5.INVISIBLE_SPACE);
+        composer.selection.insertNode(textNode);
+        composer.selection.setAfter(textNode);
+      } else {
+        composer.selection.setAfter(video);
+      }
+    },
+
+    state: function(composer) {
+      var doc = composer.doc,
+          selectedNode,
+          text,
+          videosInSelection;
+
+      if (!wysihtml5.dom.hasElementWithTagName(doc, NODE_NAME)) {
+        return false;
+      }
+
+      selectedNode = composer.selection.getSelectedNode();
+      if (!selectedNode) {
+        return false;
+      }
+
+      if (selectedNode.nodeName === NODE_NAME) {
+        // This works perfectly in IE
+        return selectedNode;
+      }
+
+      if (selectedNode.nodeType !== wysihtml5.ELEMENT_NODE) {
+        return false;
+      }
+
+      text = composer.selection.getText();
+      text = wysihtml5.lang.string(text).trim();
+      if (text) {
+        return false;
+      }
+
+      videosInSelection = composer.selection.getNodes(wysihtml5.ELEMENT_NODE, function(node) {
+        return node.nodeName === "VIDEO";
+      });
+
+      if (videosInSelection.length !== 1) {
+        return false;
+      }
+
+      return videosInSelection[0];
+    },
+
+    value: function(composer) {
+      var video = this.state(composer);
+      return video && video.src;
+    }
+  };
+})(wysihtml5);(function(wysihtml5) {
+  var NODE_NAME = "AUDIO";
+  var SOURCE_NAME = "SOURCE";
+
+  wysihtml5.commands.insertAudio = {
+    /**
+     * Inserts a <audio>
+     * If selection is already a audio link, it removes it
+     * 
+     * @example
+     *    // either ...
+     *    wysihtml5.commands.insertAudio.exec(composer, "insertAudio", "http://www.google.de/logo.mpg");
+     *    // ... or ...
+     *    wysihtml5.commands.insertAudio.exec(composer, "insertAudio", { src: "http://www.google.de/logo.mpg", title: "foo" });
+     */
+    exec: function(composer, command, value) {
+      value = typeof(value) === "object" ? value : { src: value };
+
+      var doc           = composer.doc,
+          audio         = this.state(composer),
+          audioSource   = this.state(composer),
+          textNode,
+          i,
+          parent;
+
+      if (audio) {
+        // Audio already selected, set the caret before it and delete it
+        composer.selection.setBefore(audio);
+        parent = audio.parentNode;
+        parent.removeChild(audio);
+
+        // and it's parent <a> too if it hasn't got any other relevant child nodes
+        wysihtml5.dom.removeEmptyTextNodes(parent);
+        if (!parent.firstChild) {
+          composer.selection.setAfter(parent);
+          parent.parentNode.removeChild(parent);
+        }
+
+        // firefox and ie sometimes don't remove the audio handles, even though the audio got removed
+        wysihtml5.quirks.redraw(composer.element);
+        return;
+      }
+
+      audio = doc.createElement(NODE_NAME);
+      audio.setAttribute("controls","controls");
+      audio.setAttribute("style","float:left;margin:5px;");
+      audioSource = doc.createElement(SOURCE_NAME);
+      audio.appendChild(audioSource);
+      audioSource.setAttribute("src",value.src);
+
+      composer.selection.insertNode(audio);
+      if (wysihtml5.browser.hasProblemsSettingCaretAfterImg()) {
+        textNode = doc.createTextNode(wysihtml5.INVISIBLE_SPACE);
+        composer.selection.insertNode(textNode);
+        composer.selection.setAfter(textNode);
+      } else {
+        composer.selection.setAfter(audio);
+      }
+    },
+
+    state: function(composer) {
+      var doc = composer.doc,
+          selectedNode,
+          text,
+          audiosInSelection;
+
+      if (!wysihtml5.dom.hasElementWithTagName(doc, NODE_NAME)) {
+        return false;
+      }
+
+      selectedNode = composer.selection.getSelectedNode();
+      if (!selectedNode) {
+        return false;
+      }
+
+      if (selectedNode.nodeName === NODE_NAME) {
+        // This works perfectly in IE
+        return selectedNode;
+      }
+
+      if (selectedNode.nodeType !== wysihtml5.ELEMENT_NODE) {
+        return false;
+      }
+
+      text = composer.selection.getText();
+      text = wysihtml5.lang.string(text).trim();
+      if (text) {
+        return false;
+      }
+
+      audiosInSelection = composer.selection.getNodes(wysihtml5.ELEMENT_NODE, function(node) {
+        return node.nodeName === "AUDIO";
+      });
+
+      if (audiosInSelection.length !== 1) {
+        return false;
+      }
+
+      return audiosInSelection[0];
+    },
+
+    value: function(composer) {
+      var audio = this.state(composer);
+      return audio && audio.src;
+    }
+  };
+})(wysihtml5);(function(wysihtml5) {
   var NODE_NAME = "IMG";
-  
+
   wysihtml5.commands.insertImage = {
     /**
      * Inserts an <img>
      * If selection is already an image link, it removes it
-     * 
+     *
      * @example
      *    // either ...
      *    wysihtml5.commands.insertImage.exec(composer, "insertImage", "http://www.google.de/logo.jpg");

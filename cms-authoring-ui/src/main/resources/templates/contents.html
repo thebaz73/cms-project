@@ -241,18 +241,26 @@
                                     <a class="btn btn-default btn-sm" data-wysihtml5-command="createLink"><i
                                             class="fa fa-link fa-fw"></i></a>
 
-                                    <!-- Some wysihtml5 commands like 'insertImage' require extra paramaters specified by the user (eg. href) -->
-                                    <a class="btn btn-default btn-sm" data-wysihtml5-command="insertImage"><i
-                                            class="fa fa-file-image-o fa-fw"></i></a>
+                                    <div class="btn-group" role="group">
+                                        <!-- Some wysihtml5 commands like 'insertImage' require extra paramaters specified by the user (eg. href) -->
+                                        <a class="btn btn-default btn-sm" data-wysihtml5-command="insertImage"><i
+                                                class="fa fa-file-image-o fa-fw"></i></a>
+                                        <a class="btn btn-default btn-sm" data-wysihtml5-command="insertVideo"><i
+                                                class="fa fa-file-video-o fa-fw"></i></a>
+                                        <a class="btn btn-default btn-sm" data-wysihtml5-command="insertAudio"><i
+                                                class="fa fa-file-audio-o fa-fw"></i></a>
+                                    </div>
                                     <a class="btn btn-default btn-sm"  data-wysihtml5-action="change_view"><i
                                             class="fa fa-file-code-o fa-fw"></i></a>
                                 </div>
                                 <div class="col-lg-5 text-right">
                                     <div class="input-group" data-wysihtml5-dialog="createLink"
                                          style="display: none;">
-                                        <input class="form-control input-sm" data-wysihtml5-dialog-field="href"
+                                        <input id="fileSrc" class="form-control input-sm" data-wysihtml5-dialog-field="href"
                                                placeholder="http://"/>
                                             <span class="input-group-btn">
+                                                <a class="btn btn-default btn-sm" data-target="#assetFileModal"
+                                                   data-toggle="modal"><i class="fa fa-upload fa-fw"></i></a>
                                                 <a class="btn btn-default btn-sm" data-wysihtml5-dialog-action="save"><i
                                                         class="fa fa-check fa-fw"></i></a> <a
                                                     class="btn btn-default btn-sm"
@@ -267,7 +275,39 @@
                                                data-wysihtml5-dialog-field="src"
                                                placeholder="http://"/>
                                             <span class="input-group-btn">
-                                                <a class="btn btn-default btn-sm" data-target="#assetModal"
+                                                <a class="btn btn-default btn-sm" data-target="#assetImaggeModal"
+                                                   data-toggle="modal"><i class="fa fa-upload fa-fw"></i></a>
+                                                <a class="btn btn-default btn-sm" data-wysihtml5-dialog-action="save"><i
+                                                        class="fa fa-check fa-fw"></i></a> <a
+                                                    class="btn btn-default btn-sm"
+                                                    data-wysihtml5-dialog-action="cancel"><i
+                                                    class="fa fa-close fa-fw"></i></a>
+                                            </span>
+                                    </div>
+
+                                    <div class="input-group" data-wysihtml5-dialog="insertVideo"
+                                         style="display: none;">
+                                        <input id="videoSrc" class="form-control input-sm"
+                                               data-wysihtml5-dialog-field="src"
+                                               placeholder="http://"/>
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default btn-sm" data-target="#assetVideoModal"
+                                                   data-toggle="modal"><i class="fa fa-upload fa-fw"></i></a>
+                                                <a class="btn btn-default btn-sm" data-wysihtml5-dialog-action="save"><i
+                                                        class="fa fa-check fa-fw"></i></a> <a
+                                                    class="btn btn-default btn-sm"
+                                                    data-wysihtml5-dialog-action="cancel"><i
+                                                    class="fa fa-close fa-fw"></i></a>
+                                            </span>
+                                    </div>
+
+                                    <div class="input-group" data-wysihtml5-dialog="insertAudio"
+                                         style="display: none;">
+                                        <input id="audioSrc" class="form-control input-sm"
+                                               data-wysihtml5-dialog-field="src"
+                                               placeholder="http://"/>
+                                            <span class="input-group-btn">
+                                                <a class="btn btn-default btn-sm" data-target="#assetAudioModal"
                                                    data-toggle="modal"><i class="fa fa-upload fa-fw"></i></a>
                                                 <a class="btn btn-default btn-sm" data-wysihtml5-dialog-action="save"><i
                                                         class="fa fa-check fa-fw"></i></a> <a
@@ -316,9 +356,6 @@
 <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
 
 <!-- Custom JavaScript -->
-<script th:src="@{/dist/js/parser-rules-advanced.js}" src="../public/dist/js/parser-rules-advanced.js"></script>
-
-<!-- Custom JavaScript -->
 <script th:src="@{/dist/js/wysihtml5-0.3.0.js}" src="../public/dist/js/wysihtml5-0.3.0.js"></script>
 
 <!-- Custom JavaScript -->
@@ -329,8 +366,7 @@
 
 <script th:if="${mode=='edit'}" th:inline="javascript">
     var editor = new wysihtml5.Editor("wysihtml5-textarea", {
-        toolbar: "wysihtml5-toolbar",
-        parserRules: wysihtml5ParserRules
+        toolbar: "wysihtml5-toolbar"
     });
     var $tagInput = $(".tm-input");
 
