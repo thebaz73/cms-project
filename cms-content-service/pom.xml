@@ -38,12 +38,36 @@
             <artifactId>spring-boot-starter-data-rest</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-solr</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-asset-fedora</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-asset-filesystem</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-search-solr</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-search-mongo</artifactId>
         </dependency>
     </dependencies>
 

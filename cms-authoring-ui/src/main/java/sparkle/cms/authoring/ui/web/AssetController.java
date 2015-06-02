@@ -166,6 +166,11 @@ public class AssetController {
         }
     }
 
+    @RequestMapping(value = {"/sparkleasset/**"}, method = {RequestMethod.GET, RequestMethod.HEAD})
+    public void sparkleAsset(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        preview(request, response);
+    }
+
     @RequestMapping(value = {"/assets/preview/**"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public void preview(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {

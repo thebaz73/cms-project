@@ -59,7 +59,7 @@ public class ContentService {
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-   @Secured({"ROLE_MANAGER"})
+    @Secured({"ROLE_MANAGER"})
     @RequestMapping(value = "/contents/{siteId}/{uri}", method = RequestMethod.GET)
     HttpEntity<PagedResources<CmsContent>> content(Pageable pageable,
                                                    PagedResourcesAssembler assembler,
