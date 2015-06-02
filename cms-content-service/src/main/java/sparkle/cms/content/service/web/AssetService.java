@@ -4,23 +4,12 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import sparkle.cms.data.CmsAssetRepository;
-import sparkle.cms.data.CmsContentRepository;
-import sparkle.cms.data.CmsTagRepository;
 import sparkle.cms.domain.CmsAsset;
-import sparkle.cms.domain.CmsContent;
-import sparkle.cms.domain.CmsTag;
 import sparkle.cms.plugin.mgmt.PluginOperationException;
 import sparkle.cms.plugin.mgmt.PluginService;
 import sparkle.cms.plugin.mgmt.asset.Asset;
@@ -29,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static sparkle.cms.plugin.mgmt.asset.AssetUtils.findContentTypeByFileName;
@@ -52,7 +40,7 @@ public class AssetService {
     @RequestMapping(value = "/assets/**", method = RequestMethod.GET)
     public void assets(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            final String prefix = "/assets/preview/";
+            final String prefix = "/assets/";
             final String requestURI = request.getRequestURI();
             String uri = requestURI.substring(prefix.length());
             Asset asset = findAssetByUri(uri);

@@ -168,7 +168,29 @@ public class AssetController {
 
     @RequestMapping(value = {"/sparkleasset/**"}, method = {RequestMethod.GET, RequestMethod.HEAD})
     public void sparkleAsset(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        preview(request, response);
+        try {
+            final String prefix = "/sparkleasset/";
+            final String requestURI = request.getRequestURI();
+            String uri = requestURI.substring(prefix.length());
+            Asset asset = assetManager.findAssetByUri(uri);
+            if (asset.getContent() == null) {
+                response.setHeader("Location", asset.getUri());
+                response.sendRedirect(asset.getUri());
+            } else {
+                String mimeType = findContentTypeByFileName(uri.substring(uri.lastIndexOf("/") + 1));
+                response.setContentType(mimeType);
+                response.setHeader("X-Frame-Options", "SAMEORIGIN");
+
+                ByteArrayInputStream is = new ByteArrayInputStream(asset.getContent());
+                IOUtils.copy(is, response.getOutputStream());
+                response.flushBuffer();
+            }
+        } catch (AuthoringException e) {
+            String msg = String.format("Cannot manage assets. Reason: %s",
+                    e.getMessage());
+            logger.info(msg, e);
+            response.sendError(400, msg);
+        }
     }
 
     @RequestMapping(value = {"/assets/preview/**"}, method = {RequestMethod.GET, RequestMethod.HEAD})
