@@ -379,6 +379,7 @@
     $.get('/tags', function (data) {
         $tagInput.typeahead({source: data});
     }, 'json');
+    $('#tags').val('');
 </script>
 
 <div th:replace="browseasset"></div>
