@@ -27,7 +27,7 @@ import static sparkle.cms.plugin.mgmt.asset.AssetUtils.findContentTypeByFileName
  * Created by bazzoni on 02/04/2015.
  */
 @RestController(value = "assetWebService")
-@RequestMapping(value = "/api")
+@RequestMapping(value = "/public")
 public class AssetService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
@@ -36,11 +36,10 @@ public class AssetService {
     private PluginService pluginService;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	@Secured({"ROLE_MANAGER"})
     @RequestMapping(value = "/assets/**", method = RequestMethod.GET)
     public void assets(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            final String prefix = "/assets/";
+            final String prefix = "/public/assets/";
             final String requestURI = request.getRequestURI();
             String uri = requestURI.substring(prefix.length());
             Asset asset = findAssetByUri(uri);
