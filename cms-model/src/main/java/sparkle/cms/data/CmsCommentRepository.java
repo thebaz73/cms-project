@@ -1,5 +1,7 @@
 package sparkle.cms.data;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import sparkle.cms.domain.CmsComment;
 
@@ -18,6 +20,15 @@ public interface CmsCommentRepository extends MongoRepository<CmsComment, String
      * @return list of @CmsComment
      */
     List<CmsComment> findByContentId(String contentId);
+
+    /**
+     * Finds list of @CmsComment given its contentId
+     *
+     * @param contentId content id
+     * @param pageable  page info
+     * @return list of @CmsComment
+     */
+    Page<CmsComment> findByContentId(String contentId, PageRequest pageable);
 
     /**
      * Finds list of @CmsComment given its contentId

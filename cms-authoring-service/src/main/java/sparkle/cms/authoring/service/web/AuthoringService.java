@@ -13,12 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * ContentService
+ * AuthoringService
  * Created by thebaz on 27/03/15.
  */
 @RestController(value = "contentWebService")
 @RequestMapping(value = "/api")
-public class ContentService {
+public class AuthoringService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired

@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNotNull;
 @SpringApplicationConfiguration(classes = {Application.class})
 @WebAppConfiguration
 @IntegrationTest
-public class ContentServiceTest extends AbstractServiceTest {
+public class AuthoringServiceTest extends AbstractServiceTest {
 
     @Before
     public void setUp() throws Exception {

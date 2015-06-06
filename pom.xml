@@ -64,7 +64,6 @@
         <module>cms-authoring-service</module>
         <module>cms-authentication-service</module>
         <module>cms-content-service</module>
-        <module>cms-comment-service</module>
     </modules>
 
     <build>
