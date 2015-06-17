@@ -47,6 +47,14 @@
         </dependency>
         <dependency>
             <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-asset-jackrabbit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
+            <artifactId>cms-plugin-asset-oak</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sparkle.cms</groupId>
             <artifactId>cms-plugin-search-solr</artifactId>
         </dependency>
         <dependency>
