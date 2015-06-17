@@ -85,3 +85,4 @@ Here follows some of main technologies used:
 |                | MongoBD Full text search |
 |                | Fedora common JCR |
 |                | JackRabbit JCR |
+|                | JackRabbit OAK JCR |
