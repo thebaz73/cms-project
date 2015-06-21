@@ -8,6 +8,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import sparkle.cms.data.*;
 import sparkle.cms.domain.*;
 
@@ -19,6 +20,7 @@ import java.util.List;
  * AbstractServiceTest
  * Created by thebaz on 31/03/15.
  */
+@Component
 public abstract class AbstractServiceTest {
     public static final String USERNAME = "lvoldemort";
     public static final String PASSWORD = "avada!kedavra";
@@ -61,6 +63,7 @@ public abstract class AbstractServiceTest {
                 new Date(),
                 "www.half-blood.com",
                 WorkflowType.SELF_APPROVAL_WF,
+                CommentApprovalMode.SELF_APPROVAL,
                 webMaster);
         cmsSiteRepository.save(cmsSite);
         siteId = cmsSite.getId();

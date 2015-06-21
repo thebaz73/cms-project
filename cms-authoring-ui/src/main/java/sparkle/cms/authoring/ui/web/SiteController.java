@@ -18,6 +18,7 @@ import sparkle.cms.authoring.common.business.CommentManager;
 import sparkle.cms.authoring.common.business.ContentManager;
 import sparkle.cms.domain.CmsSite;
 import sparkle.cms.domain.CmsUser;
+import sparkle.cms.domain.CommentApprovalMode;
 import sparkle.cms.domain.WorkflowType;
 import sparkle.cms.registration.common.business.RegistrationException;
 import sparkle.cms.registration.common.business.RegistrationManager;
@@ -95,7 +96,7 @@ public class SiteController {
             //TODO WHOIS_URL="http://www.whoisxmlapi.com/whoisserver/WhoisService";
             if (assetManager.checkPluginAvailable()) {
                 CmsUser cmsUser = registrationManager.findUser(request.getRemoteUser());
-                String siteId = siteManager.createSite(cmsUser, cmsSite.getName(), cmsSite.getAddress(), cmsSite.getWorkflowType());
+                String siteId = siteManager.createSite(cmsUser, cmsSite.getName(), cmsSite.getAddress(), cmsSite.getWorkflowType(), CommentApprovalMode.SELF_APPROVAL);
                 assetManager.createSiteRepository(siteId);
                 model.clear();
             } else {

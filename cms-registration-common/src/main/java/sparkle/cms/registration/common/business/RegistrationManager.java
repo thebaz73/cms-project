@@ -118,7 +118,7 @@ public class RegistrationManager {
         cmsUserRepository.delete(cmsUser);
     }
 
-    public void createSite(String userId, String name, String address, WorkflowType workflowType) throws RegistrationException {
+    public void createSite(String userId, String name, String address, WorkflowType workflowType, CommentApprovalMode commentApprovalMode) throws RegistrationException {
         CmsUser cmsUser = cmsUserRepository.findOne(userId);
         if (cmsUser == null) {
             throw new RegistrationException("User id not found");
@@ -127,7 +127,7 @@ public class RegistrationManager {
             throw new RegistrationException("Site already registered");
         }
 
-        CmsSite cmsSite = new CmsSite(name, new Date(), address, workflowType, cmsUser);
+        CmsSite cmsSite = new CmsSite(name, new Date(), address, workflowType, commentApprovalMode, cmsUser);
 
         cmsSiteRepository.save(cmsSite);
     }

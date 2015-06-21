@@ -19,6 +19,7 @@ import sparkle.cms.data.CmsRoleRepository;
 import sparkle.cms.data.CmsSiteRepository;
 import sparkle.cms.data.CmsUserRepository;
 import sparkle.cms.domain.CmsRole;
+import sparkle.cms.domain.CommentApprovalMode;
 import sparkle.cms.domain.Role;
 import sparkle.cms.domain.WorkflowType;
 
@@ -171,12 +172,12 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
         assertEquals(0, cmsSiteRepository.findAll().get(0).getAuthors().size());
 
         try {
-            registrationManager.createSite("error", "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
+            registrationManager.createSite("error", "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF, CommentApprovalMode.SELF_APPROVAL);
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
         try {
-            registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
+            registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF, CommentApprovalMode.SELF_APPROVAL);
         } catch (RegistrationException e) {
             assertEquals(RegistrationException.class, e.getClass());
         }
@@ -286,7 +287,7 @@ public class RegistrationManagerTest extends AbstractMongoConfiguration {
 
     private String createSite() throws RegistrationException {
         String userId = cmsUserRepository.findAll().get(0).getId();
-        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
+        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF, CommentApprovalMode.SELF_APPROVAL);
         return userId;
     }
 

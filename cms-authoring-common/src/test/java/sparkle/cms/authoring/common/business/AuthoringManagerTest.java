@@ -90,6 +90,7 @@ public class AuthoringManagerTest extends AbstractMongoConfiguration {
                 new Date(),
                 "www.half-blood.com",
                 WorkflowType.SELF_APPROVAL_WF,
+                CommentApprovalMode.SELF_APPROVAL,
                 webMaster);
         cmsSiteRepository.save(cmsSite);
         siteId = cmsSite.getId();

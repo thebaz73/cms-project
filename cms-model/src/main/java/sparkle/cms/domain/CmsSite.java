@@ -24,6 +24,7 @@ public class CmsSite {
     @Indexed(unique = true)
     private String address;
     private WorkflowType workflowType;
+    private CommentApprovalMode commentApprovalMode;
     @DBRef
     @Indexed
     private CmsUser webMaster;
@@ -34,11 +35,12 @@ public class CmsSite {
     }
 
     @PersistenceConstructor
-    public CmsSite(String name, Date creationDate, String address, WorkflowType workflowType, CmsUser webMaster) {
+    public CmsSite(String name, Date creationDate, String address, WorkflowType workflowType, CommentApprovalMode commentApprovalMode, CmsUser webMaster) {
         this.name = name;
         this.creationDate = creationDate;
         this.address = address;
         this.workflowType = workflowType;
+        this.commentApprovalMode = commentApprovalMode;
         this.webMaster = webMaster;
     }
 
@@ -80,6 +82,14 @@ public class CmsSite {
 
     public void setWorkflowType(WorkflowType workflowType) {
         this.workflowType = workflowType;
+    }
+
+    public CommentApprovalMode getCommentApprovalMode() {
+        return commentApprovalMode;
+    }
+
+    public void setCommentApprovalMode(CommentApprovalMode commentApprovalMode) {
+        this.commentApprovalMode = commentApprovalMode;
     }
 
     public CmsUser getWebMaster() {

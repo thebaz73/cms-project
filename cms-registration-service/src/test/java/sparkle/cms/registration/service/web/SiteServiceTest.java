@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 import sparkle.cms.domain.CmsSite;
+import sparkle.cms.domain.CommentApprovalMode;
 import sparkle.cms.domain.WorkflowType;
 import sparkle.cms.registration.service.Application;
 
@@ -53,7 +54,7 @@ public class SiteServiceTest extends AbstractServiceTest {
 
     @Test
     public void testFindSite() throws Exception {
-        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
+        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF, CommentApprovalMode.SELF_APPROVAL);
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
@@ -75,7 +76,7 @@ public class SiteServiceTest extends AbstractServiceTest {
 
     @Test
     public void testEditSite() throws Exception {
-        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
+        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF, CommentApprovalMode.SELF_APPROVAL);
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
         List<MediaType> acceptableMediaTypes = new ArrayList<>();
@@ -96,7 +97,7 @@ public class SiteServiceTest extends AbstractServiceTest {
 
     @Test
     public void testDeleteSite() throws Exception {
-        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF);
+        registrationManager.createSite(userId, "Half Blood Blog", "www.half-blood.com", WorkflowType.SELF_APPROVAL_WF, CommentApprovalMode.SELF_APPROVAL);
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
         // Prepare acceptable media type
         List<MediaType> acceptableMediaTypes = new ArrayList<>();

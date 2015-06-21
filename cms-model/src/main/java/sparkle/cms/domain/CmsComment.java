@@ -14,8 +14,7 @@ import java.util.Date;
 public class CmsComment {
     @Id
     private String id;
-    @Indexed
-    private String siteId;
+    private boolean approved;
     @Indexed
     private String contentId;
     @Indexed
@@ -44,14 +43,14 @@ public class CmsComment {
     public void setId(String id) {
         this.id = id;
     }
-//
-//    public String getSiteId() {
-//        return siteId;
-//    }
-//
-//    public void setSiteId(String siteId) {
-//        this.siteId = siteId;
-//    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
 
     public String getContentId() {
         return contentId;

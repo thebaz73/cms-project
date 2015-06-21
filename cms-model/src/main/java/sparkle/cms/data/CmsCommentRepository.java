@@ -1,6 +1,7 @@
 package sparkle.cms.data;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import sparkle.cms.domain.CmsComment;
@@ -25,10 +26,29 @@ public interface CmsCommentRepository extends MongoRepository<CmsComment, String
      * Finds list of @CmsComment given its contentId
      *
      * @param contentId content id
+     * @param approved approved flag
+     * @return list of @CmsComment
+     */
+    List<CmsComment> findByContentIdAndApproved(String contentId, boolean approved);
+
+    /**
+     * Finds page of @CmsComment given its contentId
+     *
+     * @param contentId content id
      * @param pageable  page info
      * @return list of @CmsComment
      */
     Page<CmsComment> findByContentId(String contentId, Pageable pageable);
+
+    /**
+     * Finds page of @CmsComment given its contentId
+     *
+     * @param contentId content id
+     * @param approved approved flag
+     * @param pageable  page info
+     * @return list of @CmsComment
+     */
+    Page<CmsComment> findByContentIdAndApproved(String contentId, boolean approved, PageRequest pageable);
 
     /**
      * Finds list of @CmsComment given its contentId
@@ -51,4 +71,5 @@ public interface CmsCommentRepository extends MongoRepository<CmsComment, String
      * @param siteId site id
      */
     List<CmsComment> deleteBySiteId(String siteId);
+
 }

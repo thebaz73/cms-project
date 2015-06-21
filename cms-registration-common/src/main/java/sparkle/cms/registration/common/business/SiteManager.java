@@ -8,9 +8,10 @@ import org.springframework.stereotype.Component;
 import sparkle.cms.data.CmsSiteRepository;
 import sparkle.cms.domain.CmsSite;
 import sparkle.cms.domain.CmsUser;
+import sparkle.cms.domain.CommentApprovalMode;
 import sparkle.cms.domain.WorkflowType;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class SiteManager {
 
     public List<CmsSite> findAuthoredSites(CmsUser cmsUser) {
         CmsSite cmsSite = cmsSiteRepository.findOne(cmsUser.getAuthoredSiteId());
-        return Arrays.asList(cmsSite);
+        return Collections.singletonList(cmsSite);
     }
 
     public Page<CmsSite> findAllSites(CmsUser cmsUser, Pageable pageable) {
@@ -38,15 +39,15 @@ public class SiteManager {
 
     public Page<CmsSite> findAuthoredSites(CmsUser cmsUser, Pageable pageable) {
         CmsSite cmsSite = cmsSiteRepository.findOne(cmsUser.getAuthoredSiteId());
-        return new PageImpl<>(Arrays.asList(cmsSite), pageable, 1);
+        return new PageImpl<>(Collections.singletonList(cmsSite), pageable, 1);
     }
 
-    public String createSite(CmsUser cmsUser, String name, String address, WorkflowType workflowType) throws RegistrationException {
+    public String createSite(CmsUser cmsUser, String name, String address, WorkflowType workflowType, CommentApprovalMode commentApprovalMode) throws RegistrationException {
         if (!cmsSiteRepository.findByAddress(address).isEmpty()) {
             throw new RegistrationException("Site already registered");
         }
 
-        CmsSite cmsSite = new CmsSite(name, new Date(), address, workflowType, cmsUser);
+        CmsSite cmsSite = new CmsSite(name, new Date(), address, workflowType, commentApprovalMode, cmsUser);
 
         cmsSiteRepository.save(cmsSite);
 

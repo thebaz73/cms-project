@@ -7,6 +7,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import sparkle.cms.domain.CmsSite;
 import sparkle.cms.domain.CmsUser;
+import sparkle.cms.domain.CommentApprovalMode;
 import sparkle.cms.domain.WorkflowType;
 import sparkle.cms.registration.common.business.RegistrationException;
 import sparkle.cms.registration.common.business.RegistrationManager;
@@ -32,9 +33,10 @@ public class SiteService {
     public void createSite(HttpServletResponse response,
                            @PathVariable(value = "userId") String userId,
                            @RequestParam(value = "workflow", defaultValue = "SELF_APPROVAL_WF") String workflowType,
+                           @RequestParam(value = "commentMode", defaultValue = "SELF_APPROVAL") String commentMode,
                            @RequestBody CmsSite cmsSite) throws IOException {
         try {
-            registrationManager.createSite(userId, cmsSite.getName(), cmsSite.getAddress(), WorkflowType.forName(workflowType.toUpperCase()));
+            registrationManager.createSite(userId, cmsSite.getName(), cmsSite.getAddress(), WorkflowType.forName(workflowType.toUpperCase()), CommentApprovalMode.forName(commentMode.toUpperCase()));
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create site. Reason: %s", e.toString());
             logger.info(msg, e);

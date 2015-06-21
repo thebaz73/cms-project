@@ -12,8 +12,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 import sparkle.cms.content.service.Application;
+import sparkle.cms.content.service.web.domain.CommentData;
 import sparkle.cms.domain.CmsContent;
-import sparkle.cms.domain.CmsTag;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,14 +22,15 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * TagServiceTest
- * Created by thebaz on 02/05/15.
+ * CommentServiceTest
+ * Created by bazzoni on 21/06/2015.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = {Application.class})
 @WebAppConfiguration
 @IntegrationTest
-public class TagServiceTest extends AbstractServiceTest {
+public class CommentServiceTest extends AbstractServiceTest {
+
     @Before
     public void setUp() throws Exception {
         prepareEnvironment();
@@ -37,18 +38,17 @@ public class TagServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void testTags() throws Exception {
+    public void testComment() throws Exception {
         CmsContent cmsContent = new CmsContent(siteId, "name", "title", "uri", new Date(), RandomStringUtils.randomAlphabetic(100), RandomStringUtils.randomAlphabetic(200));
         cmsContent.setPublished(true);
         cmsContentRepository.save(cmsContent);
-        for (int i = 0; i < 25; i++) {
-            CmsTag cmsTag = new CmsTag(siteId, "tag" + i, "tag" + i);
-            cmsTag.getContentIds().add(cmsContent.getId());
-            cmsTag.setPopularity(i);
-            cmsTagRepository.save(cmsTag);
-            cmsContent.getTags().add(cmsTag);
-            cmsContentRepository.save(cmsContent);
-        }
+
+        CommentData commentData = new CommentData();
+        commentData.setSiteId(siteId);
+        commentData.setTimestamp(new Date());
+        commentData.setTimestamp(new Date());
+        commentData.setTitle(RandomStringUtils.randomAlphabetic(50));
+        commentData.setContent(RandomStringUtils.randomAlphabetic(200));
 
         RestTemplate template = new RestTemplate(new HttpComponentsClientHttpRequestFactory(client));
 
@@ -59,13 +59,9 @@ public class TagServiceTest extends AbstractServiceTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(acceptableMediaTypes);
 
-        HttpEntity<CmsContent> requestEntity = new HttpEntity<>(headers);
+        HttpEntity<CommentData> requestEntity = new HttpEntity<>(commentData, headers);
         // Pass the new person and header
-        ResponseEntity<TagList> entity = template.exchange("http://localhost:9000/api/tags/" + siteId, HttpMethod.GET, requestEntity, TagList.class);
-        assertEquals(HttpStatus.OK, entity.getStatusCode());
-        assertEquals(25, entity.getBody().size());
-    }
-
-    class TagList extends ArrayList<CmsTag> {
+        ResponseEntity<Void> entity = template.exchange("http://localhost:9000/comments/" + cmsContent.getId(), HttpMethod.GET, requestEntity, Void.class);
+        assertEquals(HttpStatus.CREATED, entity.getStatusCode());
     }
 }
