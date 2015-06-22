@@ -21,9 +21,9 @@
                 <div class="panel panel-default">
                     <!-- Default panel comments -->
                     <div class="panel-heading">
-                        <h3 class="panel-title" th:text="#{title.comment.list}">List of</h3>
+                        <h3 class="panel-title" th:text="#{title.site.list}">List of</h3>
                     </div>
-                    <div class="panel-body" th:text="#{comment.none}">No comments found</div>
+                    <div class="panel-body" th:text="#{site.none}">No comments found</div>
                 </div>
             </section>
             <section class="col-lg-12" th:unless="${#lists.isEmpty(allSites)}">
@@ -41,6 +41,7 @@
                                 <th th:text="#{site.creationDate}">Creation Date</th>
                                 <th th:text="#{site.address}">Address</th>
                                 <th th:text="#{site.workflowType}">Workflow Type</th>
+                                <th th:text="#{site.commentApprovalMode}">Comment approval mode</th>
                                 <th><i class="fa fa-cogs"></i></th>
                             </tr>
                             </thead>
@@ -51,6 +52,7 @@
                                 <td th:text="${aSite.creationDate}">Creation Date</td>
                                 <td th:text="${aSite.address}">Address</td>
                                 <td th:text="#{${'site.workflow.'+aSite.workflowType}}">Workflow type</td>
+                                <td th:text="#{${'site.comment.approval.'+aSite.commentApprovalMode}}">Approval mode</td>
                                 <td>
                                     <form class="form-inline" role="form" th:action="@{${'/site/'+aSite.id}}"
                                           action="#" method="POST">
@@ -134,6 +136,18 @@
                             <select id="workflowType" class="form-control" th:field="*{workflowType}">
                                 <option th:each="var : ${allWorkflowTypes}" th:value="${var}"
                                         th:text="#{${'site.workflow.'+var}}">Workflow
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="workflowType" class="col-sm-2 control-label" th:text="#{site.commentApprovalMode}">Workflow
+                            Type</label>
+
+                        <div class="col-sm-10">
+                            <select id="commentApprovalMode" class="form-control" th:field="*{commentApprovalMode}">
+                                <option th:each="var : ${allCommentApprovalModes}" th:value="${var}"
+                                        th:text="#{${'site.comment.approval.'+var}}">Workflow
                                 </option>
                             </select>
                         </div>
