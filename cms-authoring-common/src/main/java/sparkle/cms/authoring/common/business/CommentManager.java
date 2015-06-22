@@ -33,7 +33,10 @@ public class CommentManager {
         List<CmsSite> cmsSites = cmsSiteRepository.findByWebMaster(cmsUser);
         List<CmsComment> cmsComments = new ArrayList<>();
         for (CmsSite cmsSite : cmsSites) {
-            cmsComments.addAll(cmsCommentRepository.findBySiteId(cmsSite.getId()));
+            List<CmsContent> cmsContents = cmsContentRepository.findBySiteId(cmsSite.getId());
+            for (CmsContent cmsContent : cmsContents) {
+                cmsComments.addAll(cmsCommentRepository.findByContentId(cmsContent.getId()));
+            }
         }
         return new PageImpl<>(cmsComments, pageable, cmsComments.size());
     }
@@ -52,7 +55,10 @@ public class CommentManager {
         List<CmsSite> cmsSites = cmsSiteRepository.findByWebMaster(cmsUser);
         List<CmsComment> cmsComments = new ArrayList<>();
         for (CmsSite cmsSite : cmsSites) {
-            cmsComments.addAll(cmsCommentRepository.findBySiteId(cmsSite.getId()));
+            List<CmsContent> cmsContents = cmsContentRepository.findBySiteId(cmsSite.getId());
+            for (CmsContent cmsContent : cmsContents) {
+                cmsComments.addAll(cmsCommentRepository.findByContentId(cmsContent.getId()));
+            }
         }
 
         return cmsComments;
@@ -69,7 +75,10 @@ public class CommentManager {
     }
 
     public void deleteSiteComments(String siteId) {
-        cmsCommentRepository.deleteBySiteId(siteId);
+        List<CmsContent> cmsContents = cmsContentRepository.findBySiteId(siteId);
+        for (CmsContent cmsContent : cmsContents) {
+            cmsCommentRepository.deleteByContentId(cmsContent.getId());
+        }
     }
 
     public void deleteContentComments(String contentId) {
