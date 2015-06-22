@@ -13,9 +13,13 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import sparkle.cms.content.service.web.domain.CommentData;
 import sparkle.cms.data.CmsCommentRepository;
+import sparkle.cms.data.CmsRoleRepository;
 import sparkle.cms.data.CmsSiteRepository;
 import sparkle.cms.data.CmsUserRepository;
-import sparkle.cms.domain.*;
+import sparkle.cms.domain.CmsComment;
+import sparkle.cms.domain.CmsSite;
+import sparkle.cms.domain.CmsUser;
+import sparkle.cms.domain.CommentApprovalMode;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -31,17 +35,20 @@ public class CommentService {
     @Autowired
     private CmsCommentRepository cmsCommentRepository;
     @Autowired
+    private CmsRoleRepository cmsRoleRepository;
+    @Autowired
     private CmsUserRepository cmsUserRepository;
     @Autowired
     private CmsSiteRepository cmsSiteRepository;
 
     @Secured({"ROLE_MANAGER"})
     @RequestMapping(value = "/comments", method = RequestMethod.POST)
-    HttpEntity<Void> createComment(CommentData commentData) {
+    HttpEntity<Void> createComment(@RequestBody CommentData commentData) {
         final String email = commentData.getEmail();
         final List<CmsUser> byEmail = cmsUserRepository.findByEmail(email);
         if (byEmail.isEmpty()) {
-            CmsUser viewer = new CmsUser("", email, email, "", new Date(), Arrays.asList(new CmsRole(Role.ROLE_USER), new CmsRole(Role.ROLE_VIEWER)));
+            CmsUser viewer = new CmsUser(email, email, email, "", new Date(), Arrays.asList(cmsRoleRepository.findByRole("ROLE_USER").get(0),
+                    cmsRoleRepository.findByRole("ROLE_VIEWER").get(0)));
             cmsUserRepository.save(viewer);
             byEmail.add(viewer);
         }

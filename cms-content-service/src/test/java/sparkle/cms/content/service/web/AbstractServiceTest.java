@@ -36,14 +36,13 @@ public abstract class AbstractServiceTest {
     @Autowired
     protected CmsContentRepository cmsContentRepository;
     @Autowired
+    protected CmsCommentRepository cmsCommentRepository;
+    @Autowired
     protected CmsTagRepository cmsTagRepository;
+    @Autowired
+    protected CmsSettingRepository cmsSettingRepository;
 
     protected void prepareEnvironment() {
-        cmsRoleRepository.deleteAll();
-        cmsUserRepository.deleteAll();
-        cmsSiteRepository.deleteAll();
-        cmsContentRepository.deleteAll();
-        cmsTagRepository.deleteAll();
         for (Role role : Role.ALL) {
             List<CmsRole> byRole = cmsRoleRepository.findByRole(role.getName());
             if (byRole.isEmpty()) {
@@ -87,5 +86,15 @@ public abstract class AbstractServiceTest {
                 .setDefaultRequestConfig(config)
                 .setDefaultCredentialsProvider(credentialsProvider)
                 .build();
+    }
+
+    protected void disposeEnvironment() {
+        cmsRoleRepository.deleteAll();
+        cmsUserRepository.deleteAll();
+        cmsSiteRepository.deleteAll();
+        cmsContentRepository.deleteAll();
+        cmsCommentRepository.deleteAll();
+        cmsTagRepository.deleteAll();
+        cmsSettingRepository.deleteAll();
     }
 }
