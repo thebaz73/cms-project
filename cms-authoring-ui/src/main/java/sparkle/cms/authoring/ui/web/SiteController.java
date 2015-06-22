@@ -53,8 +53,13 @@ public class SiteController {
     private CommentManager commentManager;
 
     @ModelAttribute("allWorkflowTypes")
-    public List<WorkflowType> allRoles() {
+    public List<WorkflowType> allWorkflowTypes() {
         return Arrays.asList(WorkflowType.ALL);
+    }
+
+    @ModelAttribute("allCommentApprovalModes")
+    public List<CommentApprovalMode> allApprovalModes() {
+        return Arrays.asList(CommentApprovalMode.ALL);
     }
 
     @ModelAttribute("allSites")
