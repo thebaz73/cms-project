@@ -10,7 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -33,7 +31,6 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
     private static final String[] RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",
             "classpath:/static/", "classpath:/public/"};
-//    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -41,9 +38,6 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/").setViewName("index");
-//        registry.addViewController("/index").setViewName("index");
-//        registry.addViewController("/home").setViewName("home");
     }
 
     @Override
@@ -69,7 +63,7 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
     @Bean
     protected ResourceHttpRequestHandler myFaviconRequestHandler() {
         ResourceHttpRequestHandler requestHandler = new ResourceHttpRequestHandler();
-        requestHandler.setLocations(Arrays.<Resource>asList(new ClassPathResource("/")));
+        requestHandler.setLocations(Collections.singletonList(new ClassPathResource("/")));
         requestHandler.setCacheSeconds(0);
         return requestHandler;
     }
@@ -86,36 +80,12 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
     @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
     protected class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
-//        @Autowired
-//        private SecurityProperties security;
-
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .authorizeRequests()
                     .antMatchers("/**").permitAll()
                     .anyRequest().authenticated();
-//            http
-//                    .formLogin()
-//                    .loginPage("/login")
-//                    .failureUrl("/login?error")
-//                    .permitAll()
-//                    .and()
-//                    .logout()
-//                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                    .logoutSuccessUrl("/login")
-//                    .and()
-//                    .rememberMe();
         }
     }
-
-//    @Order(Ordered.HIGHEST_PRECEDENCE + 10)
-//    protected class AuthenticationSecurity extends
-//            GlobalAuthenticationConfigurerAdapter {
-//
-//        @Override
-//        public void init(AuthenticationManagerBuilder auth) throws Exception {
-//            auth.userDetailsService(userManager);//.passwordEncoder(userManager.getEncoder());
-//        }
-//    }
 }

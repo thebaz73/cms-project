@@ -23,7 +23,7 @@ import java.util.Map;
  * Created by bazzoni on 03/04/2015.
  */
 @Component
-@ConfigurationProperties(prefix = "mscms")
+@ConfigurationProperties(prefix = "sparkle.web")
 public class WebServiceUtils implements InitializingBean {
 
     private static WebServiceUtils instance;

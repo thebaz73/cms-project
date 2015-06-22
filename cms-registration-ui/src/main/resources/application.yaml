@@ -3,15 +3,15 @@ spring:
     profiles.active: test
 ---
 spring:
-    profiles: development
+    profiles: localcloud
     data:
-      mongodb.host: 52.16.117.190
+      mongodb.host: 192.168.108.129
       mongodb.port: 27017
       mongodb.name: cms-db
 
 logging:
     level.org.springframework: INFO
-    level.ms.cms: DEBUG
+    level.sparkle.cms: DEBUG
 
 server:
     port: 9000
@@ -19,7 +19,62 @@ server:
 management:
     port: 9001
 
-mscms:
+multipart:
+    maxFileSize: 30MB
+    maxRequestSize: 30MB
+
+solr:
+  host: http://192.168.108.129:8983/solr
+
+sparkle:
+  admin:
+    name: Administrator
+    username: admin
+    password: q1w2e3r4
+    email: admin@sparkle-cms.com
+  web:
+    authentication:
+      dns: 192.168.108.130
+      ip: 192.168.108.130
+      port: 7000
+    authoring:
+      dns: 192.168.108.130
+      ip: 192.168.108.130
+      port: 9000
+    registration:
+      dns: 192.168.108.130
+      ip: 192.168.108.130
+      port: 8000
+    timeout: 5000
+---
+spring:
+    profiles: development
+    data:
+      mongodb.host: localhost
+      mongodb.port: 27017
+      mongodb.name: cms-db
+
+logging:
+    level.org.springframework: INFO
+    level.sparkle.cms: DEBUG
+
+server:
+    port: 9000
+
+management:
+    port: 9001
+
+multipart:
+    maxFileSize: 30MB
+    maxRequestSize: 30MB
+
+sparkle:
+  admin:
+    name: Administrator
+    username: admin
+    password: q1w2e3r4
+    email: admin@sparkle-cms.com
+  web:
     authentication:
       dns: ec2-52-17-40-252.eu-west-1.compute.amazonaws.com
       ip: 52.16.40.252
@@ -52,7 +107,13 @@ server:
 management:
     port: 8081
 
-mscms:
+sparkle:
+  admin:
+    name: Administrator
+    username: admin
+    password: q1w2e3r4
+    email: admin@sparkle-cms.com
+  web:
     authentication:
       dns: ec2-52-17-40-252.eu-west-1.compute.amazonaws.com
       ip: 52.16.40.252

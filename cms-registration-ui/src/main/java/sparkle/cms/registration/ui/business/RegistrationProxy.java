@@ -26,7 +26,7 @@ import java.util.Map;
  * Created by thebaz on 07/04/15.
  */
 @Component
-@ConfigurationProperties(prefix = "mscms")
+@ConfigurationProperties(prefix = "sparkle.web")
 public class RegistrationProxy implements InitializingBean {
     public static final String FIND_USER_URI = "/public/user?param={param}";
     private static final String CREATE_USER_URI = "/public/user/manager";

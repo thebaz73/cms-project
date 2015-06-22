@@ -3,6 +3,7 @@ package sparkle.cms.authoring.ui;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -13,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,7 +29,6 @@ import sparkle.cms.registration.common.business.RegistrationException;
 import sparkle.cms.registration.common.business.RegistrationManager;
 import sparkle.cms.security.ReadOnlyUserManager;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -49,6 +48,15 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
     @Autowired
     private RegistrationManager registrationManager;
 
+    @Value("${sparkle.admin.name}")
+    private String adminName;
+    @Value("${sparkle.admin.email}")
+    private String adminEmail;
+    @Value("${sparkle.admin.username}")
+    private String adminUsername;
+    @Value("${sparkle.admin.password}")
+    private String adminPassword;
+    
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
@@ -88,7 +96,7 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
     @Bean
     protected ResourceHttpRequestHandler myFaviconRequestHandler() {
         ResourceHttpRequestHandler requestHandler = new ResourceHttpRequestHandler();
-        requestHandler.setLocations(Arrays.<Resource>asList(new ClassPathResource("/")));
+        requestHandler.setLocations(Collections.singletonList(new ClassPathResource("/")));
         requestHandler.setCacheSeconds(0);
         return requestHandler;
     }
@@ -107,14 +115,14 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
     public void run(String... args) throws Exception {
         registrationManager.initialize();
         try {
-            CmsUser cmsUser = registrationManager.findUser("thebaz");
+            CmsUser cmsUser = registrationManager.findUser(adminUsername);
             logger.info(String.format("Found user: %s", cmsUser.getUsername()));
         } catch (RegistrationException e) {
             registrationManager.createUser(RegistrationManager.UserType.valueOf("ADMIN"),
-                    "thebaz",
-                    "q1w2e3r4",
-                    "marco.bazzoni@baznet.net",
-                    "Marco Bazzoni");
+                    adminUsername,
+                    adminPassword,
+                    adminEmail,
+                    adminName);
         }
     }
 
