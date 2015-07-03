@@ -71,4 +71,11 @@ public class CommentService {
         Page<CmsComment> comments = cmsCommentRepository.findByContentIdAndApproved(contentId, true, pageable);
         return new ResponseEntity<>(assembler.toResource(comments), HttpStatus.OK);
     }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Secured({"ROLE_MANAGER"})
+    @RequestMapping(value = "/comments/{contentId}", params = {"all"}, method = RequestMethod.GET)
+    List<CmsComment> comments(@PathVariable("contentId") String contentId) {
+        return cmsCommentRepository.findByContentIdAndApproved(contentId, true);
+    }
 }
