@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
@@ -11,6 +12,7 @@ import java.util.Date;
  * CmsComment
  * Created by thebaz on 24/03/15.
  */
+@Document
 public class CmsComment {
     @Id
     private String id;

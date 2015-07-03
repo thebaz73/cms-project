@@ -67,8 +67,8 @@ public class CommentService {
                                                     @RequestParam(value = "page", defaultValue = "0") int page,
                                                     @RequestParam(value = "size", defaultValue = "10") int size) {
 
-        PageRequest pageable = new PageRequest(page, size, Sort.Direction.DESC, "modificationDate");
-        Page<CmsComment> contents = cmsCommentRepository.findByContentIdAndApproved(contentId, true, pageable);
-        return new ResponseEntity<>(assembler.toResource(contents), HttpStatus.OK);
+        PageRequest pageable = new PageRequest(page, size, Sort.Direction.DESC, "timestamp");
+        Page<CmsComment> comments = cmsCommentRepository.findByContentIdAndApproved(contentId, true, pageable);
+        return new ResponseEntity<>(assembler.toResource(comments), HttpStatus.OK);
     }
 }
