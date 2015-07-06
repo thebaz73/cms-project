@@ -168,7 +168,7 @@ public class DashboardController {
             for (CmsComment comment : comments) {
                 List<Object> list = new ArrayList<>();
                 list.add(comment.getTimestamp());
-                list.add(comment.getContentId());
+                list.add(comment.getTitle());
                 list.add(comment.getViewer().getName());
                 list.add(comment.getContent());
                 list.add(comment.getId());
