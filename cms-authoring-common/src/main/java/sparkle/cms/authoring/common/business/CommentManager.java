@@ -63,6 +63,10 @@ public class CommentManager {
         cmsCommentRepository.deleteByContentId(contentId);
     }
 
+    public CmsComment findComment(String commentId) {
+        return cmsCommentRepository.findOne(commentId);
+    }
+
     public void deleteComment(String commentId) {
         cmsCommentRepository.delete(commentId);
     }

@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import sparkle.cms.authoring.common.business.AuthoringManager;
 import sparkle.cms.authoring.common.business.CommentManager;
@@ -23,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import static sparkle.cms.utils.UserUtils.isAuthor;
 import static sparkle.cms.utils.UserUtils.isWebmaster;
@@ -85,7 +85,15 @@ public class CommentController {
     }
 
     @RequestMapping({"/comments"})
-    public String commentsManagement(Map<String, Object> model) {
+    public String commentsManagement() {
+        return "comments";
+    }
+
+    @RequestMapping(value = {"/comments/{commentId}"}, method = RequestMethod.GET)
+    public String showComment(ModelMap model, @PathVariable("commentId") String commentId) throws IOException {
+        CmsComment cmsComment = commentManager.findComment(commentId);
+        model.put("cmsComment", cmsComment);
+        model.put("commentId", cmsComment.getId());
         return "comments";
     }
 
