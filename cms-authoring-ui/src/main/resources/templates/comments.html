@@ -56,11 +56,20 @@
                                               th:if="${id == aComment.contentId}">Comment</span>
 
                                 </td>
-                                <td>
-                                    <form class="form-inline" role="form" th:action="@{${'/comments/'+aComment.id}}"
+                                <td th:if="${!aComment.approved}">
+                                    <form class="form-inline" role="form" th:action="@{${'/comments/approve/'+aComment.id}}"
                                           action="#" method="GET">
-                                        <button type="submit" class="btn btn-primary btn-xs" value="put"><span
-                                                class="glyphicon glyphicon-info"></span></button>
+                                        <button type="submit" class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                data-placement="top" title="Approve"><span
+                                                class="glyphicon glyphicon-export"></span></button>
+                                    </form>
+                                </td>
+                                <td th:if="${aComment.approved}">
+                                    <form class="form-inline" role="form" th:action="@{${'/comments/disapprove/'+aComment.id}}"
+                                          action="#" method="GET">
+                                        <button type="submit" class="btn btn-warning btn-xs" data-toggle="tooltip"
+                                                data-placement="top" title="Disapprove"><span
+                                                class="glyphicon glyphicon-import"></span></button>
                                     </form>
                                 </td>
                                 <td>
