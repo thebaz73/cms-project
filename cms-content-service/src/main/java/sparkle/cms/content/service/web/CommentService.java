@@ -52,7 +52,7 @@ public class CommentService {
             cmsUserRepository.save(viewer);
             byEmail.add(viewer);
         }
-        CmsComment cmsComment = new CmsComment(commentData.getContentId(), commentData.getTimestamp(), commentData.getTitle(), commentData.getContent(), byEmail.get(0));
+        CmsComment cmsComment = new CmsComment(commentData.getSiteId(), commentData.getContentId(), commentData.getTimestamp(), commentData.getTitle(), commentData.getContent(), byEmail.get(0));
         final CmsSite cmsSite = cmsSiteRepository.findOne(commentData.getSiteId());
         cmsComment.setApproved(CommentApprovalMode.SELF_APPROVAL.equals(cmsSite.getCommentApprovalMode()));
         cmsCommentRepository.save(cmsComment);

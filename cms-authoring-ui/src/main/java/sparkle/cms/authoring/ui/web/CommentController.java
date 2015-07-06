@@ -8,9 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import sparkle.cms.authoring.common.business.AuthoringManager;
 import sparkle.cms.authoring.common.business.CommentManager;
 import sparkle.cms.authoring.common.business.ContentManager;
@@ -89,5 +87,23 @@ public class CommentController {
     @RequestMapping({"/comments"})
     public String commentsManagement(Map<String, Object> model) {
         return "comments";
+    }
+
+    @RequestMapping(value = {"/comments/approve/{commentId}"}, method = RequestMethod.GET)
+    public String approve(@PathVariable("commentId") String commentId) throws IOException {
+        commentManager.approve(commentId, true);
+        return "redirect:/contents";
+    }
+
+    @RequestMapping(value = {"/comments/disapprove/{commentId}"}, method = RequestMethod.GET)
+    public String disapprove(@PathVariable("commentId") String commentId) throws IOException {
+        commentManager.approve(commentId, false);
+        return "redirect:/contents";
+    }
+
+    @RequestMapping(value = {"/comments/{commentId}"}, method = RequestMethod.DELETE)
+    public String delete(@PathVariable("commentId") String commentId) throws IOException {
+        commentManager.deleteComment(commentId);
+        return "redirect:/contents";
     }
 }

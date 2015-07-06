@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static sparkle.cms.utils.UserUtils.isAuthor;
@@ -63,14 +63,16 @@ public class DashboardController {
             loadUserSites(registrationManager.findUser(request.getRemoteUser()));
             authoringStatus.setSitesCount(cmsSites.size());
             int contentsCount = 0;
+            int commentsCount = 0;
             int authorsCount = 0;
             for (CmsSite cmsSite : cmsSites) {
                 contentsCount += authoringManager.countContents(cmsSite);
+                commentsCount += authoringManager.countComments(cmsSite);
                 authorsCount += registrationManager.findSiteAuthors(cmsSite.getId()).size();
             }
             authoringStatus.setContentsCount(contentsCount);
+            authoringStatus.setCommentsCount(commentsCount);
             authoringStatus.setAuthorsCount(authorsCount);
-            authoringStatus.setCommentsCount(0);
         } catch (RegistrationException e) {
             String msg = String.format("Cannot create dashboard. Reason: %s", e.getMessage());
             logger.info(msg, e);
@@ -224,7 +226,7 @@ public class DashboardController {
         if (isWebmaster(cmsUser)) {
             cmsSites = siteManager.findSites(cmsUser);
         } else if (isAuthor(cmsUser)) {
-            cmsSites = Arrays.asList(siteManager.findAuthoredSite(cmsUser));
+            cmsSites = Collections.singletonList(siteManager.findAuthoredSite(cmsUser));
         }
 
         return cmsSites;

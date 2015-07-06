@@ -18,6 +18,8 @@ public class CmsComment {
     private String id;
     private boolean approved;
     @Indexed
+    private String siteId;
+    @Indexed
     private String contentId;
     @Indexed
     private Date timestamp;
@@ -30,7 +32,8 @@ public class CmsComment {
     }
 
     @PersistenceConstructor
-    public CmsComment(String contentId, Date timestamp, String title, String content, CmsUser viewer) {
+    public CmsComment(String siteId, String contentId, Date timestamp, String title, String content, CmsUser viewer) {
+        this.siteId = siteId;
         this.contentId = contentId;
         this.timestamp = timestamp;
         this.title = title;
@@ -52,6 +55,14 @@ public class CmsComment {
 
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public String getSiteId() {
+        return siteId;
+    }
+
+    public void setSiteId(String siteId) {
+        this.siteId = siteId;
     }
 
     public String getContentId() {

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import sparkle.cms.authoring.common.utils.AuthoringUtils;
+import sparkle.cms.data.CmsCommentRepository;
 import sparkle.cms.data.CmsContentRepository;
 import sparkle.cms.data.CmsSiteRepository;
 import sparkle.cms.data.CmsTagRepository;
@@ -28,6 +29,8 @@ public class AuthoringManager {
     private CmsSiteRepository cmsSiteRepository;
     @Autowired
     private CmsContentRepository cmsContentRepository;
+    @Autowired
+    private CmsCommentRepository cmsCommentRepository;
     @Autowired
     private CmsTagRepository cmsTagRepository;
     @Autowired
@@ -177,6 +180,10 @@ public class AuthoringManager {
 
     public int countContents(CmsSite cmsSite) {
         return cmsContentRepository.countBySiteId(cmsSite.getId());
+    }
+
+    public int countComments(CmsSite cmsSite) {
+        return cmsCommentRepository.countBySiteId(cmsSite.getId());
     }
 
     public List<? extends SparkleDocument> searchContent(String siteId, String query) {
