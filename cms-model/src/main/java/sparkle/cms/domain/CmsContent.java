@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,10 +27,15 @@ public class CmsContent {
     private final String type;
     @Id
     private String id;
+    @NotNull
     private String siteId;
+    @NotNull
     private String name;
+    @NotNull
     private String title;
+    @NotNull
     private String uri;
+    @NotNull
     @Indexed
     private Date modificationDate;
     private boolean published;
