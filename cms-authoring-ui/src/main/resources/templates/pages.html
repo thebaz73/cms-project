@@ -42,7 +42,7 @@
                                 <th th:text="#{page.uri}">Uri</th>
                                 <th th:if="${allSites.size() > 1}" th:text="#{page.site}">Site</th>
                                 <th th:text="#{page.menu}">Menu</th>
-                                <th><i class="fa fa-cogs"></i></th>
+                                <th colspan="2"><i class="fa fa-cogs"></i></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -52,14 +52,26 @@
                                 <td th:text="${aPage.name}">Name</td>
                                 <td th:text="${aPage.uri}">Uri</td>
                                 <td th:if="${allSites.size() > 1}">
-                                        <span th:each="id,name : ${allSites}" th:text="${name}"
-                                              th:if="${id == aPage.siteId}">Site</span>
+                                        <span th:each="aSite : ${allSites}"
+                                              th:text="${aSite.name + ' [' + aSite.address + ']'}"
+                                              th:if="${aSite.id == aPage.siteId}">Site</span>
                                 </td>
-                                <td><i class="fa fa-check-square-o fa-lg text-success" th:if="${aPage.menu}"></i><i
-                                        class="fa fa-square-o fa-lg text-danger" th:unless="${aPage.menu}"></i></td>
-
+                                <td th:if="${aPage.menu}" class="text-success"><i
+                                        class="fa fa-check-square-o fa-lg fa-fw"></i>Show
+                                </td>
+                                <td th:unless="${aPage.menu}" class="text-danger"><i
+                                        class="fa fa-square-o fa-lg fa-fw"></i>Hide
+                                </td>
                                 <td>
-                                    <form class="form-inline" role="form" th:action="@{${'/page/'+aPage.id}}"
+                                    <form class="form-inline" role="form" th:action="@{${'/pages/'+aPage.id}}"
+                                          action="#" method="GET">
+                                        <button type="submit" class="btn btn-primary btn-xs" value="put"
+                                                data-toggle="tooltip" data-placement="top" title="Edit"><span
+                                                class="glyphicon glyphicon-edit"></span></button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <form class="form-inline" role="form" th:action="@{${'/pages/'+aPage.id}}"
                                           action="#" method="POST">
                                         <input type="hidden" name="_method" value="DELETE"/>
                                         <button type="submit" class="btn btn-danger btn-xs" value="delete"><span
@@ -130,7 +142,7 @@
                                 <option th:each="aSite : ${allSites}"
                                         th:value="${aSite.id}"
                                         th:text="${aSite.name + ' [' + aSite.address + ']'}"
-                                        th:selected="${(contentData.siteId != null) and (contentData.siteId == aSite.id)}">
+                                        th:selected="${(cmsPage.siteId != null) and (cmsPage.siteId == aSite.id)}">
                                     Site
                                 </option>
                             </select>

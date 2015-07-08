@@ -97,8 +97,16 @@ public class PageController {
         return "redirect:/pages";
     }
 
+    @RequestMapping(value = {"/pages/{pageId}"}, method = RequestMethod.GET)
+    public String show(ModelMap model, @PathVariable("pageId") String pageId) throws IOException {
+        CmsPage cmsPage = pageManager.findPage(pageId);
+        model.put("cmsPage", cmsPage);
+        model.put("mode", "edit");
+        return "pages";
+    }
+
     @RequestMapping(value = {"/pages/{pageId}"}, method = RequestMethod.DELETE)
-    public String delete(HttpServletResponse response, @PathVariable("pageId") String pageId) throws IOException {
+    public String delete(@PathVariable("pageId") String pageId) throws IOException {
         pageManager.deletePage(pageId);
         return "redirect:/pages";
     }

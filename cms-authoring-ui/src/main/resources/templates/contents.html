@@ -52,8 +52,9 @@
                                 <td th:text="${aContent.title}">Name</td>
                                 <td th:text="${aContent.modificationDate}">Date</td>
                                 <td th:if="${allSites.size() > 1}">
-                                        <span th:each="id,name : ${allSites}" th:text="${name}"
-                                              th:if="${id == aContent.siteId}">Site</span>
+                                        <span th:each="aSite : ${allSites}"
+                                              th:text="${aSite.name + ' [' + aSite.address + ']'}"
+                                              th:if="${aSite.id == aContent.siteId}">Site</span>
                                 </td>
                                 <td th:text="${aContent.summary}">Address</td>
                                 <td th:if="${!aContent.published}">

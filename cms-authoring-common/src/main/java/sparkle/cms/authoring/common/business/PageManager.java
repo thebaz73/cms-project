@@ -53,6 +53,10 @@ public class PageManager {
         cmsPageRepository.save(cmsPage);
     }
 
+    public CmsPage findPage(String pageId) {
+        return cmsPageRepository.findOne(pageId);
+    }
+
     public void deletePage(String pageId) {
         cmsPageRepository.delete(pageId);
     }
