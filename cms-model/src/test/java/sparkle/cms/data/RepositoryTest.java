@@ -49,6 +49,10 @@ public class RepositoryTest extends AbstractMongoConfiguration {
     private CmsCommentRepository commentRepository;
     @Autowired
     private CmsTagRepository tagRepository;
+    @Autowired
+    private CmsPageRepository pageRepository;
+    @Autowired
+    private CmsHotspotRepository hotspotRepository;
 
     public String getDatabaseName() {
         return "cms-test";
@@ -56,7 +60,7 @@ public class RepositoryTest extends AbstractMongoConfiguration {
 
     @Bean
     public Mongo mongo() throws UnknownHostException {
-        MongoClient client = new MongoClient();
+        MongoClient client = new MongoClient("192.168.108.129");
         client.setWriteConcern(WriteConcern.SAFE);
         return client;
     }
@@ -76,6 +80,8 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assetRepository.deleteAll();
         commentRepository.deleteAll();
         tagRepository.deleteAll();
+        pageRepository.deleteAll();
+        hotspotRepository.deleteAll();
     }
 
     @Test
@@ -327,6 +333,65 @@ public class RepositoryTest extends AbstractMongoConfiguration {
         assertEquals(1, bySite.getTotalElements());
         bySite = contentRepository.findBySiteIdAndPublished(site.getId(), false, new PageRequest(1, 10, Sort.Direction.DESC, "modificationDate"));
         assertEquals(2, bySite.getTotalElements());
+    }
+
+    @Test
+    public void testPage() {
+        List<CmsRole> cmsRoles = new ArrayList<>();
+        cmsRoles.add(createCmsRole("ROLE_USER"));
+        cmsRoles.add(createCmsRole("ROLE_MANAGER"));
+        CmsUser user = new CmsUser("John Doe", "john.doe@email.com", "jdoe", "jdoe", new Date(), cmsRoles);
+        userRepository.save(user);
+
+        CmsSite site = new CmsSite("John Doe's Site", new Date(), "www.jdoe.com", WorkflowType.SELF_APPROVAL_WF, CommentApprovalMode.SELF_APPROVAL, user);
+        siteRepository.save(site);
+
+        CmsContent[] cmsContents = new CmsContent[5];
+        for (int i = 0; i < cmsContents.length; i++) {
+            cmsContents[i] = createCmsContent(site.getId(), "content0" + i, "Content 0" + i, "/content_01" + i, randomAlphanumeric(20), randomAlphabetic(200));
+        }
+
+        final CmsPage homePage = createCmsPage(site.getId(), "homepage", "", "/", true, null);
+        homePage.setTemplateId("homepage");
+        for (int i = 0; i < cmsContents.length; i++) {
+            CmsContent cmsContent = cmsContents[i];
+            final CmsHotspot cmsHotspot = new CmsHotspot();
+            cmsHotspot.setContentId(cmsContent.getId());
+            cmsHotspot.setName("hotspot0" + i);
+            hotspotRepository.save(cmsHotspot);
+            homePage.getHotspots().add(cmsHotspot);
+        }
+        pageRepository.save(homePage);
+
+        final CmsPage products = createCmsPage(site.getId(), "Products", "Products", "/products", true, homePage);
+        final CmsPage services = createCmsPage(site.getId(), "Services", "Services", "/services", true, homePage);
+        final CmsPage industries = createCmsPage(site.getId(), "Industries", "Industries", "/industries", true, homePage);
+        final CmsPage company = createCmsPage(site.getId(), "Company", "Company", "/company", true, homePage);
+
+        createCmsPage(site.getId(), "Automotive", "Automotive", "/automotive", true, industries);
+        createCmsPage(site.getId(), "Banking", "Banking", "/banking", true, industries);
+
+        assertEquals(7, pageRepository.findAll().size());
+        assertEquals(7, pageRepository.findBySiteId(site.getId()).size());
+        assertEquals(1, pageRepository.findBySiteIdAndParent(site.getId(), null).size());
+        assertEquals(4, pageRepository.findBySiteIdAndParent(site.getId(), homePage).size());
+        assertEquals(0, pageRepository.findBySiteIdAndParent(site.getId(), products).size());
+        assertEquals(0, pageRepository.findBySiteIdAndParent(site.getId(), services).size());
+        assertEquals(2, pageRepository.findBySiteIdAndParent(site.getId(), industries).size());
+        assertEquals(0, pageRepository.findBySiteIdAndParent(site.getId(), company).size());
+    }
+
+    private CmsPage createCmsPage(String siteId, String name, String title, String uri, boolean menu, CmsPage parent) {
+        CmsPage cmsPage = new CmsPage();
+        cmsPage.setSiteId(siteId);
+        cmsPage.setName(name);
+        cmsPage.setTitle(title);
+        cmsPage.setUri(uri);
+        cmsPage.setMenu(menu);
+        cmsPage.setParent(parent);
+        pageRepository.save(cmsPage);
+
+        return cmsPage;
     }
 
     private CmsContent createCmsContent(String siteId, String name, String title, String uri, String summary, String content) {

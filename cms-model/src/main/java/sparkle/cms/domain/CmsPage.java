@@ -2,6 +2,7 @@ package sparkle.cms.domain;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,6 +19,7 @@ public class CmsPage {
     @Id
     private String id;
     @NotNull
+    @Indexed
     private String siteId;
     @NotNull
     private String name;
@@ -28,7 +30,6 @@ public class CmsPage {
     private boolean menu;
     @DBRef
     private CmsPage parent;
-    @NotNull
     private String templateId;
     @DBRef
     private List<CmsHotspot> hotspots;
@@ -37,7 +38,7 @@ public class CmsPage {
     }
 
     @PersistenceConstructor
-    public CmsPage(String id, String siteId, String name, String title, String uri, boolean menu, CmsPage parent, String templateId) {
+    public CmsPage(String id, String siteId, String name, String title, String uri, boolean menu, CmsPage parent) {
         this.id = id;
         this.siteId = siteId;
         this.name = name;
@@ -45,7 +46,6 @@ public class CmsPage {
         this.uri = uri;
         this.menu = menu;
         this.parent = parent;
-        this.templateId = templateId;
     }
 
     public String getId() {
