@@ -2,6 +2,7 @@ package sparkle.cms.authoring.ui.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import sparkle.cms.authoring.common.business.PageManager;
+import sparkle.cms.authoring.ui.domain.PageData;
 import sparkle.cms.domain.CmsPage;
 import sparkle.cms.domain.CmsSite;
 import sparkle.cms.domain.CmsUser;
@@ -81,18 +83,18 @@ public class PageController {
 
     @RequestMapping({"/pages"})
     public String show(ModelMap model) {
-        model.put("cmsPage", new CmsPage());
+        model.put("pageData", new PageData());
         model.put("mode", "add");
         return "pages";
     }
 
     @RequestMapping(value = {"/pages"}, method = RequestMethod.POST)
-    public String addContent(@ModelAttribute("cmsPage") CmsPage cmsPage,
+    public String addContent(@ModelAttribute("cmsPage") PageData cmsPage,
                              final BindingResult bindingResult, final ModelMap model) throws IOException {
         if (bindingResult.hasErrors()) {
             return "pages";
         }
-        pageManager.createPage(cmsPage);
+        pageManager.createPage(cmsPage.getSiteId(), cmsPage.getTitle(), cmsPage.isMenu(), cmsPage.isRoot(), cmsPage.getParentId());
         model.clear();
         return "redirect:/pages";
     }
@@ -100,7 +102,15 @@ public class PageController {
     @RequestMapping(value = {"/pages/{pageId}"}, method = RequestMethod.GET)
     public String show(ModelMap model, @PathVariable("pageId") String pageId) throws IOException {
         CmsPage cmsPage = pageManager.findPage(pageId);
-        model.put("cmsPage", cmsPage);
+        PageData pageData = new PageData();
+        BeanUtils.copyProperties(cmsPage, pageData);
+        if (cmsPage.getParent() != null) {
+            pageData.setRoot(false);
+            pageData.setParentId(cmsPage.getParent().getId());
+        } else {
+            pageData.setRoot(true);
+        }
+        model.put("pageData", pageData);
         model.put("mode", "edit");
         return "pages";
     }
@@ -110,4 +120,12 @@ public class PageController {
         pageManager.deletePage(pageId);
         return "redirect:/pages";
     }
+
+
+    @RequestMapping(value = {"/pages/site/{siteid}"}, method = RequestMethod.GET)
+    @ResponseBody
+    public List<CmsPage> findSitePages(@PathVariable("siteid") String siteid) {
+        return pageManager.findPagesBySite(siteid);
+    }
+
 }

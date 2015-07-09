@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +17,10 @@ import java.util.List;
 public class CmsPage {
     @Id
     private String id;
-    @NotNull
     @Indexed
     private String siteId;
-    @NotNull
     private String name;
-    @NotNull
     private String title;
-    @NotNull
     private String uri;
     private boolean menu;
     @DBRef

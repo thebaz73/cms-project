@@ -57,10 +57,10 @@
                                               th:if="${aSite.id == aPage.siteId}">Site</span>
                                 </td>
                                 <td th:if="${aPage.menu}" class="text-success"><i
-                                        class="fa fa-check-square-o fa-lg fa-fw"></i>Show
+                                        class="fa fa-check-square-o fa-fw"></i>Show
                                 </td>
                                 <td th:unless="${aPage.menu}" class="text-danger"><i
-                                        class="fa fa-square-o fa-lg fa-fw"></i>Hide
+                                        class="fa fa-square-o fa-fw"></i>Hide
                                 </td>
                                 <td>
                                     <form class="form-inline" role="form" th:action="@{${'/pages/'+aPage.id}}"
@@ -111,10 +111,14 @@
             </section>
             <section class="col-lg-12">
                 <!--@thymesVar id="cmsPage" type="sparkle.cms.domain.CmsPage"-->
-                <form class="form-horizontal" role="form" th:action="@{/pages}" th:object="${cmsPage}" action="#"
+                <form class="form-horizontal" role="form" th:action="@{/pages}" th:object="${pageData}" action="#"
                       method="POST">
 
-                    <input type="hidden" name="siteId" th:value="${allSites[0].id}"
+                    <input type="hidden" name="id" th:value="*{id}"
+                           th:if="${mode == 'edit'}"/>
+
+
+                    <input type="hidden" id="siteId" name="siteId" th:value="${allSites[0].id}"
                            th:if="${allSites.size() == 1}"/>
 
                     <div class="lead" th:text="#{page.data}">Page Data</div>
@@ -138,11 +142,12 @@
                         <div class="col-sm-10">
                             <select type="text" class="form-control" id="siteId" name="siteId"
                                     th:errorclass="has-error" required="required">
+                                <option value="">Choose one</option>
                                 <!--@thymesVar id="aSite" type="sparkle.cms.domain.CmsSite"-->
                                 <option th:each="aSite : ${allSites}"
                                         th:value="${aSite.id}"
                                         th:text="${aSite.name + ' [' + aSite.address + ']'}"
-                                        th:selected="${(cmsPage.siteId != null) and (cmsPage.siteId == aSite.id)}">
+                                        th:selected="${(pageData.siteId != null) and (pageData.siteId == aSite.id)}">
                                     Site
                                 </option>
                             </select>
@@ -163,16 +168,63 @@
                             <select class="form-control" id="menu"
                                     th:field="*{menu}"
                                     th:errorclass="has-error" required="required">
-                                <option value="true" th:selected="${cmsPage.menu == true}">Show</option>
-                                <option value="false" th:selected="${cmsPage.menu == false}">Hide</option>
+                                <option value="true" th:selected="${pageData.menu == true}">Show</option>
+                                <option value="false" th:selected="${pageData.menu == false}">Hide</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="root" class="col-sm-2 control-label" th:text="#{page.root}">Root</label>
+
+                        <div class="col-sm-10">
+                            <select class="form-control" id="root"
+                                    th:field="*{root}"
+                                    th:errorclass="has-error" required="required">
+                                <option value="true" th:selected="${pageData.root == true}">Yes</option>
+                                <option value="false" th:selected="${pageData.root == false}">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--TODO better define-->
+                    <div class="form-group" th:if="${(pageData.siteId == null) && (allSites.size() > 1)}">
+                        <label for="parent" class="col-sm-2 control-label" th:text="#{page.parent}">Parent</label>
+
+                        <div class="col-sm-10">
+                            <select type="text" class="form-control" id="parent" name="parentId"
+                                    th:errorclass="has-error" required="required">
+                                <option value="">Choose one</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" th:unless="${pageData.siteId == null}">
+                        <label for="parent" class="col-sm-2 control-label" th:text="#{page.parent}">Parent</label>
+
+                        <div class="col-sm-10">
+                            <select type="text" class="form-control" id="parent" name="parentId"
+                                    th:disabled="${pageData.root == true}"
+                                    th:errorclass="has-error" required="required">
+                                <option value="">Choose one</option>
+                                <option th:each="aPage : ${allPages}"
+                                        th:value="${aPage.id}"
+                                        th:text="${aPage.title}"
+                                        th:selected="${(pageData.siteId != null) and (pageData.siteId == aPage.id)}">
+                                    Choose one
+                                </option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-sm-12 text-right">
-                            <button type="submit" class="btn btn-default" th:text="#{page.create}">Add Page</button>
+                            <button type="submit" class="btn btn-default" th:if="${mode == 'add'}"
+                                    th:text="#{page.create}">Add Page
+                            </button>
+                            <button type="submit" class="btn btn-default" th:if="${mode == 'edit'}"
+                                    th:text="#{page.edit}">Edit Page
+                            </button>
                             <button type="reset" class="btn btn-default">Cancel</button>
+                            <a th:href="@{'/pages'}" href="#" th:if="${mode == 'edit'}"
+                               class="btn btn-default">Close</a>
                         </div>
                     </div>
                 </form>
@@ -193,6 +245,12 @@
 <!-- Custom Theme JavaScript -->
 <script th:src="@{/dist/js/sb-admin-2.js}" src="../public/dist/js/sb-admin-2.js"></script>
 
+<script th:if="${allSites.size() > 1}">
+    var siteId = $("#siteId").val();
+    $.getJSON("/pages/site/" + siteId, function (data) {
+        alert(Json.stringify(data));
+    })
+</script>
 </body>
 
 </html>

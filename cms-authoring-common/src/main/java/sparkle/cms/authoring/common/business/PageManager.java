@@ -26,6 +26,7 @@ public class PageManager {
     private CmsSiteRepository cmsSiteRepository;
     @Autowired
     private CmsPageRepository cmsPageRepository;
+    private String url;
 
     public Page<CmsPage> findAllPages(CmsUser cmsUser, Pageable pageable) {
         List<CmsSite> cmsSites = cmsSiteRepository.findByWebMaster(cmsUser);
@@ -42,14 +43,23 @@ public class PageManager {
         return new PageImpl<>(cmsPages, pageable, cmsPages.size());
     }
 
-    public void createPage(CmsPage cmsPage) {
-        cmsPage.setName(toPrettyURL(cmsPage.getTitle()));
-        final CmsPage parent = cmsPage.getParent();
-        if (parent == null) {
+
+    public void createPage(String siteId, String title, boolean menu, boolean root, String parentId) {
+        url = toPrettyURL(title);
+
+        CmsPage cmsPage = new CmsPage();
+        cmsPage.setSiteId(siteId);
+        cmsPage.setTitle(title);
+        cmsPage.setName(url);
+        cmsPage.setMenu(menu);
+        if (root) {
             cmsPage.setUri("/");
         } else {
-            cmsPage.setUri(parent.getUri() + "/" + toPrettyURL(cmsPage.getTitle()));
+            final CmsPage parentPage = cmsPageRepository.findOne(parentId);
+            cmsPage.setParent(parentPage);
+            cmsPage.setUri(parentPage.getUri() + "/" + url);
         }
+
         cmsPageRepository.save(cmsPage);
     }
 
@@ -59,5 +69,9 @@ public class PageManager {
 
     public void deletePage(String pageId) {
         cmsPageRepository.delete(pageId);
+    }
+
+    public List<CmsPage> findPagesBySite(String siteid) {
+        return cmsPageRepository.findBySiteId(siteid);
     }
 }
