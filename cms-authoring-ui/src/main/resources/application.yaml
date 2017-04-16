@@ -5,9 +5,10 @@ spring:
 spring:
     profiles: localcloud
     data:
-      mongodb.host: 192.168.108.129
-      mongodb.port: 27017
-      mongodb.name: cms-db
+        mongodb:
+            host: 192.168.108.129
+            port: 27017
+            name: cms-db
 
 logging:
     level.org.springframework: INFO
@@ -24,35 +25,36 @@ multipart:
     maxRequestSize: 30MB
 
 solr:
-  host: http://192.168.108.129:8983/solr
+    host: http://192.168.108.129:8983/solr
 
 sparkle:
-  admin:
-    name: Administrator
-    username: admin
-    password: q1w2e3r4
-    email: admin@sparkle-cms.com
-  web:
-    authentication:
-      dns: 192.168.108.130
-      ip: 192.168.108.130
-      port: 7000
-    authoring:
-      dns: 192.168.108.130
-      ip: 192.168.108.130
-      port: 9000
-    registration:
-      dns: 192.168.108.130
-      ip: 192.168.108.130
-      port: 8000
-    timeout: 5000
+    admin:
+        name: Administrator
+        username: admin
+        password: q1w2e3r4
+        email: admin@sparkle-cms.com
+    web:
+        authentication:
+            dns: 192.168.108.130
+            ip: 192.168.108.130
+            port: 7000
+        authoring:
+            dns: 192.168.108.130
+            ip: 192.168.108.130
+            port: 7000
+        registration:
+            dns: 192.168.108.130
+            ip: 192.168.108.130
+            port: 7000
+        timeout: 5000
 ---
 spring:
     profiles: development
     data:
-      mongodb.host: localhost
-      mongodb.port: 27017
-      mongodb.name: cms-db
+        mongodb:
+            host: localhost
+            port: 27017
+            name: cms-db
 
 logging:
     level.org.springframework: INFO
@@ -69,64 +71,68 @@ multipart:
     maxRequestSize: 30MB
 
 sparkle:
-  admin:
-    name: Administrator
-    username: admin
-    password: q1w2e3r4
-    email: admin@sparkle-cms.com
-  web:
-    authentication:
-      dns: ec2-52-17-40-252.eu-west-1.compute.amazonaws.com
-      ip: 52.16.40.252
-      port: 80
-    authoring:
-      dns: ec2-52-17-34-133.eu-west-1.compute.amazonaws.com
-      ip: 52.16.34.133
-      port: 80
-    registration:
-      dns: ec2-52-16-32-200.eu-west-1.compute.amazonaws.com
-      ip: 52.16.32.200
-      port: 80
-    timeout: 5000
+    admin:
+        name: Administrator
+        username: admin
+        password: q1w2e3r4
+        email: admin@sparkle-cms.com
+    web:
+        authentication:
+            dns: ec2-52-17-40-252.eu-west-1.compute.amazonaws.com
+            ip: 52.16.40.252
+            port: 80
+        authoring:
+            dns: ec2-52-17-34-133.eu-west-1.compute.amazonaws.com
+            ip: 52.16.34.133
+            port: 80
+        registration:
+            dns: ec2-52-16-32-200.eu-west-1.compute.amazonaws.com
+            ip: 52.16.32.200
+            port: 80
+        timeout: 5000
 ---
 spring:
     profiles: test
     data:
-      mongodb.host: 172.31.10.154
-      mongodb.port: 27017
-      mongodb.name: cms-db
+        mongodb:
+            host: 172.31.10.154
+            port: 27017
+            name: cms-db
 
 logging:
     level.org.springframework: INFO
-    level.ms.cms: WARN
+    level.sparkle.cms: DEBUG
 
 server:
-    port: 80
-    address: 0.0.0.0
+    port: 9000
 
 management:
-    port: 8081
+    port: 9001
+
+multipart:
+    maxFileSize: 30MB
+    maxRequestSize: 30MB
 
 sparkle:
-  admin:
-    name: Administrator
-    username: admin
-    password: q1w2e3r4
-    email: admin@sparkle-cms.com
-  web:
-    authentication:
-      dns: ec2-52-17-40-252.eu-west-1.compute.amazonaws.com
-      ip: 52.16.40.252
-      port: 80
-    authoring:
-      dns: ec2-52-17-34-133.eu-west-1.compute.amazonaws.com
-      ip: 52.16.34.133
-      port: 80
-    registration:
-      dns: ec2-52-16-32-200.eu-west-1.compute.amazonaws.com
-      ip: 52.16.32.200
-      port: 80
-    timeout: 5000
+    admin:
+        name: Administrator
+        username: admin
+        password: q1w2e3r4
+        email: admin@sparkle-cms.com
+    web:
+        authentication:
+            dns: ec2-52-17-40-252.eu-west-1.compute.amazonaws.com
+            ip: 52.16.40.252
+            port: 80
+        authoring:
+            dns: ec2-52-17-34-133.eu-west-1.compute.amazonaws.com
+            ip: 52.16.34.133
+            port: 80
+        registration:
+            dns: ec2-52-16-32-200.eu-west-1.compute.amazonaws.com
+            ip: 52.16.32.200
+            port: 80
+        timeout: 5000
 
 #server.tomcat.compressableMimeTypes=application/json,application/xml
 #server.tomcat.compression: on
